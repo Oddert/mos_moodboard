@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.container .board {
+  border: 1px dashed steelblue;
+  width: 80vw;
+  height: 500px;
+}
+.container .board .draggable {
+  touch-action: none;
+  user-select: none;
+  width: 100px;
+  height: 100px;
+  border: 1px dashed tomato;
+}
+.container .board .draggable.one {
+  background: #1bbc9b;
+}
+.container .board .draggable.two {
+  background: #3598db;
+}
+.container .board .draggable.three {
+  background: #9a59b5;
+}
+
+/*# sourceMappingURL=css/interact/grid.css.map */

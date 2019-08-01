@@ -1,0 +1,17 @@
+.draggable {
+  touch-action: none;
+  user-select: none;
+  width: 100px;
+  height: 100px;
+}
+.draggable.one {
+  background: #1bbc9b;
+}
+.draggable.two {
+  background: #3598db;
+}
+.draggable.three {
+  background: #9a59b5;
+}
+
+/*# sourceMappingURL=css/interact/one.css.map */

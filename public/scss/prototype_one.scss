@@ -1,0 +1,123 @@
+
+* {
+  box-sizing: border-box;
+}
+
+
+html, body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+// .preview-holder {
+//   background: lightblue;
+// }
+
+nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .top {
+    height: 60px;
+    display: flex;
+    background: #ecf0f1;
+
+    .logo {
+      // border: 1px dashed tomato;
+      display: flex;
+      align-items: center;
+      img {
+        height: 40px;
+        object-fit: contain;
+        margin: auto 10px;
+      }
+    }
+    .search {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 0 0 50px;
+      transition: .2s linear;
+      .search__bar {
+        transition: .2s linear;
+        border-bottom: 1px solid rgba(190,195,199,.3);
+        padding: 0px 0;
+        display: flex;
+        button {
+          font-size: 20px;
+          border: none;
+          background: none;
+        }
+        input[type=text] {
+          transition: .2s linear;
+          font-size: 20px;
+          padding: 10px 20px;
+          background: none;
+          box-sizing: border-box;
+          border: none;
+          align-items: center;
+          display: flex;
+          opacity: 0;
+          &:focus + .search__bar {
+            flex: 1;
+            background: red;
+          }
+        }
+      }
+    }
+    .account {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+  }
+  &:hover {
+    .top {
+      .search {
+        .search__bar {
+          border-bottom: 1px solid rgba(190,195,199,1);
+          input[type=text] {
+            opacity: 1;
+
+          }
+        }
+      }
+    }
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+
+  .gridster {
+    // width: 50vw;
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      border: 1px dashed green;
+      width: 50vw;
+      li {
+        background: tomato;
+        border: 1px solid steelblue;
+      }
+    }
+  }
+}
+
+
+.card {
+  .card__idx {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &.product {
+    
+  }
+}

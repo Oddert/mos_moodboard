@@ -1,0 +1,17 @@
+.resizable {
+  touch-action: none;
+  user-select: none;
+  width: 100px;
+  height: 100px;
+}
+.resizable.one {
+  background: #1bbc9b;
+}
+.resizable.two {
+  background: #3598db;
+}
+.resizable.three {
+  background: #9a59b5;
+}
+
+/*# sourceMappingURL=css/interact/two.css.map */

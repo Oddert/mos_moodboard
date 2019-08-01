@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.container .board {
+  border: 1px dashed steelblue;
+  width: 80vw;
+  height: 500px;
+}
+.container .board .draggable {
+  touch-action: none;
+  user-select: none;
+  width: 100px;
+  height: 100px;
+  border: 1px dashed tomato;
+}
+.container .board .draggable.one {
+  background: #1bbc9b;
+}
+.container .board .draggable.two {
+  background: #3598db;
+}
+.container .board .draggable.three {
+  background: #9a59b5;
+}
+.container .board .dropzone {
+  background-color: #ccc;
+  border: dashed 4px transparent;
+  border-radius: 4px;
+  margin: 10px auto 30px;
+  padding: 10px;
+  width: 80%;
+  transition: background-color 0.3s;
+  height: 140px;
+}
+.container .board .dropzone.inner {
+  height: 80px;
+}
+.container .board .drop-target {
+  background-color: #29e;
+  border-color: #fff;
+  border-style: solid;
+}
+.container .board .drag-drop {
+  display: inline-block;
+  min-width: 40px;
+  padding: 2em 0.5em;
+  color: #fff;
+  background-color: #29e;
+  border: solid 2px #fff;
+  touch-action: none;
+  -webkit-transform: translate(0px, 0px);
+  transform: translate(0px, 0px);
+  transition: background-color 0.3s;
+}
+.container .board .drag-drop.can-drop {
+  color: #000;
+  background-color: #4e4;
+}
+
+/*# sourceMappingURL=css/interact/drag_drop.css.map */

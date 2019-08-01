@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Moodboard Prototype One</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.gridster/0.5.6/jquery.gridster.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.gridster/0.5.6/jquery.gridster.css">
+    <link rel="stylesheet" href="/css/master.css">
+    <link rel="stylesheet" href="/css/prototype_one.css">
+    <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+  </head>
+  <body>
+    <!-- Placeholder Nav Bar -->
+    <nav>
+      <div class="top">
+        <div class="logo">
+          <img src="/img/mos logo screen transparent.PNG" alt="Matter of Stuff Logo">
+        </div>
+        <div class="search">
+          <div class="search__bar">
+            <button>🔍</button>
+            <input type="text" name="search" placeholder="SEARCH OUR STUFF" />
+          </div>
+        </div>
+        <div class="account">
+          £ GDP | SIGN IN | 0
+        </div>
+      </div>
+      <div class="bottom">
+
+      </div>
+    </nav>
+    <!-- Placeholder Nav Bar -->
+
+    <div class="container">
+      <div class="gridster">
+          <ul>
+            <% items.forEach((each, idx) => { %>
+              <% if (each.type === 'product') { %>
+                <li
+                  data-row="<%= each.row %>"
+                  data-col="<%= each.col %>"
+                  data-sizex="<%= each.x %>"
+                  data-sizey="<%= each.y %>"
+                  class="card product"
+                  >
+                    <span class="card__idx">
+                      <%= idx %>
+                    </span>
+                    <div class="product__image">
+
+                    </div>
+                    <div class="product__details">
+                      <p></p>
+                    </div>
+                </li>
+              <% } else { %>
+                <li
+                  data-row="<%= each.row %>"
+                  data-col="<%= each.col %>"
+                  data-sizex="<%= each.x %>"
+                  data-sizey="<%= each.y %>"
+                  class="card"
+                  >
+                    <span class="card__idx">
+                      <%= idx %>
+                    </span>
+                </li>
+              <% } %>
+            <% }) %>
+          </ul>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="/js/prototype_one.js"></script>
+</html>
