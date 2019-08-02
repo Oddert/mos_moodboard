@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.gridster/0.5.6/jquery.gridster.css">
     <link rel="stylesheet" href="/css/master.css">
     <link rel="stylesheet" href="/css/prototype_one.css">
-    <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+    <!-- <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script> -->
   </head>
   <body>
     <!-- Placeholder Nav Bar -->
@@ -20,7 +20,7 @@
         <div class="search">
           <div class="search__bar">
             <button>🔍</button>
-            <input type="text" name="search" placeholder="SEARCH OUR STUFF" />
+            <input type="text" name="search" placeholder="Search Matter of Stuff" />
           </div>
         </div>
         <div class="account">
@@ -33,34 +33,39 @@
     </nav>
     <!-- Placeholder Nav Bar -->
 
+    <button class="getJson">Get Json Format</button>
     <div class="container">
       <div class="gridster">
           <ul>
             <% items.forEach((each, idx) => { %>
               <% if (each.type === 'product') { %>
                 <li
-                  data-row="<%= each.row %>"
+                  data-row="<%= each.row * 10 %>"
                   data-col="<%= each.col %>"
                   data-sizex="<%= each.x %>"
-                  data-sizey="<%= each.y %>"
+                  data-sizey="<%= each.y * 10 %>"
                   class="card product"
                   >
-                    <span class="card__idx">
-                      <%= idx %>
+                    <span class="card--content">
+                      <span class="card__idx">
+                        <%= idx %>
+                      </span>
+                      <div class="product__image">
+                        <img src="<%= each.data.img.src %>" alt="<%= each.data.img.alt %>">
+                      </div>
+                      <div class="product__details">
+                        <h4 class="product__details--title"><a href="<%= each.data.ref %>"><%= each.data.title %></a></h4>
+                        <p class="product__details--brand"><%= each.data.brand %></p>
+                        <p class="product__details--price">£<%= each.data.price %></p>
+                      </div>
                     </span>
-                    <div class="product__image">
-
-                    </div>
-                    <div class="product__details">
-                      <p></p>
-                    </div>
                 </li>
               <% } else { %>
                 <li
-                  data-row="<%= each.row %>"
+                  data-row="<%= each.row * 10 %>"
                   data-col="<%= each.col %>"
                   data-sizex="<%= each.x %>"
-                  data-sizey="<%= each.y %>"
+                  data-sizey="<%= each.y * 10 %>"
                   class="card"
                   >
                     <span class="card__idx">

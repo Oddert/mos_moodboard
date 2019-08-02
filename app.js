@@ -38,21 +38,35 @@ app.route('/interact/:file')
     )
   )
 
+const sampleProducts = [
+  {
+    title: 'aaaaaaaaaaahhhhhhhhhh',
+    brand: 'ya boi',
+    price: '345',
+    ref: '/mos',
+    img: {
+      src: 'https://i.ytimg.com/vi/LFXN9PiOGtY/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLB_WhluQRmu3tvpcupRjzkavs75IQ',
+      alt: 'a pic of mike',
+      caption: 'mike'
+    }
+  }
+]
+
 app.route('/prototype_one')
   .get((req, res, next) => res.render('prototype_one', { items: [
-    { row: 1, col: 1, x: 1, y: 1, type: 'product' },
-    { row: 2, col: 1, x: 1, y: 1, type: 'product' },
-    { row: 3, col: 1, x: 1, y: 1, type: 'product' },
-    { row: 3, col: 1, x: 1, y: 1, type: 'product' },
-    { row: 1, col: 2, x: 2, y: 1, type: 'product' },
-    { row: 2, col: 2, x: 2, y: 2, type: 'product' },
-    { row: 1, col: 4, x: 2, y: 2, type: 'product' },
-    { row: 2, col: 4, x: 2, y: 1, type: 'product' },
-    { row: 3, col: 4, x: 1, y: 1, type: 'product' },
-    { row: 1, col: 4, x: 1, y: 1, type: 'product' },
-    { row: 3, col: 4, x: 1, y: 1, type: 'product' },
-    { row: 1, col: 4, x: 1, y: 1, type: 'product' },
-    { row: 2, col: 4, x: 1, y: 2, type: 'product' },
+    { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
+    { row: 2, col: 1, x: 1, y: 1 },
+    { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
+    { row: 3, col: 1, x: 1, y: 1 },
+    { row: 1, col: 2, x: 2, y: 1 },
+    { row: 2, col: 2, x: 2, y: 2 },
+    { row: 1, col: 4, x: 2, y: 2 },
+    { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sampleProducts[0] },
+    { row: 3, col: 4, x: 1, y: 1 },
+    { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
+    { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
+    { row: 1, col: 4, x: 1, y: 1 },
+    { row: 2, col: 4, x: 1, y: 2 },
   ] }))
 
 const server = app.listen(

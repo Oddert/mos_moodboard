@@ -6,6 +6,7 @@ html, body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  background: #ecf0f1;
 }
 
 nav {
@@ -16,16 +17,15 @@ nav {
 nav .top {
   height: 60px;
   display: flex;
-  background: #ecf0f1;
 }
 nav .top .logo {
   display: flex;
   align-items: center;
 }
 nav .top .logo img {
-  height: 40px;
+  height: 30px;
   object-fit: contain;
-  margin: auto 10px;
+  margin: auto 50px;
 }
 nav .top .search {
   flex: 1;
@@ -36,7 +36,7 @@ nav .top .search {
   transition: 0.2s linear;
 }
 nav .top .search .search__bar {
-  transition: 0.2s linear;
+  transition: 0.5s ease;
   border-bottom: 1px solid rgba(190, 195, 199, 0.3);
   padding: 0px 0;
   display: flex;
@@ -60,6 +60,12 @@ nav .top .search .search__bar input[type=text] {
 nav .top .search .search__bar input[type=text]:focus + .search__bar {
   flex: 1;
   background: red;
+}
+nav .top .search:hover .search__bar {
+  flex: 1;
+}
+nav .top .search:hover .search__bar input[type=text] {
+  flex: 1;
 }
 nav .top .account {
   display: flex;
@@ -87,14 +93,36 @@ nav:hover .top .search .search__bar input[type=text] {
   width: 50vw;
 }
 .container .gridster ul li {
-  background: tomato;
-  border: 1px solid steelblue;
+  background: #fff;
 }
 
 .card .card__idx {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
+  display: none;
+}
+.card.product {
+  display: flex;
+  flex-direction: column;
+}
+.card.product .product__image {
+  display: flex;
+  justify-content: center;
+}
+.card.product .product__image img {
+  margin-top: 10px;
+  max-width: 90%;
+}
+.card.product .product__details {
+  text-align: center;
+}
+.card.product .product__details h4 {
+  margin: 10px;
+}
+.card.product .product__details p {
+  margin: 5px;
 }
 
 /*# sourceMappingURL=css/prototype_one.css.map */
