@@ -10,11 +10,12 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')))
 
 app.route('/')
-  .get((req, res, next) => res.status(200).json({
-    message: 'Status OK',
-    status: 200,
-    route: '/'
-  }))
+  .get((req, res, next) => res.redirect('/prototype_one'))
+  // .get((req, res, next) => res.status(200).json({
+  //   message: 'Status OK',
+  //   status: 200,
+  //   route: '/'
+  // }))
 
 const interact = [
   { route: 'one', title: 'One' },
