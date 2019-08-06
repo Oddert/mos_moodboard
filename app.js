@@ -1,7 +1,23 @@
+
+const interact = [
+  { route: 'one', title: 'One' },
+  { route: 'two', title: 'Two' },
+  { route: 'three', title: 'Three' },
+  { route: 'four', title: 'Four' },
+  { route: 'drag_resize', title: 'Basic Restricted Drag Example' },
+  { route: 'grid', title: 'Grid Drag Example' },
+  { route: 'drag_drop', title: 'Drag and Drop Example' },
+  { route: 'grid_proto_one', title: 'Grid Prototype Moodboard One' },
+  { route: 'gridstack_one', title: 'Gridstack Prototype Moodboard Two' },
+]
+
+
 const express     = require('express')
     , app         = express()
     , bodyParser  = require('body-parser')
     , path        = require('path')
+
+const sd = require('./utils/sample_data.js')
 
 const PORT = process.env.PORT || 3000
 
@@ -17,16 +33,6 @@ app.route('/')
   //   route: '/'
   // }))
 
-const interact = [
-  { route: 'one', title: 'One' },
-  { route: 'two', title: 'Two' },
-  { route: 'three', title: 'Three' },
-  { route: 'four', title: 'Four' },
-  { route: 'drag_resize', title: 'Basic Restricted Drag Example' },
-  { route: 'grid', title: 'Grid Drag Example' },
-  { route: 'drag_drop', title: 'Drag and Drop Example' },
-  { route: 'grid_proto_one', title: 'Grid Prototype Moodboard One' },
-]
 
 app.route('/interact')
   .get((req, res, next) => res.render('interact', { interact }))
@@ -39,36 +45,25 @@ app.route('/interact/:file')
     )
   )
 
-const sampleProducts = [
-  {
-    title: 'aaaaaaaaaaahhhhhhhhhh',
-    brand: 'ya boi',
-    price: '345',
-    ref: '/mos',
-    img: {
-      src: 'https://i.ytimg.com/vi/LFXN9PiOGtY/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLB_WhluQRmu3tvpcupRjzkavs75IQ',
-      alt: 'a pic of mike',
-      caption: 'mike'
-    }
-  }
+
+const proto_one_items = [
+  { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
+  { row: 2, col: 1, x: 1, y: 1 },
+  { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
+  { row: 3, col: 1, x: 1, y: 1 },
+  { row: 1, col: 2, x: 2, y: 1 },
+  { row: 2, col: 2, x: 2, y: 2 },
+  { row: 1, col: 4, x: 2, y: 2 },
+  { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
+  { row: 3, col: 4, x: 1, y: 1 },
+  { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
+  { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
+  { row: 1, col: 4, x: 1, y: 1 },
+  { row: 2, col: 4, x: 1, y: 2 },
 ]
 
 app.route('/prototype_one')
-  .get((req, res, next) => res.render('prototype_one', { items: [
-    { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
-    { row: 2, col: 1, x: 1, y: 1 },
-    { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
-    { row: 3, col: 1, x: 1, y: 1 },
-    { row: 1, col: 2, x: 2, y: 1 },
-    { row: 2, col: 2, x: 2, y: 2 },
-    { row: 1, col: 4, x: 2, y: 2 },
-    { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sampleProducts[0] },
-    { row: 3, col: 4, x: 1, y: 1 },
-    { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
-    { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[0] },
-    { row: 1, col: 4, x: 1, y: 1 },
-    { row: 2, col: 4, x: 1, y: 2 },
-  ] }))
+  .get((req, res, next) => res.render('prototype_one', { items: proto_one_items }))
 
 const server = app.listen(
   PORT
