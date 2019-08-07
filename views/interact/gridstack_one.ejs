@@ -3,6 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Gridstack</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.css" />
+    <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.js'></script>
+    <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.jQueryUI.min.js'></script>
     <link rel="stylesheet" href="/css/master.css">
     <link rel="stylesheet" href="/css/gridstack_one.css">
   </head>
@@ -10,10 +17,55 @@
     <h1>Gridstack</h1>
 
     <div class="container">
-      <div class="board">
-        <div class="draggable one"></div>
+      <div class="board row">
+        <div class="Left_Grid grid-stack col-md-6">
+          <!-- item.items.forEach(each => {
+            <div><div></div></div>
+          }) -->
+        </div>
+        <div class="Right_Grid grid-stack col-md-6"></div>
       </div>
     </div>
 
   </body>
+  <script type="text/javascript">
+    $(function () {
+      const items = [
+        { x:0, y:0, w:2, h:2 },
+        { x:3, y:1, w:1, h:2 },
+        { x:4, y:1, w:1, h:1 },
+        { x:2, y:3, w:3, h:1 },
+        { x:2, y:5, w:3, h:1 }
+      ]
+      console.log('#one at a time')
+      const options = {
+        width: 6,
+        float: false,
+        removable: '.trash',
+        removeTimeout: 100,
+        acceptWidets: '.grid-stack-item',
+        // minHeight: 50
+      }
+      $('.Left_Grid').gridstack(options)
+      $('.Right_Grid').gridstack(options)
+      $('.grid-stack').each(function () {
+        const grid = $(this).data('gridstack')
+        console.log(grid)
+        _.each(items, function (each) {
+          grid.addWidget(
+            $('<div><div class="grid-stack-item-content" /></div>')
+            , each.x, each.y, each.w, each.h
+          )
+        }, this)
+      })
+
+      // $('.sidebar .grid-stack-item-content').draggable ({
+      //   revert: 'invalid',
+      //   handle: '.grid-stack-item-content',
+      //   scroll: false,
+      //   appendTo: body
+      // })
+
+    })
+  </script>
 </html>

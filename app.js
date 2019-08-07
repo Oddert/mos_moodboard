@@ -8,7 +8,14 @@ const interact = [
   { route: 'grid', title: 'Grid Drag Example' },
   { route: 'drag_drop', title: 'Drag and Drop Example' },
   { route: 'grid_proto_one', title: 'Grid Prototype Moodboard One' },
-  { route: 'gridstack_one', title: 'Gridstack Prototype Moodboard Two' },
+  { route: 'gridstack_one', title: 'Gridstack Prototype Moodboard Two', items: [
+    { x:0, y:0, w:2, h:2 },
+    { x:3, y:1, w:1, h:2 },
+    { x:4, y:1, w:1, h:1 },
+    { x:2, y:3, w:3, h:1 },
+    { x:2, y:5, w:3, h:1 }
+  ] },
+  { route: 'gridstack_copy', title: 'Gridstack Multi Board Drag Drop' }
 ]
 
 
@@ -64,6 +71,9 @@ const proto_one_items = [
 
 app.route('/prototype_one')
   .get((req, res, next) => res.render('prototype_one', { items: proto_one_items }))
+
+app.route('/prototype/$:num')
+  .get((req, res, next) => res.render(`prototype/${num}`))
 
 const server = app.listen(
   PORT
