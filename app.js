@@ -72,8 +72,8 @@ const proto_one_items = [
 app.route('/prototype_one')
   .get((req, res, next) => res.render('prototype_one', { items: proto_one_items }))
 
-app.route('/prototype/$:num')
-  .get((req, res, next) => res.render(`prototype/${num}`))
+app.route('/prototype/:num')
+  .get((req, res, next) => res.render(`prototype/${req.params.num}`))
 
 const server = app.listen(
   PORT

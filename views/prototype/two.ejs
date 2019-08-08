@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Prototype Two</title>
+    <link rel="stylesheet" href="/css/master.css">
+  </head>
+  <body>
+    <h1>Prototype Two</h1>
+
+    <img src="https://matterofstuff.com/wp-content/uploads/2019/07/Centaurus-Chair-Matt-06Atelier-768x768.jpg" style="width: 300px;" class="test" alt="">
+  </body>
+  <script type="text/javascript">
+    let logo = document.querySelector('.test')
+    window.addEventListener('deviceorientation', e => {
+      console.log(e)
+      let tiltLR = e.gamma
+      let tiltFB = e.beta
+
+      logo.style.transform = `rotate(${tiltLR}deg) rotate3d(1,0,0, ${tiltFB * -1}deg)`
+    })
+
+    navigator.getBattery().then(battery => {
+      console.log(`${battery.level * 100}%`)
+      console.log(battery)
+      battery.addEventListener('levelchange', e => console.log(e.level * 100))
+    })
+  </script>
+</html>
