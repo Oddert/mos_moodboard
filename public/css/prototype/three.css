@@ -1,0 +1,24 @@
+body, html, h1, p {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.pages {
+  overflow-x: auto;
+}
+.pages .page {
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.pages .page .page__content {
+  height: 95vh;
+  width: calc(1.414141414141414141 * 95vh);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/*# sourceMappingURL=css/prototype/three.css.map */

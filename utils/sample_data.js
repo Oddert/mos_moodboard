@@ -56,6 +56,23 @@ const sampleProducts = [
   }
 ]
 
+const proto_one_items = [
+  { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { row: 2, col: 1, x: 1, y: 1 },
+  { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { row: 3, col: 1, x: 1, y: 1 },
+  { row: 1, col: 2, x: 2, y: 1 },
+  { row: 2, col: 2, x: 2, y: 2 },
+  { row: 1, col: 4, x: 2, y: 2 },
+  { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { row: 3, col: 4, x: 1, y: 1 },
+  { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { row: 1, col: 4, x: 1, y: 1 },
+  { row: 2, col: 4, x: 1, y: 2 },
+]
+
 module.exports = {
-  sampleProducts
+  sampleProducts,
+  proto_one_items
 }

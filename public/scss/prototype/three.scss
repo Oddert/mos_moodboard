@@ -1,0 +1,28 @@
+
+
+body, html, h1, p {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+// A3 size
+
+.pages {
+  overflow-x: auto;
+  .page {
+    height: 100vh;
+    width: 100%;
+    background: rgba(0,0,0,.1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .page__content {
+      height: 95vh;
+      width: calc(1.414141414141414141 * 95vh);
+      background: rgba(0,0,0,.5);
+    }
+  }
+}

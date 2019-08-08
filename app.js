@@ -52,28 +52,13 @@ app.route('/interact/:file')
     )
   )
 
-
-const proto_one_items = [
-  { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
-  { row: 2, col: 1, x: 1, y: 1 },
-  { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
-  { row: 3, col: 1, x: 1, y: 1 },
-  { row: 1, col: 2, x: 2, y: 1 },
-  { row: 2, col: 2, x: 2, y: 2 },
-  { row: 1, col: 4, x: 2, y: 2 },
-  { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
-  { row: 3, col: 4, x: 1, y: 1 },
-  { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
-  { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sd.sampleProducts[Math.floor(Math.random() * sd.sampleProducts.length)] },
-  { row: 1, col: 4, x: 1, y: 1 },
-  { row: 2, col: 4, x: 1, y: 2 },
-]
-
 app.route('/prototype_one')
-  .get((req, res, next) => res.render('prototype_one', { items: proto_one_items }))
+  .get((req, res, next) => res.render('prototype_one', { items: sd.proto_one_items }))
 
 app.route('/prototype/:num')
   .get((req, res, next) => res.render(`prototype/${req.params.num}`))
+
+app.use('/api', require('./routes/api'))
 
 const server = app.listen(
   PORT
