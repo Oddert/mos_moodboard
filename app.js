@@ -33,7 +33,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')))
 
 app.route('/')
-  .get((req, res, next) => res.redirect('/prototype_one'))
+  .get((req, res, next) => res.redirect('/prototype/one'))
   // .get((req, res, next) => res.status(200).json({
   //   message: 'Status OK',
   //   status: 200,
@@ -52,8 +52,8 @@ app.route('/interact/:file')
     )
   )
 
-app.route('/prototype_one')
-  .get((req, res, next) => res.render('prototype_one', { items: sd.proto_one_items }))
+app.route('/prototype/one')
+  .get((req, res, next) => res.render('prototype/one', { items: sd.proto_one_items }))
 
 app.route('/prototype/:num')
   .get((req, res, next) => res.render(`prototype/${req.params.num}`))

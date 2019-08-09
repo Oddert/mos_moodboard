@@ -9,7 +9,7 @@ router.route('/projects/:user')
     success: true,
     message: 'default data',
     payload: {
-      projects: [sd.proto_one_items]
+      projects: [sd.proto_one_items, sd.proto_one_items]
     }
   }))
 

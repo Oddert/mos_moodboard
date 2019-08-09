@@ -1,4 +1,8 @@
 
+* {
+
+  box-sizing: border-box;
+}
 
 body, html, h1, p {
   box-sizing: border-box;
@@ -6,23 +10,68 @@ body, html, h1, p {
   padding: 0;
 }
 
+button[name=dev] {
+  position: fixed;
+  top: 0;
+  right: 10vw;
+  font-size: 1.2rem;
+}
 
-
-// A3 size
+$page_height: 90vh;
+$page_margin: 10vh;
 
 .pages {
   overflow-x: auto;
+  display: flex;
+  flex-direction: column;
   .page {
     height: 100vh;
     width: 100%;
     background: rgba(0,0,0,.1);
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
     .page__content {
-      height: 95vh;
-      width: calc(1.414141414141414141 * 95vh);
-      background: rgba(0,0,0,.5);
+      height: $page_height;
+      // width: calc(1.414141414141414141 * 90vh);
+      width: calc(1.777777777777777777 * 90vh);
+      background: rgba(255,255,255,1);
+      box-shadow: 0 19px 38px rgba(0,0,0,0.15), 0 15px 12px rgba(0,0,0,0.11);
+    }
+  }
+  &.horizontal {
+    flex-direction: row;
+    .page {
+      padding: 0 5vh;
+      min-width: inherit;
+      flex: 1;
+    }
+    &.full_screen {
+      .page {
+        min-width: 100vw;
+        flex: 1;
+        .page__content {
+          height: 97vh;
+          width: calc(1.777777777777777777 * 97vh);
+
+        }
+      }
+    }
+  }
+}
+
+
+.control_display {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  button {
+    &.active {
+      border: 1px solid tomato;
     }
   }
 }
