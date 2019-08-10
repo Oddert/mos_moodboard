@@ -1,3 +1,4 @@
+let userRender;
 
 
 // Page initialisation BEGIN
@@ -33,34 +34,38 @@ function initialAjax () {
 }
 
 function createGridContent (pages, data) {
+  console.log('createGridContent()')
   const all = pages.querySelectorAll('.page .page__content')
   const options = {
-    w: 12,
-    height: 12,
+    width: 12,
+    minWidth: 500,
+    height: 6,
     float: true,
-    // removable: '.trash'
-    removeTimeout: 100,
-    acceptWidgets: '.grid-stack-item'
+    // // removable: '.trash'
+    // removeTimeout: 100,
+    // acceptWidgets: '.grid-stack-item'
   }
   all.forEach(each => {
     const thisPage = $(each)
     thisPage.gridstack(options)
-    each.style.height = '300px'
+    each.style.height = '250px'
   })
+
   // console.log(data)
+  console.log(  $('.page .page__content'))
   $('.page .page__content')
     .each(function (idx) {
       const grid = $(this).data('gridstack')
-      console.log({projects: data.projects[idx]})
-      _.each(data.projects[idx], function ({ row, col, x, y }) {
-        const newWidget = $('<div><div class="gr-st-item-content"></div></div>')
-        console.log(newWidget)
-        console.log({ x, y, col, row })
-        grid.addWidget(newWidget, x, y, col, row)
+      console.log({ idx }, grid);
+      const items = data.projects[idx]
+      _.each(items, function (node) {
+        const newWidget = $('<div><div class="grid-stack-item-content"></div></div>')
+        grid.addWidget(newWidget, node.x, node.y, node.width, node.height)
       }, this)
     })
 
 }
+
 
 function render (data) {
   const pages = document.querySelector('.pages')
@@ -69,16 +74,16 @@ function render (data) {
     // Page: ${idx + 1} of ${data.projects.length}
     const page = `
       <div class="page">
-        <div class="page__content">
+        <div class="page__content grid-stack">
 
         </div>
       </div>
     `
     // console.log(page)
     pages.innerHTML += page
-    createGridContent (pages, data)
   }
   data.projects.forEach(addPage)
+  userRender = () => createGridContent (pages, data)
 }
 
 

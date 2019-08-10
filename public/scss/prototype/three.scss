@@ -33,6 +33,9 @@ $page_margin: 10vh;
     justify-content: center;
     .page__content {
       height: $page_height;
+      min-height: $page_height;
+      max-height: $page_height;
+      margin-top: 5vh;
       // width: calc(1.414141414141414141 * 90vh);
       width: calc(1.777777777777777777 * 90vh);
       background: rgba(255,255,255,1);
@@ -51,9 +54,9 @@ $page_margin: 10vh;
         min-width: 100vw;
         flex: 1;
         .page__content {
-          height: 97vh;
+          height: 96vh;
           width: calc(1.777777777777777777 * 97vh);
-
+          margin-top: 2vh;
         }
       }
     }

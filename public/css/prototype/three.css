@@ -30,6 +30,9 @@ button[name=dev] {
 }
 .pages .page .page__content {
   height: 90vh;
+  min-height: 90vh;
+  max-height: 90vh;
+  margin-top: 5vh;
   width: calc(1.777777777777777777 * 90vh);
   background: white;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
@@ -47,8 +50,9 @@ button[name=dev] {
   flex: 1;
 }
 .pages.horizontal.full_screen .page .page__content {
-  height: 97vh;
+  height: 96vh;
   width: calc(1.777777777777777777 * 97vh);
+  margin-top: 2vh;
 }
 
 .control_display {

@@ -1,15 +1,15 @@
 
-.grid-stack > .grid-stack-item {
-
-    $gridstack-columns: 12;
-
-    @for $idx from 1 through $gridstack-columns {
-        &[data-gs-width='#{$idx}'] { width: (100% / $gridstack-columns) * $idx; }
-        &[data-gs-x='#{$idx}'] { left: (100% / $gridstack-columns) * $idx; }
-        &[data-gs-min-width='#{$idx}'] { min-width: (100% / $gridstack-columns) * $idx; }
-        &[data-gs-max-width='#{$idx}'] { max-width: (100% / $gridstack-columns) * $idx; }
-    }
-}
+// .grid-stack > .grid-stack-item {
+//
+//     $gridstack-columns: 12;
+//
+//     @for $idx from 1 through $gridstack-columns {
+//         &[data-gs-width='#{$idx}'] { width: (100% / $gridstack-columns) * $idx; }
+//         &[data-gs-x='#{$idx}'] { left: (100% / $gridstack-columns) * $idx; }
+//         &[data-gs-min-width='#{$idx}'] { min-width: (100% / $gridstack-columns) * $idx; }
+//         &[data-gs-max-width='#{$idx}'] { max-width: (100% / $gridstack-columns) * $idx; }
+//     }
+// }
 
 
 

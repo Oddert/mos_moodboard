@@ -39,7 +39,7 @@ const sampleProducts = [
     ref: 'https://matterofstuff.com/product/edge-cabinet/',
     img: {
       src: 'https://matterofstuff.com/wp-content/uploads/2019/05/miniforms-edge-cabinet-furniture-matterofstuff20180716_0650-768x512.jpg',
-      alt: 'Edge Cabinet next to colony chairs',
+      alt: 'Edge Cabinet next to widthony chairs',
       caption: 'Edge Cabinet in context'
     }
   },
@@ -57,19 +57,19 @@ const sampleProducts = [
 ]
 
 const proto_one_items = [
-  { row: 1, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
-  { row: 2, col: 1, x: 1, y: 1 },
-  { row: 3, col: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
-  { row: 3, col: 1, x: 1, y: 1 },
-  { row: 1, col: 2, x: 2, y: 1 },
-  { row: 2, col: 2, x: 2, y: 2 },
-  { row: 1, col: 4, x: 2, y: 2 },
-  { row: 2, col: 4, x: 2, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
-  { row: 3, col: 4, x: 1, y: 1 },
-  { row: 1, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
-  { row: 3, col: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
-  { row: 1, col: 4, x: 1, y: 1 },
-  { row: 2, col: 4, x: 1, y: 2 },
+  { height: 1, width: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { height: 2, width: 1, x: 1, y: 1 },
+  { height: 3, width: 1, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { height: 3, width: 1, x: 1, y: 1 },
+  { height: 1, width: 2, x: 2, y: 1 },
+  { height: 2, width: 2, x: 2, y: 2 },
+  { height: 1, width: 4, x: 2, y: 2 },
+  { height: 2, width: 4, x: 2, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { height: 3, width: 4, x: 1, y: 1 },
+  { height: 1, width: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { height: 3, width: 4, x: 1, y: 1, type: 'product', data: sampleProducts[Math.floor(Math.random() * sampleProducts.length)] },
+  { height: 1, width: 4, x: 1, y: 1 },
+  { height: 2, width: 4, x: 1, y: 2 },
 ]
 
 module.exports = {
