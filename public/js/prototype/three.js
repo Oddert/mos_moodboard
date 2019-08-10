@@ -36,7 +36,7 @@ function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
   const options = {
     w: 12,
-    h: 12,
+    height: 12,
     float: true,
     // removable: '.trash'
     removeTimeout: 100,
