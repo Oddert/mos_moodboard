@@ -41,8 +41,10 @@ function createGridContent (pages, data) {
   const options = {
     width: 12,
     minWidth: 500,
-    height: 6,
+    height: 7,
     float: true,
+    cellHeight: '50',
+    cellHeightUnit: 'px'
     // // removable: '.trash'
     // removeTimeout: 100,
     // acceptWidgets: '.grid-stack-item'
@@ -124,10 +126,10 @@ function initialiseDisplayButtons () {
 initialiseDisplayButtons ()
 
 
-window.addEventListener('resize', e => {
-  const elem = document.querySelector('.page__content')
-  elem.innerHTML = `Width: ${elem.scrollWidth}, Height: ${elem.scrollHeight}`
-})
+// window.addEventListener('resize', e => {
+//   const elem = document.querySelector('.page__content')
+//   elem.innerHTML = `Width: ${elem.scrollWidth}, Height: ${elem.scrollHeight}`
+// })
 
 
 initialAjax()
