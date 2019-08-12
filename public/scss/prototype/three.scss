@@ -63,6 +63,21 @@ $page_margin: 10vh;
   }
 }
 
+// Theres got to be an easier way than this
+// Also this does not include vertical gaps
+// Also also there seems to be a rendering issue with live update (the important flag stops gs updating the sprite)
+// .grid-stack > .grid-stack-item {
+//   $grid_rows: 6;
+//   @for $idx from 1 through $grid_rows {
+//     &[data-gs-height='#{$idx}'] {
+//       height: (100% / $grid_rows) * $idx;
+//       min-height: (100% / $grid_rows) * $idx;
+//       max-height: (100% / $grid_rows) * $idx;
+//     }
+//     &[data-gs-y='#{$idx}'] { top: (100% / $grid_rows) * $idx !important; }
+//   }
+// }
+
 
 .control_display {
   position: fixed;

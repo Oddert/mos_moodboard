@@ -1,10 +1,12 @@
 let userRender;
 
 
+
 // Page initialisation BEGIN
 function initPage () {
 // Page initialisation BEGIN
 
+document.querySelector('button[name=dev]').onclick = () => userRender()
 
 const data = {
   username: 'no user',
