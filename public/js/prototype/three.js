@@ -1,10 +1,10 @@
 let userRender;
 let serialise
+let rows = 14
 
 
 // Page initialisation BEGIN
 function initPage () {
-// Page initialisation BEGIN
 
 document.querySelector('button[name=dev]').onclick = () => userRender()
 
@@ -13,8 +13,6 @@ const data = {
   projects: []
 }
 
-
-const multiplier = 2
 
 function initialAjax () {
   const url = `/api/projects/sample`
@@ -41,7 +39,7 @@ function createGridContent (pages, data) {
   const options = {
     width: 12,
     minWidth: 500,
-    height: 7 * multiplier,
+    height: rows,
     float: true,
 
     // cellHeight: '50',
@@ -53,17 +51,13 @@ function createGridContent (pages, data) {
   all.forEach(each => {
     const thisPage = $(each)
     const height = thisPage.height()
-    // console.log({ height, elem: (height - (((7 * multiplier) - 1) * 20)) / (7 * multiplier) })
     thisPage.gridstack({
       ...options,
-      cellHeight: `${(height - (((7 * multiplier) - 1) * 20)) / (7 * multiplier)}`
+      cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
     })
     each.style.height = '250px'
-    // console.log(thisPage.height())
   })
 
-  // console.log(data)
-  console.log(  $('.page .page__content'))
   $('.page .page__content')
     .each(function (idx) {
       const elem = $(this)
@@ -86,7 +80,6 @@ function render (data) {
   const pages = document.querySelector('.pages')
 
   function addPage (each, idx) {
-    // Page: ${idx + 1} of ${data.projects.length}
     const page = `
       <div class="page">
         <div class="page__wrapper">
@@ -97,13 +90,13 @@ function render (data) {
         </div>
       </div>
     `
-    // console.log(page)
     pages.innerHTML += page
   }
   data.projects.forEach(addPage)
   userRender = () => createGridContent (pages, data)
 }
 
+// serialise assigned outside of page init to be browser accessible
 serialise = function () {
   const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (elem) {
     const node = $(elem).data('_gridstack_node')
@@ -164,16 +157,8 @@ function initialiseDisplayButtons () {
 
 initialiseDisplayButtons ()
 
+initialAjax ()
 
-// window.addEventListener('resize', e => {
-//   const elem = document.querySelector('.page__content')
-//   elem.innerHTML = `Width: ${elem.scrollWidth}, Height: ${elem.scrollHeight}`
-// })
-
-
-initialAjax()
-
-// Page initialisation END
 }
 // Page initialisation END
 
