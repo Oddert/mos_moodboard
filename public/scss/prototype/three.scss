@@ -63,20 +63,17 @@ $page_margin: 10vh;
   }
 }
 
-// Theres got to be an easier way than this
-// Also this does not include vertical gaps
-// Also also there seems to be a rendering issue with live update (the important flag stops gs updating the sprite)
+
 .grid-stack > .grid-stack-item {
   $grid_rows: 7;
   $grid_gaps: $grid_rows - 1;
   $gap_size: 4%;
+
+  $item_height: (100 - ($grid_gaps * $gap_size)) / $grid_rows;
   @for $idx from 0 through $grid_rows {
-    &[data-gs-height='#{$idx}'] {
-      height: ((100 - ($grid_gaps * $gap_size)) / $grid_rows) * $idx;
-      // min-height: (100% / $grid_rows) * $idx;
-      // max-height: (100% / $grid_rows) * $idx;
-    }
-    &[data-gs-y='#{$idx}'] { top: (((100 - ($grid_gaps * $gap_size)) / $grid_rows) * $idx) + ($gap_size * $idx); }
+    &[data-gs-height='#{$idx}'] { height: ($item_height * $idx) + ($gap_size * ($idx - 1)); }
+    // Height doe snot factor gap in
+    &[data-gs-y='#{$idx}']      { top: ($item_height * $idx) + ($gap_size * $idx); }
   }
 }
 

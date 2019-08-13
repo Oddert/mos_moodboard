@@ -56,7 +56,7 @@ button[name=dev] {
 }
 
 .grid-stack > .grid-stack-item[data-gs-height="0"] {
-  height: 0%;
+  height: -4%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="0"] {
   top: 0%;
@@ -68,37 +68,37 @@ button[name=dev] {
   top: 14.8571428571%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="2"] {
-  height: 21.7142857143%;
+  height: 25.7142857143%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="2"] {
   top: 29.7142857143%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="3"] {
-  height: 32.5714285714%;
+  height: 40.5714285714%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="3"] {
   top: 44.5714285714%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="4"] {
-  height: 43.4285714286%;
+  height: 55.4285714286%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="4"] {
   top: 59.4285714286%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="5"] {
-  height: 54.2857142857%;
+  height: 70.2857142857%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="5"] {
   top: 74.2857142857%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="6"] {
-  height: 65.1428571429%;
+  height: 85.1428571429%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="6"] {
   top: 89.1428571429%;
 }
 .grid-stack > .grid-stack-item[data-gs-height="7"] {
-  height: 76%;
+  height: 100%;
 }
 .grid-stack > .grid-stack-item[data-gs-y="7"] {
   top: 104%;
