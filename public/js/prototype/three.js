@@ -1,5 +1,5 @@
 let userRender;
-
+let serialise
 
 
 // Page initialisation BEGIN
@@ -14,6 +14,7 @@ const data = {
 }
 
 
+const multiplier = 2
 
 function initialAjax () {
   const url = `/api/projects/sample`
@@ -36,37 +37,47 @@ function initialAjax () {
 }
 
 function createGridContent (pages, data) {
-  console.log('createGridContent()')
   const all = pages.querySelectorAll('.page .page__content')
   const options = {
     width: 12,
     minWidth: 500,
-    height: 7,
+    height: 7 * multiplier,
     float: true,
-    cellHeight: '50',
-    cellHeightUnit: 'px'
+
+    // cellHeight: '50',
+    // cellHeightUnit: 'px'
     // // removable: '.trash'
     // removeTimeout: 100,
-    // acceptWidgets: '.grid-stack-item'
+    acceptWidgets: '.grid-stack-item'
   }
   all.forEach(each => {
     const thisPage = $(each)
-    thisPage.gridstack(options)
+    const height = thisPage.height()
+    // console.log({ height, elem: (height - (((7 * multiplier) - 1) * 20)) / (7 * multiplier) })
+    thisPage.gridstack({
+      ...options,
+      cellHeight: `${(height - (((7 * multiplier) - 1) * 20)) / (7 * multiplier)}`
+    })
     each.style.height = '250px'
+    // console.log(thisPage.height())
   })
 
   // console.log(data)
   console.log(  $('.page .page__content'))
   $('.page .page__content')
     .each(function (idx) {
-      const grid = $(this).data('gridstack')
-      console.log({ idx }, grid);
-      const items = data.projects[idx]
+      const elem = $(this)
+      const grid = elem.data('gridstack')
+      if (grid) grid.removeAll()
+      // console.log({ idx }, grid);
+      const items = data.projects[idx].entities
       _.each(items, function (node) {
         const newWidget = $('<div><div class="grid-stack-item-content"></div></div>')
         grid.addWidget(newWidget, node.x, node.y, node.width, node.height)
       }, this)
     })
+
+    console.log(serialise())
 
 }
 
@@ -78,8 +89,11 @@ function render (data) {
     // Page: ${idx + 1} of ${data.projects.length}
     const page = `
       <div class="page">
-        <div class="page__content grid-stack">
+        <div class="page__wrapper">
+          <h3 class="page__title">Page Title Goes Here</h3>
+          <div class="page__content grid-stack">
 
+          </div>
         </div>
       </div>
     `
@@ -87,14 +101,32 @@ function render (data) {
     pages.innerHTML += page
   }
   data.projects.forEach(addPage)
-  userRender = () => {
-    $('.page .page__content').each(function (idx) {
-      const grid = $(this).data('gridstack')
-      if (grid) grid.removeAll()
-      console.log(`removed all for grid: ${idx}`)
-    })
-    createGridContent (pages, data)
-  }
+  userRender = () => createGridContent (pages, data)
+}
+
+serialise = function () {
+  const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (elem) {
+    const node = $(elem).data('_gridstack_node')
+    return {
+      x: node.x,
+      y: node.y,
+      width: node.width,
+      height: node.height,
+      page: node._grid._stylesId
+    }
+  }, this)
+
+  const keys = Object.keys(all.reduce((acc, each) => {
+    if (!acc[each.page]) acc[each.page] = true
+    return acc
+  }, {}))
+
+  const out = []
+  keys.forEach((key, idx) => {
+    out[idx] = all.filter(each => each.page === key)
+  })
+  const sanitised = out.map((page, idx) => page.map(cell => ({ ...cell, page: idx })))
+  return sanitised
 }
 
 

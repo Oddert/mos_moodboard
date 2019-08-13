@@ -10,27 +10,45 @@ router.route('/projects/:user')
     message: 'default data',
     payload: {
       // projects: [sd.proto_one_items, sd.proto_one_items]
-      projects: [[
-        {x: 0, y: 0, width: 2, height: 2},
-        {x: 3, y: 1, width: 1, height: 2},
-        {x: 4, y: 1, width: 1, height: 1},
-        {x: 2, y: 3, width: 3, height: 1},
-        {x: 1, y: 4, width: 1, height: 1},
-        {x: 1, y: 3, width: 1, height: 1},
-        {x: 2, y: 4, width: 1, height: 1},
-        {x: 2, y: 5, width: 1, height: 1}
-      ],[
-        {x: 0, y: 0, width: 2, height: 2},
-        {x: 3, y: 1, width: 1, height: 2},
-        {x: 4, y: 1, width: 1, height: 1},
-        {x: 2, y: 3, width: 3, height: 1},
-        {x: 1, y: 4, width: 1, height: 1},
-        {x: 1, y: 3, width: 1, height: 1},
-        {x: 2, y: 4, width: 1, height: 1},
-        {x: 2, y: 5, width: 1, height: 1}
-      ]]
+      projects: [
+        {entities: [
+          {x: 7, y: 8, width: 5, height: 6},
+          {x: 0, y: 8, width: 4, height: 5},
+          {x: 5, y: 4, width: 2, height: 6},
+          {x: 3, y: 1, width: 2, height: 7},
+          {x: 4, y: 10, width: 2, height: 2},
+          {x: 0, y: 0, width: 2, height: 3},
+          {x: 0, y: 4, width: 1, height: 2},
+          {x: 9, y: 0, width: 3, height: 2}
+        ]},
+        // autoProj()
+        {entities: [
+          {x: 8, y: 3, width: 4, height: 2},
+          {x: 3, y: 4, width: 4, height: 5},
+          {x: 7, y: 5, width: 5, height: 5},
+          {x: 1, y: 7, width: 2, height: 7},
+          {x: 1, y: 3, width: 1, height: 2},
+          {x: 0, y: 0, width: 2, height: 3},
+          {x: 0, y: 3, width: 1, height: 2},
+          {x: 9, y: 0, width: 3, height: 2}
+        ]}
+      ]
     }
   }))
+
+const ran = (multiplier, offset=0) => Math.floor(Math.random() * multiplier) + offset
+const autoVal = () => ({
+  x: ran(5, 0),
+  y: ran(5, 0),
+  width: ran(5, 1),
+  height: ran(5, 2),
+})
+const autoProj = () => {
+  const out = []
+  for (let i=0; i<8; i++) out.push(autoVal())
+  return out
+}
+console.log(autoProj())
 
 
 module.exports = router

@@ -13,29 +13,44 @@ button[name=dev] {
   top: 0;
   right: 10vw;
   font-size: 1.2rem;
+  z-index: 10;
+}
+
+.grid-stack-item-content {
+  color: #2c3e50;
+  text-align: center;
+  background-color: #18bc9c;
 }
 
 .pages {
+  padding: 0 0 300px 0;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  background: rgba(0, 0, 0, 0.1);
 }
 .pages .page {
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
-.pages .page .page__content {
+.pages .page .page__wrapper {
+  margin-top: 2vh;
+}
+.pages .page .page__wrapper .page__title {
+  margin: 0;
+  padding: 10px 30px;
+}
+.pages .page .page__wrapper .page__content {
+  background: white;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
   height: 90vh;
   min-height: 90vh;
   max-height: 90vh;
-  margin-top: 5vh;
+  background: #fff;
   width: calc(1.777777777777777777 * 90vh);
-  background: white;
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
 }
 .pages.horizontal {
   flex-direction: row;
@@ -53,55 +68,6 @@ button[name=dev] {
   height: 96vh;
   width: calc(1.777777777777777777 * 97vh);
   margin-top: 2vh;
-}
-
-.grid-stack > .grid-stack-item[data-gs-height="0"] {
-  height: -4%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="0"] {
-  top: 0%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="1"] {
-  height: 10.8571428571%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="1"] {
-  top: 14.8571428571%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="2"] {
-  height: 25.7142857143%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="2"] {
-  top: 29.7142857143%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="3"] {
-  height: 40.5714285714%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="3"] {
-  top: 44.5714285714%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="4"] {
-  height: 55.4285714286%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="4"] {
-  top: 59.4285714286%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="5"] {
-  height: 70.2857142857%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="5"] {
-  top: 74.2857142857%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="6"] {
-  height: 85.1428571429%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="6"] {
-  top: 89.1428571429%;
-}
-.grid-stack > .grid-stack-item[data-gs-height="7"] {
-  height: 100%;
-}
-.grid-stack > .grid-stack-item[data-gs-y="7"] {
-  top: 104%;
 }
 
 .control_display {
