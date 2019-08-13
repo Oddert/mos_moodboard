@@ -87,7 +87,14 @@ function render (data) {
     pages.innerHTML += page
   }
   data.projects.forEach(addPage)
-  userRender = () => createGridContent (pages, data)
+  userRender = () => {
+    $('.page .page__content').each(function (idx) {
+      const grid = $(this).data('gridstack')
+      if (grid) grid.removeAll()
+      console.log(`removed all for grid: ${idx}`)
+    })
+    createGridContent (pages, data)
+  }
 }
 
 
