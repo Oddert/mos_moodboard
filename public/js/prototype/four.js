@@ -195,10 +195,45 @@ const createImage = ({ src, alt }) => `
   </div>
 `
 
+const createProduct = ({ img: { src, alt }, title, design, price }) => `
+  <div class="content product">
+    <div class="content__controls">
+      <button class="content__controls--product_edit">✎</button>
+      <button content__controls--delete>✖</button>
+    </div>
+    <div class="content_product__img">
+      <img src="${src}" alt="${alt}" />
+    </div>
+    <div class="content_product__text">
+      <p>${title}</p>
+      <p>${design}</p>
+      <p>${price}</p>
+    </div>
+  </div>
+`
+
+const createMaterial = ({ img: { src, alt }, title, design }) => `
+  <div class="content material">
+    <div class="content__controls">
+      <button class="content__controls--material_edit">✎</button>
+      <button content__controls--delete>✖</button>
+    </div>
+    <div class="content_material__img">
+      <img src="${src}" alt="${alt}" />
+    </div>
+    <div class="content_material__text">
+      <p>${title}</p>
+      <p>${design}</p>
+    </div>
+  </div>
+`
+
 function getContent (eachItem) {
   switch (eachItem._type) {
     case "text": return createText (eachItem)
     case "image": return createImage (eachItem)
+    case "product": return createProduct (eachItem)
+    case "material": return createMaterial (eachItem)
     default: return `<div>${JSON.stringify(eachItem)}</div>`
   }
 }
