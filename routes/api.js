@@ -12,8 +12,8 @@ router.route('/projects/:user')
       // projects: [sd.proto_one_items, sd.proto_one_items]
       projects: [
         {entities: [
-          {x: 7, y: 8, width: 5, height: 6},
-          {x: 0, y: 8, width: 4, height: 5},
+          {x: 7, y: 8, width: 5, height: 6, _type: "image", src: "http://mos.oddberries.com/wp-content/themes/oddb-storefront/_layouts/home_selection/decor-01.jpg", alt: "" },
+          {x: 0, y: 8, width: 4, height: 5, _type: "text", text: "Hello World!"},
           {x: 5, y: 4, width: 2, height: 6},
           {x: 3, y: 1, width: 2, height: 7},
           {x: 4, y: 10, width: 2, height: 2},

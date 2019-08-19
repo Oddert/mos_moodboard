@@ -81,7 +81,62 @@ $page_margin: 10vh;
           height: 96vh;
           width: calc(1.777777777777777777 * 97vh);
           margin-top: 2vh;
+          // .content {
+
+          //}
         }
+      }
+    }
+  }
+}
+
+// for overriding default css settings without indenting the main tree too much
+.grid-stack > .grid-stack-item > .grid-stack-item-content {
+  overflow: hidden;
+}
+
+.grid-stack-item-content {
+  border: 1px solid darkgreen;
+  box-sizing: border-box;
+  & * { box-sizing: border-box; }
+  .content {
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    transition: .1s linear;
+    .content__controls {
+      transition: .1s linear;
+      position: absolute;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      button {
+        background: #fff;
+        border: none;
+        cursor: pointer;
+      }
+    }
+    &.text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &.image {
+      display: flex;
+      flex-direction: column;
+      .content_image__img {
+        width: 100%;
+        height: 100%;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+    &:hover {
+      .content__controls {
+        opacity: 1;
       }
     }
   }
