@@ -172,6 +172,39 @@ button[name=dev] {
   background-position: center;
   background-size: cover;
 }
+.grid-stack-item-content .content.file .file__cover {
+  transition: 0.2s linear;
+  opacity: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.6);
+}
+.grid-stack-item-content .content.file .file__cover .file__cover__icon {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.grid-stack-item-content .content.file .file__cover .file__cover__title {
+  flex: 1;
+  color: #ecf0f1;
+  font-size: 12px;
+}
+.grid-stack-item-content .content.file:hover .file__cover {
+  opacity: 1;
+}
+.grid-stack-item-content .content.file:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 24px 24px 0px;
+  border-style: solid;
+  border-color: #bec3c7 #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), -1px 1px 1px rgba(0, 0, 0, 0.1);
+}
 .grid-stack-item-content .content:hover .content__controls {
   opacity: 1;
 }

@@ -247,8 +247,8 @@ const createFile = ({ format, name, image: { src } }) => {
             <button content__controls--delete>✖</button>
           </div>
           <div class="file__cover">
-            <div class="file__cover__logo">📁</div>
-            <div class="file__cover__text">
+            <div class="file__cover__icon">📁</div>
+            <div class="file__cover__title">
               <p>${name}</p>
             </div>
           </div>
