@@ -33,7 +33,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')))
 
 app.route('/')
-  .get((req, res, next) => res.redirect('/prototype/one'))
+  .get((req, res, next) => res.redirect('/prototype/four'))
   // .get((req, res, next) => res.status(200).json({
   //   message: 'Status OK',
   //   status: 200,
@@ -66,3 +66,18 @@ const server = app.listen(
     `${new Date().toLocaleTimeString('en-GB')}: Server initialised on PORT: ${PORT}...`
   )
 )
+
+
+// =====================================
+//   -=-=-=-=-  TO DO LIST  -=-=-=-=-
+// =====================================
+
+// -Find a way of binding event listeners to newly created widgets
+// -Implament remove funcitonality (easy)
+// -Implament Page Add
+// -Implament Page Delete
+// -Implament each 'edit' of other functions (unify controls?)
+// -Considder how new items will be added (drag drop)
+// -Considder how colours can size themselfs and work with a subgrid
+// -Implament auto-save and actual save
+// -Implament undo, redo

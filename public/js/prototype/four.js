@@ -122,7 +122,10 @@ function createGridContent (pages, data) {
             </div>
           </div>
         `)
-        grid.addWidget(newWidget, node.x, node.y, node.width, node.height)
+        const createdWidget = grid.addWidget(newWidget, node.x, node.y, node.width, node.height)
+        createdWidget.find('.content__controls--delete').click(function () {
+          grid.removeWidget(this.closest('.grid-stack-item'))
+        })
       }, this)
     })
 
@@ -177,7 +180,7 @@ const createText = ({ text }) => `
   <div class="content text">
     <div class="content__controls">
       <button class="content__controls--text_edit">✎</button>
-      <button content__controls--delete>✖</button>
+      <button class="content__controls--delete">✖</button>
     </div>
     <p class="content_text__text">${text}</p>
   </div>
@@ -187,7 +190,7 @@ const createImage = ({ src, alt }) => `
   <div class="content image">
     <div class="content__controls">
       <button class="content__controls--image_edit">✎</button>
-      <button content__controls--delete>✖</button>
+      <button class="content__controls--delete">✖</button>
     </div>
     <div class="content_image__img">
       <img src="${src}" alt="${alt}" />
@@ -199,7 +202,7 @@ const createProduct = ({ img: { src, alt }, title, design, price }) => `
   <div class="content product">
     <div class="content__controls">
       <button class="content__controls--product_edit">✎</button>
-      <button content__controls--delete>✖</button>
+      <button class="content__controls--delete">✖</button>
     </div>
     <div class="content_product__img">
       <img src="${src}" alt="${alt}" />
@@ -216,7 +219,7 @@ const createMaterial = ({ img: { src, alt }, title, design }) => `
   <div class="content material">
     <div class="content__controls">
       <button class="content__controls--material_edit">✎</button>
-      <button content__controls--delete>✖</button>
+      <button class="content__controls--delete">✖</button>
     </div>
     <div class="content_material__img">
       <img src="${src}" alt="${alt}" />
@@ -232,7 +235,7 @@ const createColour = ({ hex }) => `
   <div class="content colour">
     <div class="content__controls">
       <button class="content__controls--colour_edit">✎</button>
-      <button content__controls--delete>✖</button>
+      <button class="content__controls--delete">✖</button>
     </div>
     <div class="colour__module" style="background-color: #${hex};"></div>
   </div>
@@ -244,7 +247,7 @@ const createFile = ({ format, name, image: { src } }) => {
         <div class="content file format_pdf" style="background-image: url('${src}');">
           <div class="content__controls">
             <button class="content__controls--file_edit">✎</button>
-            <button content__controls--delete>✖</button>
+            <button class="content__controls--delete">✖</button>
           </div>
           <div class="file__cover">
             <div class="file__cover__icon">📁</div>
