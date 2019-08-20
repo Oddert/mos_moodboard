@@ -75,7 +75,7 @@ button[name=dev] {
 }
 
 .grid-stack-item-content {
-  border: 1px solid darkgreen;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 .grid-stack-item-content * {
@@ -119,8 +119,9 @@ button[name=dev] {
   object-fit: cover;
 }
 .grid-stack-item-content .content.product {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 4fr 1fr;
+  grid-template-columns: 1fr;
   padding: 10px 0;
 }
 .grid-stack-item-content .content.product .content_product__img {
@@ -129,7 +130,7 @@ button[name=dev] {
 }
 .grid-stack-item-content .content.product .content_product__img img {
   width: 90%;
-  height: 90%;
+  max-height: 90%;
   object-fit: contain;
 }
 .grid-stack-item-content .content.product .content_product__text {
@@ -155,6 +156,21 @@ button[name=dev] {
 .grid-stack-item-content .content.material .content_material__text {
   font-size: 11px;
   flex: 1;
+}
+.grid-stack-item-content .content.colour {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid-stack-item-content .content.colour .colour__module {
+  width: 100%;
+  height: 100%;
+}
+.grid-stack-item-content .content.file {
+  display: flex;
+  flex-direction: column;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 .grid-stack-item-content .content:hover .content__controls {
   opacity: 1;

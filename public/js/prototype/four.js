@@ -228,12 +228,48 @@ const createMaterial = ({ img: { src, alt }, title, design }) => `
   </div>
 `
 
+const createColour = ({ hex }) => `
+  <div class="content colour">
+    <div class="content__controls">
+      <button class="content__controls--colour_edit">✎</button>
+      <button content__controls--delete>✖</button>
+    </div>
+    <div class="colour__module" style="background-color: #${hex};"></div>
+  </div>
+`
+const createFile = ({ format, name, image: { src } }) => {
+  switch (format) {
+    case 'pdf':
+      return `
+        <div class="content file format_pdf" style="background-image: url('${src}');">
+          <div class="content__controls">
+            <button class="content__controls--file_edit">✎</button>
+            <button content__controls--delete>✖</button>
+          </div>
+          <div class="file__cover">
+            <div class="file__cover__logo">📁</div>
+            <div class="file__cover__text">
+              <p>${name}</p>
+            </div>
+          </div>
+        </div>
+      `
+    default:
+      return `
+        <div class="content file format_undefined">
+        </div>
+      `
+  }
+}
+
 function getContent (eachItem) {
   switch (eachItem._type) {
     case "text": return createText (eachItem)
     case "image": return createImage (eachItem)
     case "product": return createProduct (eachItem)
     case "material": return createMaterial (eachItem)
+    case "colour": return createColour (eachItem)
+    case "file": return createFile (eachItem)
     default: return `<div>${JSON.stringify(eachItem)}</div>`
   }
 }

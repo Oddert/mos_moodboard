@@ -16,9 +16,9 @@ router.route('/projects/:user')
           {x: 0, y: 8, width: 4, height: 5, _type: "text", text: "Hello World!"},
           {x: 5, y: 1, width: 2, height: 9, _type: "product", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
           {x: 3, y: 1, width: 2, height: 7, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },
-          {x: 4, y: 10, width: 2, height: 2},
-          {x: 0, y: 0, width: 2, height: 3},
-          {x: 0, y: 4, width: 1, height: 2},
+          {x: 4, y: 10, width: 2, height: 2, _type: "colour", hex: "9a95b5" },
+          {x: 0, y: 0, width: 2, height: 6, _type: "file", format: "pdf", name: "Thinghy", image: { src: "https://cdn.shopify.com/s/files/1/1709/9537/products/100977_1024x1024.jpg?v=1508977616" } },
+          {x: 0, y: 6, width: 1, height: 2},
           {x: 9, y: 0, width: 3, height: 2}
         ]},
         // autoProj()
