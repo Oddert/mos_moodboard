@@ -80,6 +80,7 @@ function render (data) {
   }
   data.projects.forEach(addPage)
   userRender = () => createGridContent (pages, data)
+  userRender()
 }
 
 function createGridContent (pages, data) {
@@ -168,7 +169,6 @@ function initialiseDisplayButtons () {
 
 initialiseDisplayButtons ()
 initialAjax ()
-
 }
 // ========== / Page initialisation ==========
 
@@ -291,3 +291,24 @@ function toggleTextEdit () {
 
 
 window.addEventListener('DOMContentLoaded', initPage)
+window.addEventListener('resize', debounce(() => userRender(), 250))
+
+
+
+
+
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
