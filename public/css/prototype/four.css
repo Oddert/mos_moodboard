@@ -30,7 +30,7 @@ button[name=dev] {
   background: rgba(0, 0, 0, 0.1);
 }
 .pages .page {
-  height: 100vh;
+  margin: 30px 0;
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -44,13 +44,11 @@ button[name=dev] {
   padding: 10px 30px;
 }
 .pages .page .page__wrapper .page__content {
+  background: #fff;
   background: white;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
-  height: 90vh;
-  min-height: 90vh;
-  max-height: 90vh;
-  background: #fff;
-  width: calc(1.777777777777777777 * 90vh);
+  width: 85vw;
+  height: 47.8125vw;
 }
 .pages.horizontal {
   flex-direction: row;
@@ -105,6 +103,16 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
 }
+.grid-stack-item-content .content.text .content_text__input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+}
 .grid-stack-item-content .content.image {
   display: flex;
   flex-direction: column;
@@ -156,6 +164,10 @@ button[name=dev] {
 .grid-stack-item-content .content.material .content_material__text {
   font-size: 11px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .grid-stack-item-content .content.colour {
   display: flex;

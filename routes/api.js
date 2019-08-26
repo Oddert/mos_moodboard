@@ -12,7 +12,7 @@ router.route('/projects/:user')
       // projects: [sd.proto_one_items, sd.proto_one_items]
       projects: [
         {entities: [
-          {x: 7, y: 8, width: 5, height: 6, _type: "image", src: "http://mos.oddberries.com/wp-content/themes/oddb-storefront/_layouts/home_selection/decor-01.jpg", alt: "" },
+          {x: 7, y: 8, width: 5, height: 6, _type: "image", src: "http://mos.oddberries.com/wp-content/themes/oddb-storefront/_layouts/home_selection/decor-01.jpg", alt: "A banner image from the storefront" },
           {x: 0, y: 8, width: 4, height: 5, _type: "text", text: "Hello World! This is my first moodboard to test the various elements. Please be patient will they progress."},
           {x: 5, y: 1, width: 2, height: 9, _type: "product", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
           {x: 3, y: 1, width: 2, height: 7, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },

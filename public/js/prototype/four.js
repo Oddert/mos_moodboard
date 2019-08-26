@@ -3,16 +3,48 @@ let userRender;
 let rows = 20
 console.log({ rows })
 
+const data = {
+  username: 'no user',
+  projects: []
+}
+
+
+// ========== Top Level Functions ==========
+
+function extractElementData (node) {
+  const content = node.el.find('.content')
+  const dataType = content.data('mosContenttype')
+  switch (dataType) {
+    case "text":
+      return {
+        _type: "text",
+        text: content.find('.content_text__text') ? content.find('.content_text__text').text() : content.find('.content_text__input').val()
+      }
+    case "image":
+      return {
+        _type: "image",
+        src: content.find('img').attr('src') || "",
+        alt: content.find('img').attr('alt') || ""
+      }
+    default:
+      return {}
+  }
+}
 
 function serialise () {
-  const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (elem) {
-    const node = $(elem).data('_gridstack_node')
+  const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
+    const elem = $(el)
+    const node = elem.data('_gridstack_node')
+    const elementData = extractElementData(node)
+    console.log(node)
+    console.log(elementData)
     return {
       x: node.x,
       y: node.y,
       width: node.width,
       height: node.height,
-      page: node._grid._stylesId
+      page: node._grid._stylesId,
+      ...elementData
     }
   }, this)
 
@@ -29,17 +61,14 @@ function serialise () {
   return sanitised
 }
 
+// ========== / Top Level Functions ==========
 
 
 // ========== Page initialisation ==========
+
 function initPage () {
 
 document.querySelector('button[name=dev]').onclick = () => userRender()
-
-const data = {
-  username: 'no user',
-  projects: []
-}
 
 
 function initialAjax () {
@@ -53,7 +82,6 @@ function initialAjax () {
     console.log(res)
     const { projects } = res.payload
     data.projects = projects
-    console.log(data)
     render(data)
   }
 
@@ -109,16 +137,16 @@ function createGridContent (pages, data) {
   })
 
   $('.page .page__content')
-    .each(function (idx) {
+    .each(function (pageIdx) {
       const elem = $(this)
       const grid = elem.data('gridstack')
       if (grid) grid.removeAll()
       // console.log({ idx }, grid);
-      const items = data.projects[idx].entities
-      _.each(items, function (node) {
+      const items = data.projects[pageIdx].entities
+      _.each(items, function (node, itemIdx) {
         const newWidget = $(`
           <div>
-            <div class="grid-stack-item-content">
+            <div class="grid-stack-item-content" data-mos-page="${pageIdx}" data-mos-item="${itemIdx}">
               ${getContent(node)}
             </div>
           </div>
@@ -127,11 +155,12 @@ function createGridContent (pages, data) {
         createdWidget.find('.content__controls--delete').click(function () {
           grid.removeWidget(this.closest('.grid-stack-item'))
         })
+        createdWidget.data('mospage', `${pageIdx}`)
+        if (node._type === "text") {
+          createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+        }
       }, this)
     })
-
-    console.log(serialise())
-
 }
 
 
@@ -170,6 +199,7 @@ function initialiseDisplayButtons () {
 initialiseDisplayButtons ()
 initialAjax ()
 }
+
 // ========== / Page initialisation ==========
 
 
@@ -177,7 +207,7 @@ initialAjax ()
 // ========== Content Creators ==========
 
 const createText = ({ text }) => `
-  <div class="content text">
+  <div class="content text" data-mos-contenttype="text">
     <div class="content__controls">
       <button class="content__controls--text_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -187,7 +217,7 @@ const createText = ({ text }) => `
 `
 
 const createImage = ({ src, alt }) => `
-  <div class="content image">
+  <div class="content image" data-mos-contenttype="image">
     <div class="content__controls">
       <button class="content__controls--image_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -199,7 +229,7 @@ const createImage = ({ src, alt }) => `
 `
 
 const createProduct = ({ img: { src, alt }, title, design, price }) => `
-  <div class="content product">
+  <div class="content product" data-mos-contenttype="product">
     <div class="content__controls">
       <button class="content__controls--product_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -216,7 +246,7 @@ const createProduct = ({ img: { src, alt }, title, design, price }) => `
 `
 
 const createMaterial = ({ img: { src, alt }, title, design }) => `
-  <div class="content material">
+  <div class="content material" data-mos-contenttype="material">
     <div class="content__controls">
       <button class="content__controls--material_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -232,7 +262,7 @@ const createMaterial = ({ img: { src, alt }, title, design }) => `
 `
 
 const createColour = ({ hex }) => `
-  <div class="content colour">
+  <div class="content colour" data-mos-contenttype="colour">
     <div class="content__controls">
       <button class="content__controls--colour_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -244,7 +274,7 @@ const createFile = ({ format, name, image: { src } }) => {
   switch (format) {
     case 'pdf':
       return `
-        <div class="content file format_pdf" style="background-image: url('${src}');">
+        <div class="content file format_pdf" data-mos-contenttype="file" style="background-image: url('${src}');">
           <div class="content__controls">
             <button class="content__controls--file_edit">✎</button>
             <button class="content__controls--delete">✖</button>
@@ -259,7 +289,7 @@ const createFile = ({ format, name, image: { src } }) => {
       `
     default:
       return `
-        <div class="content file format_undefined">
+        <div class="content file format_undefined" data-mos-contenttype="undef">
         </div>
       `
   }
@@ -283,20 +313,82 @@ function getContent (eachItem) {
 
 // ========== Content Functions ==========
 
+function saveOneText (x, y, page, item, content, payload) {
+  console.log({ x, y, page, item, content, payload })
+  const { text } = payload
+  data.projects[page].entities[item].text = text
+  console.log(data.projects[page].entities[item].text)
+}
+
+function saveOne (gridStackItem, payload) {
+  const content = gridStackItem.querySelector('.grid-stack-item-content')
+  const { gsX: x, gsY: y } = gridStackItem.dataset
+  const { mosPage: page, mosItem: item } = content.dataset
+  const type = content.querySelector('.content').dataset.mosContenttype
+  switch (type) {
+    case "text":
+      saveOneText(x, y, page, item, content, payload)
+      break;
+    default:
+      console.error('ERROR ln 309: No Such data type', type)
+      break;
+  }
+}
+
+// We are free from jquery somehow woooo
 function toggleTextEdit () {
+  const parent = this.closest('.grid-stack-item')
+  console.log(parent.dataset)
+  const content = parent.querySelector('.content')
+
+  if (parent.dataset.mosEdit === 'active') {
+    console.log('item active')
+
+    if (parent.querySelector('.content_text__input')) {
+      const textInput = content.querySelector('.content_text__input')
+      const { value } = textInput
+      saveOne(parent, { text: value })
+      const textShow = document.createElement('p')
+      textShow.className = 'content_text__text'
+      textShow.textContent = value
+      content.removeChild(textInput)
+      content.appendChild(textShow)
+    }
+
+    parent.dataset.mosEdit = 'inactive'
+  } else {
+    console.log('item inactive')
+
+    if (parent.querySelector('.content_text__text')) {
+      const textShow = content.querySelector('.content_text__text')
+      const { textContent } = textShow
+      const textInput = document.createElement('textarea')
+      textInput.className = 'content_text__input'
+      textInput.value = textContent
+      content.removeChild(textShow)
+      content.appendChild(textInput)
+    }
+
+    parent.dataset.mosEdit = 'active'
+  }
+
 
 }
 
 // ========== / Content Functions ==========
 
 
+
+// ========== Event Binding ==========
+
 window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 
+// ========== / Event Binding ==========
 
 
 
-
+// ========== Ur tawdry debounce ==========
 
 function debounce(func, wait, immediate) {
 	var timeout;
