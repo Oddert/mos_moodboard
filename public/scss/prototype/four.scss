@@ -24,12 +24,49 @@ button[name=dev] {
   background-color: #18bc9c;
 }
 
+$menu_width: 30vw;
 $page_height: 85vh;
 $page_width: 85vw;
 $page_margin: 10vh;
 
 .pages--container {
+  &.menu_open {
+    display: grid;
+    grid-template-columns: $menu_width 1fr;
+    .input_menu {
+      display: flex;
+    }
+    .input_menu__toggle {
+      left: $menu_width;
+      transform: translateX(-50%);
+    }
+    .pages .page .page__wrapper .page__content {
+      width: $page_width - $menu_width;
+      height: (9/16) * ($page_width - $menu_width);
+    }
+  }
+}
 
+.input_menu {
+  background: #1bbc9b;
+  box-shadow: 19px 0 38px rgba(0,0,0,0.15), 15px 0 12px rgba(0,0,0,0.11);
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+.input_menu__toggle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #2dcc50;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .pages {
@@ -45,6 +82,7 @@ $page_margin: 10vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    position: relative;
     .page__wrapper {
 
       margin-top: 2vh;
@@ -67,6 +105,9 @@ $page_margin: 10vh;
       }
     }
   }
+
+
+
   &.horizontal {
     flex-direction: row;
     .page {

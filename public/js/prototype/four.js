@@ -128,6 +128,7 @@ function initialAjax () {
 
 function render (data) {
   const pages = document.querySelector('.pages')
+  pages.innerHTML = ""
 
   function addPage (each, idx) {
     const page = `
@@ -178,6 +179,7 @@ function createGridContent (pages, data) {
       const grid = elem.data('gridstack')
       if (grid) grid.removeAll()
       // console.log({ idx }, grid);
+      console.log(data, pageIdx)
       const items = data.projects[pageIdx].entities
       _.each(items, function (node, itemIdx) {
         const newWidget = $(`
@@ -225,6 +227,31 @@ function changeDisplayMode (e) {
   }
 }
 
+function toggleInputMenu () {
+  const pagesContainer = document.querySelector('.pages--container')
+  const toggle = pagesContainer.querySelector('.input_menu__toggle')
+  const icon = toggle.querySelector('.input_menu__toggle__icon')
+  if (pagesContainer.classList.contains('menu_open')) {
+    //close the menu
+    console.log('closing')
+    icon.innerHTML = "+"
+    pagesContainer.classList.remove('menu_open')
+    render(data)
+  } else {
+    //open the menu
+
+    console.log('opening')
+    pagesContainer.classList.add('menu_open')
+    render(data)
+    icon.innerHTML = "&lt;"
+  }
+}
+
+function initialiseToggleMenu () {
+  const toggle = document.querySelector('.input_menu__toggle')
+  toggle.onclick = toggleInputMenu
+}
+
 function initialiseDisplayButtons () {
   const displayButtons = document.querySelectorAll('.control_display button')
   displayButtons.forEach(each =>
@@ -232,6 +259,7 @@ function initialiseDisplayButtons () {
   )
 }
 
+initialiseToggleMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
 }
