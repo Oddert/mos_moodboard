@@ -68,6 +68,16 @@ function extractElementData (node) {
         design: content.find('.content_product__text--design').text(),
         price: content.find('.content_product__text--price').text()
       }
+    case "material":
+      return {
+        _type: "material",
+        img: {
+          src: content.find('.content_material__img img').attr('src'),
+          alt: content.find('.content_material__img img').attr('alt')
+        },
+        title: content.find('.content_material__text--title').text(),
+        design: content.find('.content_material__text--design').text()
+      }
     default:
       return {}
   }
@@ -297,8 +307,8 @@ const createMaterial = ({ img: { src, alt }, title, design }) => `
       <img src="${src}" alt="${alt}" />
     </div>
     <div class="content_material__text">
-      <p>${title}</p>
-      <p>${design}</p>
+      <p class="content_material__text--title">${title}</p>
+      <p class="content_material__text--design">${design}</p>
     </div>
   </div>
 `
