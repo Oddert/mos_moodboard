@@ -72,12 +72,12 @@ const server = app.listen(
 //   -=-=-=-=-  TO DO LIST  -=-=-=-=-
 // =====================================
 
-// -Find a way of binding event listeners to newly created widgets
-// -Implament remove funcitonality (easy)
+// -Find a way of binding event listeners to newly created widgets ✓
+// -Implament remove funcitonality (easy) ✓
+// -Add new item pull in menu for drag and drop
 // -Implament Page Add
 // -Implament Page Delete
 // -Implament each 'edit' of other functions (unify controls?)
-// -Considder how new items will be added (drag drop)
-// -Considder how colours can size themselfs and work with a subgrid
+// -Considder how colours can size themselfs and work with a subgrid (maybe leave for now)
 // -Implament auto-save and actual save
 // -Implament undo, redo
