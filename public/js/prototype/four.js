@@ -57,6 +57,17 @@ function extractElementData (node) {
           src: content.css('background-image').replace('url("', '').replace('")', '')
         }
       }
+    case "product":
+      return {
+        _type: "product",
+        img: {
+          src: content.find('.content_product__img img').attr('src'),
+          alt: content.find('.content_product__img img').attr('alt')
+        },
+        title: content.find('.content_product__text--title').text(),
+        design: content.find('.content_product__text--design').text(),
+        price: content.find('.content_product__text--price').text()
+      }
     default:
       return {}
   }
@@ -269,9 +280,9 @@ const createProduct = ({ img: { src, alt }, title, design, price }) => `
       <img src="${src}" alt="${alt}" />
     </div>
     <div class="content_product__text">
-      <p>${title}</p>
-      <p>${design}</p>
-      <p>${price}</p>
+      <p class="content_product__text--title">${title}</p>
+      <p class="content_product__text--design">${design}</p>
+      <p class="content_product__text--price">${price}</p>
     </div>
   </div>
 `
