@@ -51,8 +51,8 @@ function extractElementData (node) {
     case "file":
       return {
         _type: "file",
-        format: "pdf",
-        name: "History of Italian Design",
+        format: content.find('.file__data').data('mosFormat'),
+        name: content.find('.file__cover__title p').text(),
         image: {
           src: content.css('background-image').replace('url("', '').replace('")', '')
         }
@@ -310,6 +310,9 @@ const createFile = ({ format, name, image: { src } }) => {
             <button class="content__controls--file_edit">✎</button>
             <button class="content__controls--delete">✖</button>
           </div>
+          <div
+            class="file__data" data-mos-format="${format}"
+          />
           <div class="file__cover">
             <div class="file__cover__icon">📁</div>
             <div class="file__cover__title">
