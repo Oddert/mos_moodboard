@@ -33,32 +33,85 @@ button[name=dev] {
   left: 30vw;
   transform: translateX(-50%);
 }
+.pages--container.menu_open .input_menu__toggle .input_menu__toggle__icon {
+  transform: none;
+}
 .pages--container.menu_open .pages .page .page__wrapper .page__content {
   width: 55vw;
   height: 30.9375vw;
 }
 
 .input_menu {
-  background: #1bbc9b;
+  background: #fff;
   box-shadow: 19px 0 38px rgba(0, 0, 0, 0.15), 15px 0 12px rgba(0, 0, 0, 0.11);
+  box-shadow: 19px 0 38px rgba(0, 0, 0, 0.04), 15px 0 12px rgba(0, 0, 0, 0.03);
   display: none;
   flex-direction: column;
   height: 100vh;
   position: sticky;
   top: 0;
+  z-index: 10;
+}
+.input_menu .input_menu__title {
+  text-align: center;
+  color: #34495e;
+}
+.input_menu .input_menu__content {
+  margin-top: 30px;
+}
+.input_menu .input_menu__content .input_menu__content_item {
+  height: 200px;
+  cursor: default;
+  z-index: 1;
+  border: 2px dashed #ecf0f1;
+}
+.input_menu .input_menu__content .input_menu__content_item .grid-stack-item {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.input_menu .input_menu__content .input_menu__content_item .grid-stack-item .grid-stack-item-content {
+  width: 90%;
+  height: 80%;
+}
+.input_menu .input_menu__content .input_menu__content_item .grid-stack-item .grid-stack-item-content .content .content__controls {
+  display: none;
+}
+.input_menu .input_menu__content .input_menu__content_item .grid-stack-item:hover .grid-stack-item-content .content {
+  background: #fcfcfc;
 }
 
 .input_menu__toggle {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 20px;
+  left: 20px;
   width: 50px;
   height: 50px;
   border: none;
-  background: #2dcc50;
+  margin: 0;
+  padding: 0;
+  background: #2dcc70;
   border-radius: 50%;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
+  z-index: 15;
+  transition: 0.1s linear;
+  box-shadow: 0 9px 19px rgba(0, 0, 0, 0.07), 0 7px 6px rgba(0, 0, 0, 0.05);
+}
+.input_menu__toggle:hover {
+  background: #3CDF83;
+  color: #34495e;
+  box-shadow: 0 9px 19px rgba(0, 0, 0, 0.15), 0 7px 6px rgba(0, 0, 0, 0.11);
+}
+.input_menu__toggle .input_menu__toggle__icon {
+  transition: 0.35s linear;
+  display: block;
+  transform: rotate(45deg);
 }
 
 .pages {

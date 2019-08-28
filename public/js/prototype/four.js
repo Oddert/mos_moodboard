@@ -232,23 +232,79 @@ function toggleInputMenu () {
   const toggle = pagesContainer.querySelector('.input_menu__toggle')
   const icon = toggle.querySelector('.input_menu__toggle__icon')
   if (pagesContainer.classList.contains('menu_open')) {
-    //close the menu
     console.log('closing')
-    icon.innerHTML = "+"
     pagesContainer.classList.remove('menu_open')
     render(data)
   } else {
-    //open the menu
-
     console.log('opening')
     pagesContainer.classList.add('menu_open')
     render(data)
-    icon.innerHTML = "&lt;"
   }
 }
 
 function initialiseToggleMenu () {
+  const randomColour = () => {
+    const colours = [
+      { r:53, g:152, b:219 }, { r:27, g:188, b:155 }, { r:154, g:89, b:181 }, { r:243, g:156, b:17 }, { r:232, g:76, b:61 },
+      { r:126, g:140, b:141 }, { r:52, g:73, b:94 }, { r:241, g:196, b:15 }, { r:22, g:160, b:134 }, { r:210, g:84, b:0 }, { r:41, g:127, b:184 },
+      { r:141, g:68, b:173 }, { r:193, g:57, b:43 }, { r:39, g:174, b:97 }
+    ]
+    const sel = colours[Math.floor(Math.random()*colours.length)]
+    return `rgb(${sel.r}, ${sel.g}, ${sel.b})`
+  }
+
+  const toggleMenu = document.querySelector('.input_menu')
   const toggle = document.querySelector('.input_menu__toggle')
+
+  const textElem = $('.input_menu__content--text')
+  const colourElem = $('.input_menu__content--colour')
+  const imageElem = $('.input_menu__content--image')
+  const productElem = $('.input_menu__content--product')
+  const materialElem = $('.input_menu__content--material')
+  const fileElem = $('.input_menu__content--file')
+
+  const menuGridOpts = {
+    height: 3,
+    width: 2,
+    cellHeight: 40,
+    minWidth: 100,
+    float: true,
+    cellHeightUnit: 'px',
+  }
+
+  const widgetTemplate = content => $(`
+    <div>
+      <div class="grid-stack-item-content">
+        ${content}
+      </div>
+    </div>
+  `)
+
+  textElem.gridstack(menuGridOpts)
+  colourElem.gridstack(menuGridOpts)
+  const text = textElem.data('gridstack')
+  const colour = colourElem.data('gridstack')
+
+  text.addWidget(widgetTemplate (`
+      <div class="content text" data-mos-contenttype="text">
+        <div class="content__controls">
+          <button class="content__controls--text_edit">✎</button>
+          <button class="content__controls--delete">✖</button>
+        </div>
+        <p class="content_text__text">New Text Box</p>
+      </div>
+    `), 0, 0, 3, 2)
+
+  colour.addWidget(widgetTemplate (`
+      <div class="content colour" data-mos-contenttype="colour">
+        <div class="content__controls">
+          <button class="content__controls--colour_edit">✎</button>
+          <button class="content__controls--delete">✖</button>
+        </div>
+        <div class="colour__module" style="background-color: ${randomColour()};"></div>
+      </div>
+    `), 0, 0, 3, 2)
+
   toggle.onclick = toggleInputMenu
 }
 
