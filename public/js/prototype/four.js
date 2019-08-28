@@ -270,6 +270,7 @@ function initialiseToggleMenu () {
     minWidth: 100,
     float: true,
     cellHeightUnit: 'px',
+    disableResize: true
   }
 
   const widgetTemplate = content => $(`

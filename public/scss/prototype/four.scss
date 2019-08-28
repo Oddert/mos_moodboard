@@ -67,10 +67,19 @@ $page_margin: 10vh;
   .input_menu__content {
     margin-top: 30px;
     .input_menu__content_item {
-      height: 200px; //doesn't do anything
+      // height: 200px; //doesn't do anything
+      min-height: 50px;
       cursor: default;
       z-index: 1;
       border: 2px dashed #ecf0f1;
+      position: relative;
+      .input_menu__content_item--tooltip {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+      }
       .grid-stack-item {
         border-radius: 10px;
         width: 100%;

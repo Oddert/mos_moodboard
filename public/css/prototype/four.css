@@ -60,10 +60,18 @@ button[name=dev] {
   margin-top: 30px;
 }
 .input_menu .input_menu__content .input_menu__content_item {
-  height: 200px;
+  min-height: 50px;
   cursor: default;
   z-index: 1;
   border: 2px dashed #ecf0f1;
+  position: relative;
+}
+.input_menu .input_menu__content .input_menu__content_item .input_menu__content_item--tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 .input_menu .input_menu__content .input_menu__content_item .grid-stack-item {
   border-radius: 10px;
