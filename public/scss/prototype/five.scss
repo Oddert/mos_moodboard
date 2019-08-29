@@ -24,6 +24,130 @@ button[name=dev] {
   background-color: #18bc9c;
 }
 
+.new_item_menu--container {
+  $text_main: #c1392b;
+  $text_hover: #e84c3d;
+  $text_active: #c1392b;
+  $image_main: #e67f22;
+  $image_hover: #f39c11;
+  $image_active: #e67f22;
+  $product_main: #16a086;
+  $product_hover: #1bbc9b;
+  $product_active: #16a086;
+  $material_main: #27ae61;
+  $material_hover: #2dcc70;
+  $material_active: #27ae61;
+  $colour_main: #297fb8;
+  $colour_hover: #3598db;
+  $colour_active: #297fb8;
+  $file_main: #8d44ad;
+  $file_hover: #9a59b5;
+  $file_active: #8d44ad;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+  .new_item_menu {
+    display: flex;
+    ul {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      .new_item_menu__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 8px;
+        button {
+          font-size: 24px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 50px;
+          height: 50px;
+          background: #1bbc9b;
+          border-radius: 50%;
+          border: none;
+          &:hover {
+
+          }
+        }
+        &.text {
+          button {
+            font-weight: 700;
+            background: $text_main;
+            &:hover {
+              background: $text_hover;
+            }
+            &:active {
+              background: $text_active;
+            }
+          }
+        }
+        &.image {
+          button {
+            background: $image_main;
+            &:hover {
+              background: $image_hover;
+            }
+            &:active {
+              background: $image_active;
+            }
+          }
+        }
+        &.product {
+          button {
+            background: $product_main;
+            &:hover {
+              background: $product_hover;
+            }
+            &:active {
+              background: $product_active;
+            }
+          }
+        }
+        &.material {
+          button {
+            background: $material_main;
+            &:hover {
+              background: $material_hover;
+            }
+            &:active {
+              background: $material_active;
+            }
+          }
+        }
+        &.colour {
+          button {
+            background: $colour_main;
+            &:hover {
+              background: $colour_hover;
+            }
+            &:active {
+              background: $colour_active;
+            }
+          }
+        }
+        &.file {
+          button {
+            background: $file_main;
+            &:hover {
+              background: $file_hover;
+            }
+            &:active {
+              background: $file_active;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 $menu_width: 30vw;
 $page_height: 85vh;
 $page_width: 85vw;

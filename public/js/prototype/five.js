@@ -6,6 +6,12 @@ const colours = [
 
 let userRender;
 
+const lastClick = {
+  grid: null,
+  x: null,
+  y: null
+}
+
 let rows = 20
 console.log({ rows })
 
@@ -147,7 +153,7 @@ function render (data) {
       <div class="page">
         <div class="page__wrapper">
           <div class="page__title">
-            <h3>${each.title ? each.title : `Page ${idx}`}</h3>
+            <h3 title="double click to edit title">${each.title ? each.title : `Page ${idx}`}</h3>
           </div>
           <div class="page__content grid-stack">
 
@@ -216,6 +222,26 @@ function createGridContent (pages, data) {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
         }
       }, this)
+      elem.on('mousedown', function (event) {
+        const { clientX, clientY } = event
+        const newItemMenu = $('.new_item_menu--container')
+        if (event.target.classList.contains('grid-stack')) {
+          newItemMenu.css({
+            display: 'flex',
+            top: `${clientY - (newItemMenu.height() + 15)}px`,
+            left: `${clientX - (newItemMenu.width() / 2)}px`
+          })
+          lastClick.grid = grid
+          lastClick.x = clientX
+          lastClick.y = clientY
+        } else {
+          newItemMenu.css({
+            display: 'none',
+            top: '20px',
+            left: '20px'
+          })
+        }
+      })
     })
 }
 
@@ -252,6 +278,11 @@ function initialiseDisplayButtons () {
   )
 }
 
+function initialiseNewItemMenu () {
+
+}
+
+initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
 }

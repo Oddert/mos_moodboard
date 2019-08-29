@@ -22,6 +22,97 @@ button[name=dev] {
   background-color: #18bc9c;
 }
 
+.new_item_menu--container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+}
+.new_item_menu--container .new_item_menu {
+  display: flex;
+}
+.new_item_menu--container .new_item_menu ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item button {
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: #1bbc9b;
+  border-radius: 50%;
+  border: none;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.text button {
+  font-weight: 700;
+  background: #c1392b;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.text button:hover {
+  background: #e84c3d;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.text button:active {
+  background: #c1392b;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.image button {
+  background: #e67f22;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.image button:hover {
+  background: #f39c11;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.image button:active {
+  background: #e67f22;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.product button {
+  background: #16a086;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.product button:hover {
+  background: #1bbc9b;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.product button:active {
+  background: #16a086;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.material button {
+  background: #27ae61;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.material button:hover {
+  background: #2dcc70;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.material button:active {
+  background: #27ae61;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.colour button {
+  background: #297fb8;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.colour button:hover {
+  background: #3598db;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.colour button:active {
+  background: #297fb8;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.file button {
+  background: #8d44ad;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.file button:hover {
+  background: #9a59b5;
+}
+.new_item_menu--container .new_item_menu ul .new_item_menu__item.file button:active {
+  background: #8d44ad;
+}
+
 .pages--container.menu_open {
   display: grid;
   grid-template-columns: 1fr;
