@@ -99,7 +99,13 @@ function serialise () {
     out[idx] = all.filter(each => each.page === key)
   })
   const sanitised = out.map((page, idx) => page.map(cell => ({ ...cell, page: idx })))
-  const formated = sanitised.map(page => ({ entities: page }))
+  const titles = document.querySelectorAll('.page__title h3')
+  const formated = sanitised.map((entities, idx) => {
+    return {
+      title: titles[idx].textContent,
+      entities
+    }
+  })
   return formated
 }
 
@@ -141,7 +147,7 @@ function render (data) {
       <div class="page">
         <div class="page__wrapper">
           <div class="page__title">
-            <h3>Page Title Goes Here</h3>
+            <h3>${each.title ? each.title : `Page ${idx}`}</h3>
           </div>
           <div class="page__content grid-stack">
 
