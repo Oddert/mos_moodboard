@@ -1,3 +1,9 @@
+const colours = [
+  { r:53, g:152, b:219 }, { r:27, g:188, b:155 }, { r:154, g:89, b:181 }, { r:243, g:156, b:17 }, { r:232, g:76, b:61 },
+  { r:126, g:140, b:141 }, { r:52, g:73, b:94 }, { r:241, g:196, b:15 }, { r:22, g:160, b:134 }, { r:210, g:84, b:0 }, { r:41, g:127, b:184 },
+  { r:141, g:68, b:173 }, { r:193, g:57, b:43 }, { r:39, g:174, b:97 }
+]
+
 let userRender;
 
 let rows = 20
@@ -71,8 +77,8 @@ function serialise () {
     const elem = $(el)
     const node = elem.data('_gridstack_node')
     const elementData = extractElementData(node)
-    console.log(node)
-    console.log(elementData)
+    // console.log(node)
+    // console.log(elementData)
     return {
       x: node.x,
       y: node.y,
@@ -134,7 +140,9 @@ function render (data) {
     const page = `
       <div class="page">
         <div class="page__wrapper">
-          <h3 class="page__title">Page Title Goes Here</h3>
+          <div class="page__title">
+            <h3>Page Title Goes Here</h3>
+          </div>
           <div class="page__content grid-stack">
 
           </div>
@@ -144,6 +152,10 @@ function render (data) {
     pages.innerHTML += page
   }
   data.projects.forEach(addPage)
+  $('.page').each(function () {
+    $(this).find('.page__title h3').dblclick(toggleTitleEdit)
+  })
+
   userRender = () => createGridContent (pages, data)
   userRender()
 }
@@ -227,100 +239,6 @@ function changeDisplayMode (e) {
   }
 }
 
-function toggleInputMenu () {
-  const pagesContainer = document.querySelector('.pages--container')
-  const toggle = pagesContainer.querySelector('.input_menu__toggle')
-  const icon = toggle.querySelector('.input_menu__toggle__icon')
-  if (pagesContainer.classList.contains('menu_open')) {
-    console.log('closing')
-    pagesContainer.classList.remove('menu_open')
-    render(data)
-  } else {
-    console.log('opening')
-    pagesContainer.classList.add('menu_open')
-    render(data)
-  }
-}
-
-function initialiseToggleMenu () {
-  const randomColour = () => {
-    const colours = [
-      { r:53, g:152, b:219 }, { r:27, g:188, b:155 }, { r:154, g:89, b:181 }, { r:243, g:156, b:17 }, { r:232, g:76, b:61 },
-      { r:126, g:140, b:141 }, { r:52, g:73, b:94 }, { r:241, g:196, b:15 }, { r:22, g:160, b:134 }, { r:210, g:84, b:0 }, { r:41, g:127, b:184 },
-      { r:141, g:68, b:173 }, { r:193, g:57, b:43 }, { r:39, g:174, b:97 }
-    ]
-    const sel = colours[Math.floor(Math.random()*colours.length)]
-    return `rgb(${sel.r}, ${sel.g}, ${sel.b})`
-  }
-
-  const toggleMenu = document.querySelector('.input_menu')
-  const toggle = document.querySelector('.input_menu__toggle')
-
-  const textElem = $('.input_menu__content--text')
-  const colourElem = $('.input_menu__content--colour')
-  const imageElem = $('.input_menu__content--image')
-  const productElem = $('.input_menu__content--product')
-  const materialElem = $('.input_menu__content--material')
-  const fileElem = $('.input_menu__content--file')
-
-  const menuGridOpts = {
-    height: 3,
-    width: 2,
-    cellHeight: 40,
-    minWidth: 100,
-    float: true,
-    cellHeightUnit: 'px',
-    disableResize: true
-  }
-
-  const widgetTemplate = content => $(`
-    <div>
-      <div class="grid-stack-item-content">
-        ${content}
-      </div>
-    </div>
-  `)
-
-  textElem.gridstack(menuGridOpts)
-  colourElem.gridstack(menuGridOpts)
-  const text = textElem.data('gridstack')
-  const colour = colourElem.data('gridstack')
-
-  function addTextWidget () {
-    const createdWidget = text.addWidget(widgetTemplate (`
-      <div class="content text" data-mos-contenttype="text">
-        <div class="content__controls">
-          <button class="content__controls--text_edit">✎</button>
-          <button class="content__controls--delete">✖</button>
-        </div>
-        <p class="content_text__text">New Text Box</p>
-      </div>
-    `), 0, 0, 3, 2)
-    createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
-    console.log(createdWidget, createdWidget.find('.content__controls--text_edit'), createdWidget.click())
-  }
-
-  function addColourWidget () {
-    colour.addWidget(widgetTemplate (`
-      <div class="content colour" data-mos-contenttype="colour">
-        <div class="content__controls">
-          <button class="content__controls--colour_edit">✎</button>
-          <button class="content__controls--delete">✖</button>
-        </div>
-        <div class="colour__module" style="background-color: ${randomColour()};"></div>
-      </div>
-    `), 0, 0, 3, 2)
-  }
-
-  textElem.on('removed', addTextWidget)
-  colourElem.on('removed', addColourWidget)
-
-  addTextWidget()
-  addColourWidget()
-
-  toggle.onclick = toggleInputMenu
-}
-
 function initialiseDisplayButtons () {
   const displayButtons = document.querySelectorAll('.control_display button')
   displayButtons.forEach(each =>
@@ -328,7 +246,6 @@ function initialiseDisplayButtons () {
   )
 }
 
-initialiseToggleMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
 }
@@ -448,6 +365,45 @@ function getContent (eachItem) {
 
 
 // ========== Content Functions ==========
+
+function toggleTitleEdit () {
+  const title = this.closest('.page__title')
+  console.log(title, title.dataset.mosEdit === "active")
+  function outsideClick (e) {
+    console.log(e.target, !e.target.classList.contains('page__title__edit'))
+    if (!e.target.classList.contains('page__title__edit')) {
+      const titleEdit= title.querySelector('input')
+      const titleDisplay = document.createElement('h3')
+      titleDisplay.textContent = titleEdit.value
+      title.removeChild(titleEdit)
+      title.appendChild(titleDisplay)
+      title.dataset.mosEdit = "inactive"
+      window.removeEventListener('click', outsideClick)
+    }
+  }
+
+  if (title.dataset.mosEdit === "active") {
+    const titleEdit= title.querySelector('input')
+    const titleDisplay = document.createElement('h3')
+    titleDisplay.textContent = titleEdit.value
+    title.removeChild(titleEdit)
+    title.appendChild(titleDisplay)
+    title.dataset.mosEdit = "inactive"
+    window.removeEventListener('click', outsideClick)
+  } else {
+    const titleDisplay = title.querySelector('h3')
+    const titleEdit = document.createElement('input')
+    titleEdit.value = titleDisplay.textContent
+    titleEdit.type = "text"
+    titleEdit.className = 'page__title__edit'
+    title.removeChild(titleDisplay)
+    title.appendChild(titleEdit)
+    title.dataset.mosEdit = "active"
+    setTimeout(() => {
+      window.addEventListener('click', outsideClick)
+    }, 1000)
+  }
+}
 
 function saveOneText (x, y, page, item, content, payload) {
   console.log({ x, y, page, item, content, payload })

@@ -33,7 +33,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')))
 
 app.route('/')
-  .get((req, res, next) => res.redirect('/prototype/four'))
+  .get((req, res, next) => res.redirect('/prototype/five'))
   // .get((req, res, next) => res.status(200).json({
   //   message: 'Status OK',
   //   status: 200,

@@ -24,7 +24,7 @@ button[name=dev] {
 
 .pages--container.menu_open {
   display: grid;
-  grid-template-columns: 30vw 1fr;
+  grid-template-columns: 1fr;
 }
 .pages--container.menu_open .input_menu {
   display: flex;
@@ -41,87 +41,6 @@ button[name=dev] {
   height: 30.9375vw;
 }
 
-.input_menu {
-  background: #fff;
-  box-shadow: 19px 0 38px rgba(0, 0, 0, 0.15), 15px 0 12px rgba(0, 0, 0, 0.11);
-  box-shadow: 19px 0 38px rgba(0, 0, 0, 0.04), 15px 0 12px rgba(0, 0, 0, 0.03);
-  display: none;
-  flex-direction: column;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.input_menu .input_menu__title {
-  text-align: center;
-  color: #34495e;
-}
-.input_menu .input_menu__content {
-  margin-top: 30px;
-}
-.input_menu .input_menu__content .input_menu__content_item {
-  min-height: 50px;
-  cursor: default;
-  z-index: 1;
-  border: 2px dashed #ecf0f1;
-  position: relative;
-}
-.input_menu .input_menu__content .input_menu__content_item .input_menu__content_item--tooltip {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-.input_menu .input_menu__content .input_menu__content_item .grid-stack-item {
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.input_menu .input_menu__content .input_menu__content_item .grid-stack-item .grid-stack-item-content {
-  width: 90%;
-  height: 80%;
-}
-.input_menu .input_menu__content .input_menu__content_item .grid-stack-item .grid-stack-item-content .content .content__controls {
-  display: none;
-}
-.input_menu .input_menu__content .input_menu__content_item .grid-stack-item:hover .grid-stack-item-content .content {
-  background: #fcfcfc;
-}
-
-.input_menu__toggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  border: none;
-  margin: 0;
-  padding: 0;
-  background: #2dcc70;
-  border-radius: 50%;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 15;
-  transition: 0.1s linear;
-  box-shadow: 0 9px 19px rgba(0, 0, 0, 0.07), 0 7px 6px rgba(0, 0, 0, 0.05);
-}
-.input_menu__toggle:hover {
-  background: #3CDF83;
-  color: #34495e;
-  box-shadow: 0 9px 19px rgba(0, 0, 0, 0.15), 0 7px 6px rgba(0, 0, 0, 0.11);
-}
-.input_menu__toggle .input_menu__toggle__icon {
-  transition: 0.35s linear;
-  display: block;
-  transform: rotate(45deg);
-}
-
 .pages {
   padding: 0 0 300px 0;
   overflow-x: auto;
@@ -130,7 +49,7 @@ button[name=dev] {
   background: rgba(0, 0, 0, 0.1);
 }
 .pages .page {
-  margin: 30px 0;
+  margin: 5px 0;
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -140,9 +59,17 @@ button[name=dev] {
 .pages .page .page__wrapper {
   margin-top: 2vh;
 }
-.pages .page .page__wrapper .page__title {
+.pages .page .page__wrapper .page__title h3, .pages .page .page__wrapper .page__title input {
+  font-size: 20px;
+  font-weight: 700;
+  border: none;
+  box-sizing: border-box;
+  background: none;
   margin: 0;
   padding: 10px 30px;
+}
+.pages .page .page__wrapper .page__title input {
+  color: #bec3c7;
 }
 .pages .page .page__wrapper .page__content {
   background: #fff;
