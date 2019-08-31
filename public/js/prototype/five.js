@@ -223,17 +223,24 @@ function createGridContent (pages, data) {
         }
       }, this)
       elem.on('mousedown', function (event) {
-        const { clientX, clientY } = event
+        // client relative to screen not scroll
+        // offset requires elem position
+        const { clientX, clientY, offsetX, offsetY, target } = event
+        const rect = target.getBoundingClientRect()
+        console.log(target, target.offsetTop, target.offsetLeft)
+        console.log({ offsetX, offsetY, rectLeft: rect.left + window.scrollX, rectTop: rect.top + window.scrollY })
         const newItemMenu = $('.new_item_menu--container')
         if (event.target.classList.contains('grid-stack')) {
+          // console.log({ clientY, grid, scrollTop: grid.scrollTop() })
+          // console.log((clientY + grid.scrollTop()) - (newItemMenu.height() + 15))
           newItemMenu.css({
             display: 'flex',
-            top: `${clientY - (newItemMenu.height() + 15)}px`,
-            left: `${clientX - (newItemMenu.width() / 2)}px`
+            top: `${(offsetY) - (newItemMenu.height() + 15) + rect.top + window.scrollY}px`,
+            left: `${offsetX - (newItemMenu.width() / 2) + rect.left + window.scrollX}px`
           })
           lastClick.grid = grid
-          lastClick.x = clientX
-          lastClick.y = clientY
+          lastClick.x = offsetX + rect.left + window.scrollX
+          lastClick.y = offsetY + rect.top + window.scrollY
         } else {
           newItemMenu.css({
             display: 'none',
@@ -279,7 +286,11 @@ function initialiseDisplayButtons () {
 }
 
 function initialiseNewItemMenu () {
-
+  const text = document.querySelector('.new_item_menu__item.text')
+  text.onclick = e => {
+    const { grid, x, y } = lastClick
+    console.log({ grid, x, y })
+  }
 }
 
 initialiseNewItemMenu ()
