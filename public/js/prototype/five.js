@@ -200,6 +200,8 @@ function createGridContent (pages, data) {
   $('.page .page__content')
     .each(function (pageIdx) {
       const elem = $(this)
+      elem.data('mosPageIdx', pageIdx)
+      console.log(elem.data('mosPageIdx'))
       const grid = elem.data('gridstack')
       if (grid) grid.removeAll()
       // console.log({ idx }, grid);
@@ -217,7 +219,7 @@ function createGridContent (pages, data) {
         createdWidget.find('.content__controls--delete').click(function () {
           grid.removeWidget(this.closest('.grid-stack-item'))
         })
-        createdWidget.data('mospage', `${pageIdx}`)
+        // createdWidget.data('mospage', `${pageIdx}`)
         if (node._type === "text") {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
         }
@@ -227,18 +229,17 @@ function createGridContent (pages, data) {
         // offset requires elem position
         const { clientX, clientY, offsetX, offsetY, target } = event
         const rect = target.getBoundingClientRect()
-        console.log(target, target.offsetTop, target.offsetLeft)
-        console.log({ offsetX, offsetY, rectLeft: rect.left + window.scrollX, rectTop: rect.top + window.scrollY })
         const newItemMenu = $('.new_item_menu--container')
         if (event.target.classList.contains('grid-stack')) {
-          // console.log({ clientY, grid, scrollTop: grid.scrollTop() })
-          // console.log((clientY + grid.scrollTop()) - (newItemMenu.height() + 15))
+          const absoluteTop = offsetY + rect.top + window.scrollY
+          const absoluteLeft = offsetX + rect.left + window.scrollX
           newItemMenu.css({
             display: 'flex',
-            top: `${(offsetY) - (newItemMenu.height() + 15) + rect.top + window.scrollY}px`,
-            left: `${offsetX - (newItemMenu.width() / 2) + rect.left + window.scrollX}px`
+            top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
+            left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
           })
-          lastClick.grid = grid
+          lastClick.grid = grid,
+          lastClick.gridElem = elem
           lastClick.x = offsetX + rect.left + window.scrollX
           lastClick.y = offsetY + rect.top + window.scrollY
         } else {
@@ -287,9 +288,28 @@ function initialiseDisplayButtons () {
 
 function initialiseNewItemMenu () {
   const text = document.querySelector('.new_item_menu__item.text')
+  const menu = document.querySelector('.new_item_menu--container')
   text.onclick = e => {
-    const { grid, x, y } = lastClick
-    console.log({ grid, x, y })
+    menu.style.display = 'none'
+    const { grid, gridElem, x, y } = lastClick
+    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+    const newWidget = $(`
+      <div>
+        <div
+          class="grid-stack-item-content"
+          data-mos-page="${gridElem.data('mosPageIdx')}"
+          data-mos-item="${gridElem.children().length}"
+        >
+          ${createText({ text: 'New Text Box' })}
+        </div>
+      </div>
+    `)
+    const adjustedY = gridPos.y < 2 ? gridPos.y : gridPos.y - 1
+    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, 2, 3)
+    createdWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
   }
 }
 

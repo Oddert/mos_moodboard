@@ -222,6 +222,7 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
+  cursor: default;
 }
 .grid-stack-item-content .content.text .content_text__input {
   box-sizing: border-box;
