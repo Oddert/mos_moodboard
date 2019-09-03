@@ -127,11 +127,15 @@ function serialise () {
 
 function initPage () {
 
-document.querySelector('button[name=dev]').onclick = () => userRender()
+const devButton = document.querySelector('button[name=dev]')
+if (devButton) devButton.onclick = () => userRender()
 
 
 function initialAjax () {
-  const url = `/api/projects/sample`
+  const params = new URLSearchParams(window.location.search)
+  const dataset = params.get('dataset')
+  const url = dataset ? `/api/projects/sample?dataset=${dataset}` : `/api/projects/sample`
+  console.log(params, dataset, url)
   const opts = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -158,7 +162,7 @@ function render (data) {
       <div class="page">
         <div class="page__wrapper">
           <div class="page__title">
-            <h3 title="double click to edit title">${each.title ? each.title : `Page ${idx}`}</h3>
+            <h3 title="double click to edit title">${each.title ? each.title : '  '}</h3>
           </div>
           <div class="page__content grid-stack">
 
@@ -310,16 +314,14 @@ function initialiseNewItemMenu () {
       </div>
     `)
     // I appologise profusely.
-    const adjustedY = gridPos.y < 2
-      ? gridPos.y
-      : gridPos.y > 18
-        ? 20 - height
-        : gridPos.y - 1
-    const adjustedX = gridPos.x < 2
-      ? gridPos.x
-      : gridPos.x > 10
-        ? 12 - width
-        : gridPos.x - 1
+    let adjustedX = gridPos.x
+    let adjustedY = gridPos.y
+    if (gridPos.x < 2) adjustedX = 0
+    if (gridPos.x > 10) adjustedX = 12 - width
+    if (gridPos.y < 2) adjustedY = 0
+    if (gridPos.y > 18) adjustedY = 20 - height
+    if (adjustedY > 1 && adjustedY < 18) adjustedY -= 1
+
     const createdWidget = grid.addWidget(newWidget, adjustedX, adjustedY, width, height)
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))

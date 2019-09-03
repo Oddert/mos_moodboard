@@ -158,6 +158,7 @@ button[name=dev] {
   background: none;
   margin: 0;
   padding: 10px 30px;
+  cursor: text;
 }
 .pages .page .page__wrapper .page__title input {
   color: #bec3c7;
