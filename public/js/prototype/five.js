@@ -120,6 +120,20 @@ function serialise () {
   return formated
 }
 
+function save () {
+  const url = `/api/projects/test`
+  const opts = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      payload: serialise()
+    })
+  }
+  fetch(url, opts)
+    .then(res => res.json())
+    .then(res => console.log({ res }))
+}
+
 // ========== / Top Level Functions ==========
 
 
@@ -190,6 +204,7 @@ function createGridContent (pages, data) {
     height: rows,
     float: true,
     animate: true,
+    removable: false,
 
     // cellHeight: '50',
     // cellHeightUnit: 'px'
@@ -574,8 +589,10 @@ function toggleTextEdit () {
 
     parent.dataset.mosEdit = 'active'
   }
+}
 
-
+function toggleImageEdit () {
+    const parent = this.closest('.grid-stack-item')
 }
 
 // ========== / Content Functions ==========

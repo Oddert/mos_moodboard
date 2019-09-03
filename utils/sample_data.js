@@ -131,7 +131,6 @@ const fora_payload = {
         {x: 1, y: 6, width: 3, height: 10, _type: "image", src: "https://cdn.mos.cms.futurecdn.net/U4BRsKHqqUrs3wcXVY49ub-768-80.jpg", alt: "A banner image from the storefront" },
         {x: 4, y: 6, width: 4, height: 10, _type: "image", src: "https://matterofstuff.com/wp-content/uploads/2018/09/our-curated-design-shop-2000x944.jpg", alt: "A banner image from the storefront" },
         {x: 8, y: 6, width: 4, height: 10, _type: "image", src: "https://matterofstuff.com/wp-content/uploads/2018/09/our-curated-design-shop-2000x944.jpg", alt: "A banner image from the storefront" },
-        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -139,7 +138,6 @@ const fora_payload = {
       entities: [
         {x: 4, y: 1, width: 5, height: 3, _type: "text", text: "Shapes and Inspiration"},
         {x: 0, y: 4, width: 13, height: 13, _type: "image", src: "https://www.luxurylifestylemag.co.uk/wp-content/uploads/2019/08/19-0124151-IG-Creative-Collaboration.jpg", alt: "A banner image from the storefront" },
-        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -148,7 +146,6 @@ const fora_payload = {
         {x: 2, y: 3, width: 3, height: 13, _type: "image", src: "https://www.extreme-design.co.uk/wp-content/uploads/2019/07/kitchen-design-trend-2019-colour-blocking-and-geometric-interior.jpg", alt: "A banner image from the storefront" },
         {x: 5, y: 3, width: 3, height: 13, _type: "image", src: "https://www.interiorsandsources.com/Portals/0/Images/2018-August/2020-trends/IS_SHAW_CALPE_2019_RGB.jpg", alt: "A banner image from the storefront" },
         {x: 8, y: 3, width: 3, height: 13, _type: "image", src: "https://de-production-media.s3.amazonaws.com/loft/3958/Moody_Colors.jpg", alt: "A banner image from the storefront" },
-        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -156,7 +153,6 @@ const fora_payload = {
       entities: [
         {x: 4, y: 0, width: 5, height: 3, _type: "text", text: "Shample Board"},
         {x: 2, y: 4, width: 9, height: 15, _type: "image", src: "https://lodgingmagazine.com/wp-content/uploads/2019/05/Inclusivity_Palette_HR.jpg", alt: "A banner image from the storefront" },
-        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -174,7 +170,6 @@ const fora_payload = {
         {x: 1, y: 4, width: 4, height: 15, _type: "image", src: "https://essentialhome.eu/inspirations/wp-content/uploads/2018/08/Untitled-design-740x560.png", alt: "A banner image from the storefront" },
         {x: 5, y: 4, width: 3, height: 15, _type: "image", src: "https://www.livesouthshore.com/wp-content/uploads/ppg-color-of-the-year-2019-01.jpg", alt: "A banner image from the storefront" },
         {x: 8, y: 4, width: 4, height: 15, _type: "image", src: "https://cdn.interiorzine.com/wp-content/uploads/2018/02/interior-design-color-trends-2019-79.jpg", alt: "A banner image from the storefront" },
-        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -191,7 +186,6 @@ const fora_payload = {
         {x: 1, y: 11, width: 2, height: 9, _type: "image", src:  "http://ourstorycreative.com/wp-content/uploads/2019/03/Our_Story_Creative_Artisan_Atelier_Editorial-86-1.jpg", alt: "A banner image from the storefront" },
         {x: 5, y: 11, width: 2, height: 9, _type: "product", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/06/Mariolina_miniforms-blue-1300x1300.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
         {x: 3, y: 11, width: 2, height: 9, _type: "product", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/06/Mariolina_2-1-1300x1300.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
-        {x: 11, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
@@ -204,7 +198,6 @@ const fora_payload = {
         {x: 4, y: 4, width: 3, height: 14, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-2-800x655.jpg", alt: "A banner image from the storefront" },
         {x: 0, y: 10, width: 3, height: 5, _type: "text", text: "3x Minuetto Console: https://www.bauline.it/en/products/minuetto/ Dimension \n(LxPxH): Closed cm 140x48x76 \nOpen cm 140x300x76 \nn° 05 external leaves, 50 cm \nCOD06 Light Oak"},
         {x: 0, y: 15, width: 3, height: 4, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/04/Hand-Planed-1024x1022.jpg", alt: "" }, title: "Light Oak", design: "This guy" },
-        {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
   ]

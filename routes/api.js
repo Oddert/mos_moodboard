@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const fs = require('fs')
 
 const sd = require('../utils/sample_data')
 
@@ -21,8 +22,19 @@ router.route('/projects/:user')
         })
     }
 
-  }
-)
+  })
+  .put((req, res, next) => {
+    console.log(req.body)
+    fs.writeFile('test.txt', JSON.stringify(req.body.payload), err => {
+      if (err) {
+        console.log(err)
+        res.json({ success: false, err, message: 'oops' })
+      } else {
+        console.log('success!')
+        res.json({ success: true, message: 'sal good' })
+      }
+    })
+  })
 
 const ran = (multiplier, offset=0) => Math.floor(Math.random() * multiplier) + offset
 const autoVal = () => ({

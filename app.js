@@ -74,10 +74,15 @@ const server = app.listen(
 
 // -Find a way of binding event listeners to newly created widgets ✓
 // -Implament remove funcitonality (easy) ✓
-// -Add new item pull in menu for drag and drop
+// -Add new item menu for ajax'ed products, maerials etc. ✓
+// -Widget Edit Menues:
+//    -Text Edit ✓
+//    -Colour Picker
+//    -Image Uploader
+//    -Product / Material Browser
+//    -File Upload
 // -Implament Page Add
 // -Implament Page Delete
 // -Implament each 'edit' of other functions (unify controls?)
-// -Considder how colours can size themselfs and work with a subgrid (maybe leave for now)
 // -Implament auto-save and actual save
 // -Implament undo, redo
