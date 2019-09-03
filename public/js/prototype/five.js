@@ -201,11 +201,8 @@ function createGridContent (pages, data) {
     .each(function (pageIdx) {
       const elem = $(this)
       elem.data('mosPageIdx', pageIdx)
-      console.log(elem.data('mosPageIdx'))
       const grid = elem.data('gridstack')
       if (grid) grid.removeAll()
-      // console.log({ idx }, grid);
-      // console.log(data, pageIdx)
       const items = data.projects[pageIdx].entities
       _.each(items, function (node, itemIdx) {
         const newWidget = $(`
@@ -225,8 +222,6 @@ function createGridContent (pages, data) {
         }
       }, this)
       elem.on('mousedown', function (event) {
-        // client relative to screen not scroll
-        // offset requires elem position
         const { clientX, clientY, offsetX, offsetY, target } = event
         const rect = target.getBoundingClientRect()
         const newItemMenu = $('.new_item_menu--container')
@@ -288,6 +283,7 @@ function initialiseDisplayButtons () {
 
 function initialiseNewItemMenu () {
   const text = document.querySelector('.new_item_menu__item.text')
+  const colour = document.querySelector('.new_item_menu__item.colour')
   const menu = document.querySelector('.new_item_menu--container')
   text.onclick = e => {
     menu.style.display = 'none'
@@ -298,7 +294,7 @@ function initialiseNewItemMenu () {
         <div
           class="grid-stack-item-content"
           data-mos-page="${gridElem.data('mosPageIdx')}"
-          data-mos-item="${gridElem.children().length}"
+          data-mos-item="${gridElem.children().length + 1}"
         >
           ${createText({ text: 'New Text Box' })}
         </div>
@@ -310,6 +306,27 @@ function initialiseNewItemMenu () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+  }
+  colour.onclick = e => {
+    menu.style.display = 'none'
+    const { grid, gridElem, x, y } = lastClick
+    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+    const newWidget = $(`
+      <div>
+        <div
+          class="grid-stack-item-content"
+          data-mos-page="${gridElem.data('mosPageIdx')}"
+          data-mos-item="${gridElem.children().length + 1}"
+        >
+          ${createColour({ hex: randomHex() })}
+        </div>
+      </div>
+    `)
+    const adjustedY = gridPos.y < 2 ? gridPos.y : gridPos.y - 1
+    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, 1, 2)
+    createdWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
   }
 }
 
@@ -580,4 +597,9 @@ function convertToHex (rgb) {
   }
 
   return rgb2hex(rgb)
+}
+
+function randomHex () {
+  const ran = colours[Math.floor(Math.random() * colours.length)]
+  return convertToHex(`rgb(${ran.r}, ${ran.g}, ${ran.b})`)
 }
