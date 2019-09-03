@@ -184,10 +184,12 @@ function render (data) {
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
   const options = {
-    width: 12,
+    // width: 12,
+    width: 13,
     minWidth: 500,
     height: rows,
     float: true,
+    animate: true,
 
     // cellHeight: '50',
     // cellHeightUnit: 'px'
@@ -204,6 +206,7 @@ function createGridContent (pages, data) {
       cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
     })
     each.style.height = '250px'
+    each.dataset.mosTest = '250'
   })
 
   $('.page .page__content')

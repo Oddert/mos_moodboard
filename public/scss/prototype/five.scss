@@ -170,6 +170,8 @@ $page_margin: 10vh;
     .pages .page .page__wrapper .page__content {
       width: $page_width - $menu_width;
       height: (9/16) * ($page_width - $menu_width);
+      min-height: (9/16) * ($page_width - $menu_width);
+      max-height: (9/16) * ($page_width - $menu_width);
     }
   }
 }
@@ -446,4 +448,16 @@ $page_margin: 10vh;
       border: 1px solid tomato;
     }
   }
+}
+
+.grid-stack {
+  .grid-stack-item {
+    $columns: 13;
+    @for $idx from 0 through $columns {
+      &[data-gs-width="#{$idx}"] { width: (100% / $columns) * $idx }
+      &[data-gs-min-width="#{$idx}"] { width: (100% / $columns) * $idx }
+      &[data-gs-max-width="#{$idx}"] { width: (100% / $columns) * $idx }
+      &[data-gs-x="#{$idx}"] { left: (100% / $columns) * $idx; }
+    }
+}
 }
