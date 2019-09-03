@@ -338,6 +338,19 @@ function initialiseNewItemMenu () {
   }
 }
 
+document.addEventListener('click', e => {
+  const menu = document.querySelector('.new_item_menu--container')
+  let hide = true
+  document.querySelectorAll('.page__content').forEach(each => {
+    if (each.contains(e.target)) hide = false
+  })
+  if (hide) {
+    menu.style.display = 'none'
+    menu.style.top = '20px'
+    menu.style.left = '20px'
+  }
+})
+
 initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
