@@ -309,8 +309,18 @@ function initialiseNewItemMenu () {
         </div>
       </div>
     `)
-    const adjustedY = gridPos.y < 2 ? gridPos.y : gridPos.y - 1
-    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, width, height)
+    // I appologise profusely.
+    const adjustedY = gridPos.y < 2
+      ? gridPos.y
+      : gridPos.y > 18
+        ? 20 - height
+        : gridPos.y - 1
+    const adjustedX = gridPos.x < 2
+      ? gridPos.x
+      : gridPos.x > 10
+        ? 12 - width
+        : gridPos.x - 1
+    const createdWidget = grid.addWidget(newWidget, adjustedX, adjustedY, width, height)
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
@@ -453,7 +463,7 @@ function toggleTitleEdit () {
   const title = this.closest('.page__title')
   console.log(title, title.dataset.mosEdit === "active")
   function outsideClick (e) {
-    console.log(e.target, !e.target.classList.contains('page__title__edit'))
+    // console.log(e.target, !e.target.classList.contains('page__title__edit'))
     if (!e.target.classList.contains('page__title__edit')) {
       const titleEdit= title.querySelector('input')
       const titleDisplay = document.createElement('h3')
