@@ -4,6 +4,11 @@ const colours = [
   { r:141, g:68, b:173 }, { r:193, g:57, b:43 }, { r:39, g:174, b:97 }
 ]
 
+const defaultImg = {
+  src: 'https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png',
+  alt: 'Placeholder Image'
+}
+
 let userRender;
 
 const lastClick = {
@@ -233,6 +238,9 @@ function createGridContent (pages, data) {
             top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
             left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
           })
+          // newItemMenu.addEventListener('click', function (e) {
+          //   console.log(this === e.target)
+          // })
           lastClick.grid = grid,
           lastClick.gridElem = elem
           lastClick.x = offsetX + rect.left + window.scrollX
@@ -284,8 +292,9 @@ function initialiseDisplayButtons () {
 function initialiseNewItemMenu () {
   const text = document.querySelector('.new_item_menu__item.text')
   const colour = document.querySelector('.new_item_menu__item.colour')
+  const image = document.querySelector('.new_item_menu__item.image')
   const menu = document.querySelector('.new_item_menu--container')
-  text.onclick = e => {
+  function addUserWidget (content, width = 1, height = 2) {
     menu.style.display = 'none'
     const { grid, gridElem, x, y } = lastClick
     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
@@ -296,37 +305,26 @@ function initialiseNewItemMenu () {
           data-mos-page="${gridElem.data('mosPageIdx')}"
           data-mos-item="${gridElem.children().length + 1}"
         >
-          ${createText({ text: 'New Text Box' })}
+          ${content}
         </div>
       </div>
     `)
     const adjustedY = gridPos.y < 2 ? gridPos.y : gridPos.y - 1
-    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, 2, 3)
+    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, width, height)
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
+    return createdWidget
+  }
+  text.onclick = e => {
+    const createdWidget = addUserWidget(createText({ text: 'New Text Box' }), 2, 3)
     createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
   }
   colour.onclick = e => {
-    menu.style.display = 'none'
-    const { grid, gridElem, x, y } = lastClick
-    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
-    const newWidget = $(`
-      <div>
-        <div
-          class="grid-stack-item-content"
-          data-mos-page="${gridElem.data('mosPageIdx')}"
-          data-mos-item="${gridElem.children().length + 1}"
-        >
-          ${createColour({ hex: randomHex() })}
-        </div>
-      </div>
-    `)
-    const adjustedY = gridPos.y < 2 ? gridPos.y : gridPos.y - 1
-    const createdWidget = grid.addWidget(newWidget, gridPos.x, adjustedY, 1, 2)
-    createdWidget.find('.content__controls--delete').click(function () {
-      grid.removeWidget(this.closest('.grid-stack-item'))
-    })
+    const createdWidget = addUserWidget(createColour({ hex: randomHex() }), 1, 2)
+  }
+  image.onclick = e => {
+    const createdWidget = addUserWidget(createImage(defaultImg), 2, 4)
   }
 }
 
