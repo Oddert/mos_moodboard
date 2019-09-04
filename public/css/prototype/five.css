@@ -358,6 +358,39 @@ button[name=dev] {
   border: 1px solid tomato;
 }
 
+.colour_picker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border: 1px dashed tomato;
+}
+.colour_picker .colour_picker__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.colour_picker .colour_picker__preview .colour_picker__preview--wrapper {
+  height: 40px;
+  width: 70%;
+  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input {
+  letter-spacing: 4px;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  text-align: center;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  font-size: 17px;
+}
+.colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input:focus {
+  border-bottom: 1px solid #bec3c7;
+}
+
 .grid-stack .grid-stack-item[data-gs-width="0"] {
   width: 0%;
 }

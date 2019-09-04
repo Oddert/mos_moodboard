@@ -9,7 +9,7 @@ const defaultImg = {
   alt: 'Placeholder Image'
 }
 
-let userRender;
+let userRender, colourPicker;
 
 const lastClick = {
   grid: null,
@@ -358,6 +358,19 @@ function initialiseNewItemMenu () {
   }
 }
 
+function initColourPicker () {
+  const preview = document.querySelector('.colour_picker__preview--wrapper')
+  const previewInput = preview.querySelector('.colour_picker__preview__input')
+  colourPicker = new iro.ColorPicker('.colour_picker__iro', {
+    width: 250
+  })
+  function handleColourChange (colour, change) {
+    preview.style.backgroundColor = colour.rgbString
+    previewInput.value = colour.hexString.toUpperCase()
+  }
+  colourPicker.on('color:change', handleColourChange)
+}
+
 document.addEventListener('click', e => {
   const menu = document.querySelector('.new_item_menu--container')
   let hide = true
@@ -371,6 +384,7 @@ document.addEventListener('click', e => {
   }
 })
 
+initColourPicker()
 initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()

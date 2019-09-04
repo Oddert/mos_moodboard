@@ -176,7 +176,7 @@ const fora_payload = {
       title: 'Lower Ground Floor',
       entities: [
         {x: 0, y: 0, width: 3, height: 2, _type: "text", text: "Roll out early Jully"},
-        {x: 0, y: 3, width: 3, height: 8, _type: "image", src:  "https://www.sacredpixel.com/wp-content/uploads/2019/07/%20family%20opractic-business-plan-pdf-services-template-%20e2%2080%2093-guiaubuntupt-org%20--1024x1321.jpg", alt: "A banner image from the storefront" },
+        {x: 0, y: 3, width: 3, height: 8, _type: "image", src:  "http://drova.me/wp-content/uploads/2018/11/office-layout-ideas-office-layouts-design-home-office-layout-office-layouts-layout-ideas-space-for-design-large-open-home-office-layouts-pretentious-design-ideas-home-office-space-layout-ideas.jpg", alt: "A banner image from the storefront" },
         {x: 3, y: 6, width: 1, height: 3, _type: "colour", hex: "6b7d77" },
         {x: 3, y: 3, width: 3, height: 3, _type: "image", src:  "https://dwg.cizimokulu.com/wp-content/uploads/2018/12/chair-A-Tolix-in-elevation-660x329.jpg", alt: "A banner image from the storefront" },
         {x: 9, y: 1, width: 4, height: 6, _type: "image", src:  "https://www.elreytuqueque.com/wp-content/uploads/2018/07/interior-design-trends-for-autumn-2017-that-are-out-in-2018-winter-7-top-home-improvement-glamorous.jpg", alt: "A banner image from the storefront" },
@@ -192,7 +192,7 @@ const fora_payload = {
       title: 'Lower Ground Floor',
       entities: [
         {x: 0, y: 0, width: 3, height: 2, _type: "text", text: "Lead Time 60 Days"},
-        {x: 0, y: 2, width: 2, height: 8, _type: "image", src:  "https://www.sacredpixel.com/wp-content/uploads/2019/07/%20family%20opractic-business-plan-pdf-services-template-%20e2%2080%2093-guiaubuntupt-org%20--1024x1321.jpg", alt: "A banner image from the storefront" },
+        {x: 0, y: 2, width: 2, height: 8, _type: "image", src:  "http://drova.me/wp-content/uploads/2018/11/office-layout-ideas-office-layouts-design-home-office-layout-office-layouts-layout-ideas-space-for-design-large-open-home-office-layouts-pretentious-design-ideas-home-office-space-layout-ideas.jpg", alt: "A banner image from the storefront" },
         {x: 7, y: 4, width: 6, height: 7, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-4-800x549.jpg", alt: "A banner image from the storefront" },
         {x: 7, y: 11, width: 6, height: 7, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-6-800x539.jpg", alt: "A banner image from the storefront" },
         {x: 4, y: 4, width: 3, height: 14, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-2-800x655.jpg", alt: "A banner image from the storefront" },
