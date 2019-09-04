@@ -247,6 +247,9 @@ function createGridContent (pages, data) {
         if (node._type === "text") {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
         }
+        if (node._type === "colour") {
+          createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+        }
       }, this)
       elem.on('mousedown', function (event) {
         const { clientX, clientY, offsetX, offsetY, target } = event
@@ -361,14 +364,24 @@ function initialiseNewItemMenu () {
 function initColourPicker () {
   const preview = document.querySelector('.colour_picker__preview--wrapper')
   const previewInput = preview.querySelector('.colour_picker__preview__input')
-  colourPicker = new iro.ColorPicker('.colour_picker__iro', {
+  const opts = {
     width: 250
-  })
+  }
+  colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
   function handleColourChange (colour, change) {
     preview.style.backgroundColor = colour.rgbString
     previewInput.value = colour.hexString.toUpperCase()
   }
   colourPicker.on('color:change', handleColourChange)
+  previewInput.onchange = e => {
+    const { value } = e.target
+    if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+      colourPicker.color.hexString = value
+    }
+    if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+      colourPicker.color.hexString = '#' + value
+    }
+  }
 }
 
 document.addEventListener('click', e => {
@@ -609,7 +622,53 @@ function toggleImageEdit () {
     const parent = this.closest('.grid-stack-item')
 }
 
+function toggleColourEdit () {
+  const parent = this.closest('.grid-stack-item')
+  const colourModule = parent.querySelector('.colour__module')
+  if (parent.dataset.mosEdit === 'active') {
+    console.log('closing colour picker')
+    hideColourPicker (colourPicker)
+    parent.dataset.mosEdit = 'inactive'
+    console.log('#')
+  } else {
+    console.log('opening colour picker')
+    // this cannot depend on click, needs colour element position
+    const { x, y } = lastClick
+    const startingColour = colourModule.style.backgroundColor
+    const cb = colour => {
+      // we want to hold the returned colour value, let user accept or reset
+      colourModule.style.backgroundColor = colour.rgbString
+    }
+    showColourPicker(x, y, cb, colourPicker, startingColour)
+    parent.dataset.mosEdit = 'active'
+    console.log('#')
+  }
+}
+
 // ========== / Content Functions ==========
+
+
+// ========== Interface Functions ==========
+
+function showColourPicker (x, y, callback, picker, startingColour) {
+  console.log({x, y})
+  const colourPickerContainer = document.querySelector('.colour_picker')
+  colourPickerContainer.style.display = 'block'
+  colourPickerContainer.style.top = `${y}px`
+  colourPickerContainer.style.left = `${x}px`
+  picker.color.rgbString = startingColour
+  picker.on('color:change', callback)
+}
+
+function hideColourPicker (picker) {
+  const colourPickerContainer = document.querySelector('.colour_picker')
+  colourPickerContainer.style.display = 'none'
+  colourPickerContainer.style.top = `0px`
+  colourPickerContainer.style.left = `0px`
+  picker.on('color:change', () => {})
+}
+
+// ========== / Interface Functions ==========
 
 
 

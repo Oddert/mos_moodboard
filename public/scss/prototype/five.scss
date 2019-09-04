@@ -451,10 +451,14 @@ $page_margin: 10vh;
 }
 
 .colour_picker {
-  position: fixed;
-  top: 0;
-  left: 0;
-  border: 1px dashed tomato;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  // border: 1px dashed tomato;
+  border-radius: 15px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 10px 10px 30px rgba(0,0,0,.1);
   .colour_picker__iro {
 
   }
@@ -467,6 +471,7 @@ $page_margin: 10vh;
     .colour_picker__preview--wrapper {
       height: 40px;
       width: 70%;
+      margin-top: 12px;
       border-radius: 20px;
       background-color: #fff;
       display: flex;
