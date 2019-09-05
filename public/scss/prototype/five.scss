@@ -174,14 +174,15 @@ $page_margin: 10vh;
       max-height: (9/16) * ($page_width - $menu_width);
     }
   }
+  background: rgba(0,0,0,.1);
+  padding: 0 0 300px 0;
 }
 
 .pages {
-  padding: 0 0 300px 0;
+  padding: 0 0 60px 0;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
-  background: rgba(0,0,0,.1);
   .page {
     // height: 100vh;
     margin: 5px 0;
@@ -247,6 +248,41 @@ $page_margin: 10vh;
 
           //}
         }
+      }
+    }
+  }
+}
+
+.new_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .new_page--wrapper {
+    width: $page_width - $menu_width;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    button {
+      $radius: 50px;
+      width: $radius;
+      height: $radius;
+      border-radius: 50%;
+      background: none;
+      border: 3px solid #27ae61;
+      font-size: 20px;
+      transition: .1s linear;
+      cursor: pointer;
+      color: #24495e;
+      &:hover {
+        background: #27ae61;
+        color: #ecf0f1;
+        box-shadow: 10px 10px 30px rgba(0,0,0,.3);
+      }
+      &:active {
+        box-shadow: 5px 5px 15px rgba(0,0,0,.4);
+        background: #2dcc70;
+        color: #fff;
+        border-color: #2dcc70;
       }
     }
   }

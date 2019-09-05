@@ -84,6 +84,7 @@ function extractElementData (node) {
 }
 
 function serialise () {
+  // BUG: If there are no widgets the serialise function cannot run
   const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
     const elem = $(el)
     const node = elem.data('_gridstack_node')
@@ -195,34 +196,38 @@ function render (data) {
   userRender()
 }
 
+const gridstackOptions = {
+  // width: 12,
+  width: 13,
+  minWidth: 500,
+  height: rows,
+  float: true,
+  animate: true,
+  removable: false,
+
+  // cellHeight: '50',
+  // cellHeightUnit: 'px'
+  // // removable: '.trash'
+  // removeTimeout: 100,
+  acceptWidgets: '.grid-stack-item'
+}
+
+function addOnePageContent (page) {
+  //.page__content as queryselector
+  const thisPage = $(page)
+  const height = thisPage.height()
+  thisPage.gridstack({
+    ...gridstackOptions,
+    cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
+  })
+  page.style.height = '250px'
+  page.dataset.mosTest = '250'
+}
+
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
-  const options = {
-    // width: 12,
-    width: 13,
-    minWidth: 500,
-    height: rows,
-    float: true,
-    animate: true,
-    removable: false,
 
-    // cellHeight: '50',
-    // cellHeightUnit: 'px'
-    // // removable: '.trash'
-    // removeTimeout: 100,
-    acceptWidgets: '.grid-stack-item'
-  }
-
-  all.forEach(each => {
-    const thisPage = $(each)
-    const height = thisPage.height()
-    thisPage.gridstack({
-      ...options,
-      cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
-    })
-    each.style.height = '250px'
-    each.dataset.mosTest = '250'
-  })
+  all.forEach(addOnePageContent)
 
   $('.page .page__content')
     .each(function (pageIdx) {
@@ -390,6 +395,36 @@ function initColourPicker () {
   }
 }
 
+function initialisePageAdd () {
+  const newPage = document.querySelector('.new_page button')
+  newPage.onclick = () => {
+    const pages = document.querySelector('.pages')
+    const page = `
+      <div class="page">
+        <div class="page__wrapper">
+          <div class="page__title">
+            <h3 title="double click to edit title"></h3>
+          </div>
+          <div class="page__content grid-stack">
+
+          </div>
+        </div>
+      </div>
+    `
+    pages.innerHTML += page
+    const jqueryPage = $('.pages .page').last()
+    jqueryPage.find('.page__title h3').dblclick(toggleTitleEdit)
+
+        const pageContent = jqueryPage.find('.page__content')
+        const height = pageContent.height()
+        pageContent.gridstack({
+          ...gridstackOptions,
+          cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
+        })
+  }
+
+}
+
 document.addEventListener('click', e => {
   const menu = document.querySelector('.new_item_menu--container')
   let hide = true
@@ -407,6 +442,7 @@ initColourPicker()
 initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
+initialisePageAdd()
 }
 
 // ========== / Page initialisation ==========
@@ -660,7 +696,7 @@ function toggleImageEdit (event) {
     const accept = imageUpdate => {
       img.src = imageUpdate
     }
-    showImageInterface (x, y, uri, accept, null)
+    showImageInterface (x, y, uri, accept)
     parent.dataset.mosEdit = 'active'
     imageCurrentlyOpen = parent
   }
