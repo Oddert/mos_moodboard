@@ -478,15 +478,58 @@ $page_margin: 10vh;
       align-items: center;
       justify-content: center;
       .colour_picker__preview__input {
+        font-family: 'Ubuntu', Helvetica, sans-serif, arial, 'Roboto';
         letter-spacing: 4px;
-        text-shadow: 0 0 5px rgba(255,255,255,1);
+        text-shadow: 1px 1px 1px #ecf0f1;
         text-align: center;
         box-sizing: border-box;
         background: none;
         border: none;
         font-size: 17px;
+        max-width: 100%;
         &:focus {
           border-bottom: 1px solid #bec3c7;
+        }
+      }
+    }
+  }
+  .colour_picker__control {
+    $radius: 40px;
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    .colour_picker__control--wrapper {
+      // width: 100%;
+      // display: flex;
+      // justify-content: space-between;
+      button {
+        --hover_back_color: #ecf0f1;
+        --hover_color: black;
+        --color: black;
+        width: $radius;
+        height: $radius;
+        border-radius: $radius;
+        border: none;
+        background: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        padding: 0;
+        margin: 0 10px;
+        transition: .1s linear;
+        color: var(--color);
+        &:hover {
+          background: var(--hover_back_color);
+          color: var(--hover_color);
+        }
+        &.colour_cancel {
+          --hover_back_color: #e84c3d;
+          --hover_color: #ecf0f1;
+          --color: #c1392b;
+        }
+        &.colour_accept {
+          --hover_back_color: #2dcc70;
+          --hover_color: #ecf0f1;
+          --color: #27ae61;
         }
       }
     }

@@ -383,16 +383,53 @@ button[name=dev] {
   justify-content: center;
 }
 .colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input {
+  font-family: "Ubuntu", Helvetica, sans-serif, arial, "Roboto";
   letter-spacing: 4px;
-  text-shadow: 0 0 5px white;
+  text-shadow: 1px 1px 1px #ecf0f1;
   text-align: center;
   box-sizing: border-box;
   background: none;
   border: none;
   font-size: 17px;
+  max-width: 100%;
 }
 .colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input:focus {
   border-bottom: 1px solid #bec3c7;
+}
+.colour_picker .colour_picker__control {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button {
+  --hover_back_color: #ecf0f1;
+  --hover_color: black;
+  --color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  margin: 0 10px;
+  transition: 0.1s linear;
+  color: var(--color);
+}
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button:hover {
+  background: var(--hover_back_color);
+  color: var(--hover_color);
+}
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button.colour_cancel {
+  --hover_back_color: #e84c3d;
+  --hover_color: #ecf0f1;
+  --color: #c1392b;
+}
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button.colour_accept {
+  --hover_back_color: #2dcc70;
+  --hover_color: #ecf0f1;
+  --color: #27ae61;
 }
 
 .grid-stack .grid-stack-item[data-gs-width="0"] {

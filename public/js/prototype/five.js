@@ -365,7 +365,8 @@ function initColourPicker () {
   const preview = document.querySelector('.colour_picker__preview--wrapper')
   const previewInput = preview.querySelector('.colour_picker__preview__input')
   const opts = {
-    width: 250
+    width: 250,
+    color: '#1bbc9b'
   }
   colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
   function handleColourChange (colour, change) {
@@ -630,15 +631,15 @@ function toggleColourEdit (event) {
     parent.dataset.mosEdit = 'inactive'
   } else {
     const pickerElem = document.querySelector('.colour_picker')
-    const { top, left, width, height } = this.getBoundingClientRect()
+    const { top, left } = this.getBoundingClientRect()
     const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
     const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
     const startingColour = colourModule.style.backgroundColor
-    const cb = colour => {
-      // we want to hold the returned colour value, let user accept or reset
-      colourModule.style.backgroundColor = colour.rgbString
+    const accept = picker => {
+      colourModule.style.backgroundColor = picker.color.rgbString
     }
-    showColourPicker(x, y, cb, colourPicker, startingColour)
+    const decline = () => {}
+    showColourPicker(x, y, colourPicker, startingColour, null, accept, decline)
     parent.dataset.mosEdit = 'active'
   }
 }
@@ -648,14 +649,28 @@ function toggleColourEdit (event) {
 
 // ========== Interface Functions ==========
 
-function showColourPicker (x, y, callback, picker, startingColour) {
-  console.log({ x, y, callback, picker, startingColour })
+function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
+  console.log({ x, y, picker, startingColour, changeCb, acceptCb, declineCb })
   const colourPickerContainer = document.querySelector('.colour_picker')
   colourPickerContainer.style.display = 'block'
   colourPickerContainer.style.top = `${y}px`
   colourPickerContainer.style.left = `${x}px`
   picker.color.rgbString = startingColour
-  picker.on('color:change', callback)
+  picker.on('color:change', changeCb ? changeCb : () => {})
+  if (acceptCb) {
+    const accept = colourPickerContainer.querySelector('.colour_accept')
+    accept.onclick = () => {
+      hideColourPicker(picker)
+      acceptCb(picker)
+    }
+  }
+  if (declineCb) {
+    const decline = colourPickerContainer.querySelector('.colour_cancel')
+    decline.onclick = () => {
+      hideColourPicker(picker)
+      declineCb(picker)
+    }
+  }
 }
 
 function hideColourPicker (picker) {
