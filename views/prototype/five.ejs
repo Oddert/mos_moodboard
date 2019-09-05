@@ -74,10 +74,25 @@
       </div>
       <div class="colour_picker__control">
         <div class="colour_picker__control--wrapper">
-          <button type="button" name="colour_cancel" class="colour_cancel">
+          <button type="button" name="colour_cancel" class="colour_cancel control_cancel">
             <i class="fas fa-times"></i>
           </button>
-          <button type="button" name="colour_accept" class="colour_accept">
+          <button type="button" name="colour_accept" class="colour_accept control_accept">
+            <i class="fas fa-check"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="image_interface">
+      <div class="image_interface--wrapper">
+        <label for="image_upload">Upload Image</label>
+        <input type="file" name="image_upload" class="image_upload" id="image_upload" />
+        <input type="url" name="image_url" class="image_url" placeholder="Image URL" />
+        <div class="image_interface__control">
+          <button type="button" name="image_cancel" class="image_cancel control_cancel">
+            <i class="fas fa-times"></i>
+          </button>
+          <button type="button" name="image_accept" class="image_accept control_accept">
             <i class="fas fa-check"></i>
           </button>
         </div>

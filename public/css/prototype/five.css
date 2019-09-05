@@ -366,6 +366,7 @@ button[name=dev] {
   padding: 10px;
   background: #fff;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+  display: none;
 }
 .colour_picker .colour_picker__preview {
   display: flex;
@@ -421,12 +422,94 @@ button[name=dev] {
   background: var(--hover_back_color);
   color: var(--hover_color);
 }
-.colour_picker .colour_picker__control .colour_picker__control--wrapper button.colour_cancel {
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button.control_cancel {
   --hover_back_color: #e84c3d;
   --hover_color: #ecf0f1;
   --color: #c1392b;
 }
-.colour_picker .colour_picker__control .colour_picker__control--wrapper button.colour_accept {
+.colour_picker .colour_picker__control .colour_picker__control--wrapper button.control_accept {
+  --hover_back_color: #2dcc70;
+  --hover_color: #ecf0f1;
+  --color: #27ae61;
+}
+
+.image_interface {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+.image_interface .image_interface--wrapper {
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image_interface .image_interface--wrapper label {
+  border: 1px solid #ecf0f1;
+  margin: 10px;
+  background: black;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+}
+.image_interface .image_interface--wrapper label:hover {
+  text-decoration: underline;
+}
+.image_interface .image_interface--wrapper input[type=file] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.image_interface .image_interface--wrapper input[type=url] {
+  margin: 10px;
+  flex: 4;
+  padding: 10px 20px;
+}
+.image_interface .image_interface--wrapper .image_interface__control {
+  display: flex;
+}
+.image_interface .image_interface--wrapper .image_interface__control button {
+  --hover_back_color: #ecf0f1;
+  --hover_color: black;
+  --color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  margin: 0 10px;
+  transition: 0.1s linear;
+  color: var(--color);
+  margin: 0;
+}
+.image_interface .image_interface--wrapper .image_interface__control button:hover {
+  background: var(--hover_back_color);
+  color: var(--hover_color);
+}
+.image_interface .image_interface--wrapper .image_interface__control button.control_cancel {
+  --hover_back_color: #e84c3d;
+  --hover_color: #ecf0f1;
+  --color: #c1392b;
+}
+.image_interface .image_interface--wrapper .image_interface__control button.control_accept {
   --hover_back_color: #2dcc70;
   --hover_color: #ecf0f1;
   --color: #27ae61;

@@ -149,7 +149,7 @@ function initialAjax () {
   const params = new URLSearchParams(window.location.search)
   const dataset = params.get('dataset')
   const url = dataset ? `/api/projects/sample?dataset=${dataset}` : `/api/projects/sample`
-  console.log(params, dataset, url)
+  // console.log(params, dataset, url)
   const opts = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -249,6 +249,9 @@ function createGridContent (pages, data) {
         }
         if (node._type === "colour") {
           createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+        }
+        if (node._type === "image") {
+          createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
       }, this)
       elem.on('mousedown', function (event) {
@@ -355,9 +358,11 @@ function initialiseNewItemMenu () {
   }
   colour.onclick = e => {
     const createdWidget = addUserWidget(createColour({ hex: randomHex() }), 1, 2)
+    createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
   }
   image.onclick = e => {
     const createdWidget = addUserWidget(createImage(defaultImg), 2, 4)
+    createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
   }
 }
 
@@ -619,10 +624,6 @@ function toggleTextEdit () {
   }
 }
 
-function toggleImageEdit () {
-    const parent = this.closest('.grid-stack-item')
-}
-
 function toggleColourEdit (event) {
   const parent = this.closest('.grid-stack-item')
   const colourModule = parent.querySelector('.colour__module')
@@ -644,32 +645,59 @@ function toggleColourEdit (event) {
   }
 }
 
+function toggleImageEdit (event) {
+  const parent = this.closest('.grid-stack-item')
+  const img = parent.querySelector('.content_image__img img')
+  if (parent.dataset.mosEdit === 'active') {
+    hideImageInterface ()
+    parent.dataset.mosEdit = 'inactive'
+  } else {
+    const interface = document.querySelector('.image_interface')
+    const { top, left } = this.getBoundingClientRect()
+    const x = left + event.offsetX + window.scrollX - (interface.scrollWidth / 2)
+    const y = top + event.offsetY + window.scrollY - interface.scrollHeight - 50
+    const uri = img.src
+    const accept = imageUpdate => {
+      img.src = imageUpdate
+    }
+    showImageInterface (x, y, uri, accept, null)
+    parent.dataset.mosEdit = 'active'
+    imageCurrentlyOpen = parent
+  }
+}
+
 // ========== / Content Functions ==========
 
 
 // ========== Interface Functions ==========
+let imageCurrentlyOpen
 
 function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
-  console.log({ x, y, picker, startingColour, changeCb, acceptCb, declineCb })
+  // console.log({ x, y, picker, startingColour, changeCb, acceptCb, declineCb })
   const colourPickerContainer = document.querySelector('.colour_picker')
+  const decline = colourPickerContainer.querySelector('.colour_cancel')
+  const accept = colourPickerContainer.querySelector('.colour_accept')
   colourPickerContainer.style.display = 'block'
   colourPickerContainer.style.top = `${y}px`
   colourPickerContainer.style.left = `${x}px`
   picker.color.rgbString = startingColour
   picker.on('color:change', changeCb ? changeCb : () => {})
-  if (acceptCb) {
-    const accept = colourPickerContainer.querySelector('.colour_accept')
-    accept.onclick = () => {
-      hideColourPicker(picker)
-      acceptCb(picker)
-    }
+
+  setTimeout(() => {
+    window.addEventListener('click', e => {
+      if (colourPickerContainer.contains(e.target)) return
+      else hideColourPicker(picker)
+    })
+  }, 500)
+
+  accept.onclick = () => {
+    if (acceptCb) acceptCb(picker)
+    hideColourPicker(picker)
   }
-  if (declineCb) {
-    const decline = colourPickerContainer.querySelector('.colour_cancel')
-    decline.onclick = () => {
-      hideColourPicker(picker)
-      declineCb(picker)
-    }
+
+  decline.onclick = () => {
+    hideColourPicker(picker)
+    if (declineCb) declineCb(picker)
   }
 }
 
@@ -678,7 +706,57 @@ function hideColourPicker (picker) {
   colourPickerContainer.style.display = 'none'
   colourPickerContainer.style.top = `0px`
   colourPickerContainer.style.left = `0px`
-  picker.on('color:change', () => {})
+  if (picker) picker.on('color:change', () => {})
+}
+
+
+function showImageInterface (x, y, imageUri, acceptCb, declineCb) {
+  const imageInterfaceContainer = document.querySelector('.image_interface')
+  const url = document.querySelector('.image_url')
+  const accept = imageInterfaceContainer.querySelector('.image_accept')
+  const decline = imageInterfaceContainer.querySelector('.image_cancel')
+  let currentUri = imageUri || url.value || ""
+  imageInterfaceContainer.style.display = `flex`
+  imageInterfaceContainer.style.top = `${y}px`
+  imageInterfaceContainer.style.left = `${x}px`
+  url.onkeyup = e => currentUri = e.target.value
+
+  if (imageUri) url.value = imageUri
+
+  setTimeout(() => {
+    window.addEventListener('click', imageOOBListener)
+  }, 500)
+
+  function handleInput () {
+    if (acceptCb) acceptCb (currentUri)
+    hideImageInterface ()
+  }
+
+  accept.onclick = handleInput
+  accept.onpaste = handleInput
+  accept.oninput = handleInput
+
+  decline.onclick = () => {
+    if (declineCb) declineCb (currentUri)
+    hideImageInterface ()
+  }
+}
+
+function imageOOBListener (e) {
+  const imageInterfaceContainer = document.querySelector('.image_interface')
+  if (imageInterfaceContainer.contains(e.target)) return
+  else hideImageInterface ()
+}
+
+function hideImageInterface () {
+  const imageInterfaceContainer = document.querySelector('.image_interface')
+  const url = document.querySelector('.image_url')
+  imageInterfaceContainer.style.display = `none`
+  imageInterfaceContainer.style.top = `0px`
+  imageInterfaceContainer.style.left = `0px`
+  window.removeEventListener('click', imageOOBListener)
+  if (imageCurrentlyOpen) imageCurrentlyOpen.dataset.mosEdit = 'inactive'
+  // console.log('removed listener')
 }
 
 // ========== / Interface Functions ==========
