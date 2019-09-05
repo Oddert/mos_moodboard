@@ -622,18 +622,17 @@ function toggleImageEdit () {
     const parent = this.closest('.grid-stack-item')
 }
 
-function toggleColourEdit () {
+function toggleColourEdit (event) {
   const parent = this.closest('.grid-stack-item')
   const colourModule = parent.querySelector('.colour__module')
   if (parent.dataset.mosEdit === 'active') {
-    console.log('closing colour picker')
     hideColourPicker (colourPicker)
     parent.dataset.mosEdit = 'inactive'
-    console.log('#')
   } else {
-    console.log('opening colour picker')
-    // this cannot depend on click, needs colour element position
-    const { x, y } = lastClick
+    const pickerElem = document.querySelector('.colour_picker')
+    const { top, left, width, height } = this.getBoundingClientRect()
+    const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
+    const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
     const startingColour = colourModule.style.backgroundColor
     const cb = colour => {
       // we want to hold the returned colour value, let user accept or reset
@@ -641,7 +640,6 @@ function toggleColourEdit () {
     }
     showColourPicker(x, y, cb, colourPicker, startingColour)
     parent.dataset.mosEdit = 'active'
-    console.log('#')
   }
 }
 
@@ -651,7 +649,7 @@ function toggleColourEdit () {
 // ========== Interface Functions ==========
 
 function showColourPicker (x, y, callback, picker, startingColour) {
-  console.log({x, y})
+  console.log({ x, y, callback, picker, startingColour })
   const colourPickerContainer = document.querySelector('.colour_picker')
   colourPickerContainer.style.display = 'block'
   colourPickerContainer.style.top = `${y}px`

@@ -384,7 +384,7 @@ button[name=dev] {
 }
 .colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input {
   letter-spacing: 4px;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 5px white;
   text-align: center;
   box-sizing: border-box;
   background: none;
