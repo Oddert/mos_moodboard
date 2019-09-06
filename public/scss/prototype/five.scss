@@ -195,6 +195,7 @@ $page_margin: 10vh;
 
       margin-top: 2vh;
       .page__title {
+        display: flex;
         h3, input {
           font-size: 20px;
           font-weight: 700;
@@ -204,9 +205,48 @@ $page_margin: 10vh;
           margin: 0;
           padding: 10px 30px;
           cursor: text;
+          flex: 5;
         }
         input {
-          color: #bec3c7;
+          color: #7e8c8d;
+        }
+        &:hover {
+          .page__title__delete {
+            button {
+              color: #2d3e50;
+            }
+          }
+        }
+        .page__title__delete {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          opacity: 0;
+          transition: .1s linear;
+          .page__title__delete--delete {
+            transition: .1s linear;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: #7e8c8d;
+            font-size: 20px;
+            cursor: pointer;
+            &:hover {
+              color: #e84c3d;
+              background: #fff;
+            }
+          }
+          .page__title__delete--message {
+
+          }
+          .page__title__delete--confirm {
+
+          }
+          .page__title__delete--cancel {
+
+          }
         }
       }
       .page__content {
@@ -220,6 +260,15 @@ $page_margin: 10vh;
         // width: (16/9) * 85vh;
         width: $page_width;
         height: (9/16) * $page_width;
+      }
+    }
+    &:hover {
+      .page__wrapper {
+        .page__title {
+          .page__title__delete {
+            opacity: 1;
+          }
+        }
       }
     }
   }

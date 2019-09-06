@@ -162,7 +162,10 @@ function render (data) {
       <div class="page">
         <div class="page__wrapper">
           <div class="page__title">
-            <h3 title="double click to edit title">${each.title ? each.title : '  '}</h3>
+            <h3 title="double click to edit page title" class="page__title__text">${each.title ? each.title : '  '}</h3>
+            <div class="page__title__delete">
+              <button class="page__title__delete--delete"><i class="fas fa-times"></i></button>
+            </div>
           </div>
           <div class="page__content grid-stack">
 
@@ -175,6 +178,7 @@ function render (data) {
   data.projects.forEach(addPage)
   $('.page').each(function () {
     $(this).find('.page__title h3').dblclick(toggleTitleEdit)
+    $(this).find('.page__title .page__title__delete--delete').click(toggleTitleDelete)
   })
 
   userRender = () => createGridContent (pages, data)
@@ -540,7 +544,7 @@ function toggleTitleEdit () {
       const titleDisplay = document.createElement('h3')
       titleDisplay.textContent = titleEdit.value
       title.removeChild(titleEdit)
-      title.appendChild(titleDisplay)
+      title.prepend(titleDisplay)
       title.dataset.mosEdit = "inactive"
       window.removeEventListener('click', outsideClick)
     }
@@ -561,11 +565,46 @@ function toggleTitleEdit () {
     titleEdit.type = "text"
     titleEdit.className = 'page__title__edit'
     title.removeChild(titleDisplay)
-    title.appendChild(titleEdit)
+    title.prepend(titleEdit)
+    titleEdit.focus()
     title.dataset.mosEdit = "active"
     setTimeout(() => {
       window.addEventListener('click', outsideClick)
     }, 1000)
+  }
+}
+
+function toggleTitleDelete () {
+  const deleteContainer = this.closest('.page__title__delete')
+  const deleteButton = deleteContainer.querySelector('.page__title__delete--delete')
+  if (deleteButton) {
+    deleteContainer.removeChild(deleteButton)
+    const message = document.createElement('p')
+    message.className=  'page__title__delete--message'
+    message.textContent = `Warning: Are you Sure you want to delete this page?`
+    const confirm = document.createElement('button')
+    confirm.textContent = 'Delete'
+    confirm.className = 'page__title__delete--confirm'
+    confirm.name = 'delete_page_confirm'
+    confirm.onclick = e => {
+      console.log('confirm delete page')
+    }
+    const cancel = document.createElement('button')
+    cancel.textContent = 'Cancel'
+    confirm.className = 'page__title__delete--cancel'
+    confirm.name = 'delete_page_cancel'
+    cancel.onclick = toggleTitleDelete
+    deleteContainer.appendChild(message)
+    deleteContainer.appendChild(confirm)
+    deleteContainer.appendChild(cancel)
+  } else {
+    const deleteButton = document.createElement('button')
+    deleteButton.innerHTML = `<i class="fas fa-times"></i>`
+    deleteButton.className = 'page__title__delete--delete'
+    deleteButton.name = 'delete_page_delete'
+    deleteButton.onclick = toggleTitleDelete
+    deleteContainer.innerHTML = ``
+    deleteContainer.appendChild(deleteButton)
   }
 }
 

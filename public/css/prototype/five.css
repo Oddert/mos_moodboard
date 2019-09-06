@@ -155,6 +155,9 @@ button[name=dev] {
 .pages .page .page__wrapper {
   margin-top: 2vh;
 }
+.pages .page .page__wrapper .page__title {
+  display: flex;
+}
 .pages .page .page__wrapper .page__title h3, .pages .page .page__wrapper .page__title input {
   font-size: 20px;
   font-weight: 700;
@@ -164,9 +167,35 @@ button[name=dev] {
   margin: 0;
   padding: 10px 30px;
   cursor: text;
+  flex: 5;
 }
 .pages .page .page__wrapper .page__title input {
-  color: #bec3c7;
+  color: #7e8c8d;
+}
+.pages .page .page__wrapper .page__title:hover .page__title__delete button {
+  color: #2d3e50;
+}
+.pages .page .page__wrapper .page__title .page__title__delete {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: 0.1s linear;
+}
+.pages .page .page__wrapper .page__title .page__title__delete .page__title__delete--delete {
+  transition: 0.1s linear;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: #7e8c8d;
+  font-size: 20px;
+  cursor: pointer;
+}
+.pages .page .page__wrapper .page__title .page__title__delete .page__title__delete--delete:hover {
+  color: #e84c3d;
+  background: #fff;
 }
 .pages .page .page__wrapper .page__content {
   background: #fff;
@@ -174,6 +203,9 @@ button[name=dev] {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
   width: 85vw;
   height: 47.8125vw;
+}
+.pages .page:hover .page__wrapper .page__title .page__title__delete {
+  opacity: 1;
 }
 .pages.horizontal {
   flex-direction: row;
