@@ -83,8 +83,33 @@ function extractElementData (node) {
   }
 }
 
+function newSerialise () {
+  const output = []
+  $('.page').each(function (idx, grid) {
+    const pageItems = []
+    console.log({ items: $(grid).find('.grid-stack-item:visible') })
+    const items = $(grid).find('.grid-stack-item:visible')
+      .map((idx, each) => {
+        const node = $(each).data('_gridstack_node')
+        console.log({ each: $(each), data: $(each).data(), node })
+        const nodeData = extractElementData(node)
+        pageItems.push ({
+          x: node.x,
+          y: node.y,
+          width: node.width,
+          height: node.height,
+          page: node._grid._stylesId,
+          ...nodeData
+        })
+      })
+      output.push(pageItems)
+  })
+  console.log(output)
+}
+
 function serialise () {
   // BUG: If there are no widgets the serialise function cannot run
+  // BUG: Adding page seems to unbind event listeners for new item input
   const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
     const elem = $(el)
     const node = elem.data('_gridstack_node')
@@ -213,7 +238,7 @@ const gridstackOptions = {
 }
 
 function addOnePageContent (page) {
-  //.page__content as queryselector
+  //.page__content as document.querySelector()
   const thisPage = $(page)
   const height = thisPage.height()
   thisPage.gridstack({
@@ -398,29 +423,13 @@ function initColourPicker () {
 function initialisePageAdd () {
   const newPage = document.querySelector('.new_page button')
   newPage.onclick = () => {
-    const pages = document.querySelector('.pages')
-    const page = `
-      <div class="page">
-        <div class="page__wrapper">
-          <div class="page__title">
-            <h3 title="double click to edit title"></h3>
-          </div>
-          <div class="page__content grid-stack">
-
-          </div>
-        </div>
-      </div>
-    `
-    pages.innerHTML += page
-    const jqueryPage = $('.pages .page').last()
-    jqueryPage.find('.page__title h3').dblclick(toggleTitleEdit)
-
-        const pageContent = jqueryPage.find('.page__content')
-        const height = pageContent.height()
-        pageContent.gridstack({
-          ...gridstackOptions,
-          cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
-        })
+    const serialised = serialise()
+    serialised.push({
+      title: 'New Page',
+      entities: []
+    })
+    data.projects = serialised
+    render(data)
   }
 
 }
