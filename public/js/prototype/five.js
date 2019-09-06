@@ -83,17 +83,16 @@ function extractElementData (node) {
   }
 }
 
-function newSerialise () {
+function serialise () {
   const output = []
   $('.page').each(function (idx, grid) {
-    const pageItems = []
-    console.log({ items: $(grid).find('.grid-stack-item:visible') })
+    const title = $(grid).find('.page__title h3').text().trim()
+    const entities = []
     const items = $(grid).find('.grid-stack-item:visible')
       .map((idx, each) => {
         const node = $(each).data('_gridstack_node')
-        console.log({ each: $(each), data: $(each).data(), node })
         const nodeData = extractElementData(node)
-        pageItems.push ({
+        entities.push ({
           x: node.x,
           y: node.y,
           width: node.width,
@@ -102,48 +101,9 @@ function newSerialise () {
           ...nodeData
         })
       })
-      output.push(pageItems)
+      output.push({ title, entities })
   })
-  console.log(output)
-}
-
-function serialise () {
-  // BUG: If there are no widgets the serialise function cannot run
-  // BUG: Adding page seems to unbind event listeners for new item input
-  const all = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
-    const elem = $(el)
-    const node = elem.data('_gridstack_node')
-    const elementData = extractElementData(node)
-    // console.log(node)
-    // console.log(elementData)
-    return {
-      x: node.x,
-      y: node.y,
-      width: node.width,
-      height: node.height,
-      page: node._grid._stylesId,
-      ...elementData
-    }
-  }, this)
-
-  const keys = Object.keys(all.reduce((acc, each) => {
-    if (!acc[each.page]) acc[each.page] = true
-    return acc
-  }, {}))
-
-  const out = []
-  keys.forEach((key, idx) => {
-    out[idx] = all.filter(each => each.page === key)
-  })
-  const sanitised = out.map((page, idx) => page.map(cell => ({ ...cell, page: idx })))
-  const titles = document.querySelectorAll('.page__title h3')
-  const formated = sanitised.map((entities, idx) => {
-    return {
-      title: titles[idx].textContent,
-      entities
-    }
-  })
-  return formated
+  return output
 }
 
 function save () {
