@@ -587,7 +587,10 @@ function toggleTitleDelete () {
     confirm.className = 'page__title__delete--confirm'
     confirm.name = 'delete_page_confirm'
     confirm.onclick = e => {
-      console.log('confirm delete page')
+      // const serialised = serialise()
+      // const serialisedRemoved = serialised.split()
+      // data.projects = serialised
+      // render(data)
     }
     const cancel = document.createElement('button')
     cancel.textContent = 'Cancel'

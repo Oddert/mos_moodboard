@@ -77,12 +77,11 @@ const server = app.listen(
 // -Add new item menu for ajax'ed products, maerials etc. ✓
 // -Widget Edit Menues:
 //    -Text Edit ✓
-//    -Colour Picker
-//    -Image Uploader
+//    -Colour Picker ✓
+//    -Image Uploader ✓
 //    -Product / Material Browser
 //    -File Upload
-// -Implament Page Add
-// -Implament Page Delete
-// -Implament each 'edit' of other functions (unify controls?)
+// -Implament Page Add ✓
+// -Implament Page Delete (1/2)
 // -Implament auto-save and actual save
 // -Implament undo, redo

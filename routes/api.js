@@ -3,6 +3,14 @@ const fs = require('fs')
 
 const sd = require('../utils/sample_data')
 
+let sampleProductData
+fs.readFile('./utils/sample_products.txt', 'utf8', (err, data) => {
+  // console.log(err, data)
+  // console.log(JSON.parse(data).products[0])
+  sampleProductData = JSON.parse(data).products
+})
+let sampleProducts = () => sampleProductData
+
 router.route('/projects/:user')
   .get((req, res, next) => {
     console.log(req.query)
@@ -34,6 +42,21 @@ router.route('/projects/:user')
         res.json({ success: true, message: 'sal good' })
       }
     })
+  })
+
+router.route('/product')
+  .get((req, res, next) => {
+    res.json(sampleProducts())
+  })
+
+router.route('/product/:searchTerm')
+  .get((req, res, next) => {
+    const search = new RegExp(req.params.searchTerm, 'gi')
+    const data = () => [...sampleProducts()].filter(each => {
+      if (!each) return false
+      else return each.title.match(search)
+    })
+    res.json(data())
   })
 
 const ran = (multiplier, offset=0) => Math.floor(Math.random() * multiplier) + offset
