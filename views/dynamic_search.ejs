@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro/dist/iro.min.js"></script>
+    <!-- NOTE: Temporary font awesome using my own auth token -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.css" />
+    <!-- WARNING: older version of jQuery, current is 3.4.1 -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.js'></script>
+    <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.jQueryUI.min.js'></script>
+
+    <link rel="stylesheet" href="/css/master.css">
+    <link rel="stylesheet" href="/css/gridstack_extra.css">
+  </head>
+  <body>
+
+    <div class="search_product">
+      <div class="search_product__bar">
+        <input type="text" name="search_product" placeholder="Search MOS Products..." />
+      </div>
+      <div class="search_product__results">
+        <ul>
+
+        </ul>
+      </div>
+    </div>
+
+
+  </body>
+  <link rel="stylesheet" href="/css/prototype/five.css">
+  <script type="text/javascript" src="/js/dynamic_search.js"></script>
+  <style media="screen">
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+
+    }
+    .search_product {
+      margin-top: 50px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 50px 100px;
+      box-shadow: 10px 10px 30px rgba(0,0,0,.3);
+    }
+    input[type=text] {
+      font-size: 24px;
+      padding: 14px 20px;
+      border-radius: 5px;
+      border: 1px solid #2d3e50;
+    }
+    .search_product__results ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+    }
+  </style>
+</html>

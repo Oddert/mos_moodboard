@@ -58,6 +58,9 @@ app.route('/prototype/one')
 app.route('/prototype/:num')
   .get((req, res, next) => res.render(`prototype/${req.params.num}`))
 
+app.route('/dynamic_search')
+  .get((req, res, next) => res.render('dynamic_search'))
+
 app.use('/api', require('./routes/api'))
 
 const server = app.listen(
