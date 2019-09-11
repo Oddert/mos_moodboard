@@ -401,6 +401,7 @@ function initProductSearch () {
 
   const productBar = document.querySelector('.product_search__input--bar')
   const resultsContainer = document.querySelector('.product_search__results ul')
+  const clearButton = document.querySelector('.product_search__input--clear')
 
   let lastSearchTerm
 
@@ -426,7 +427,6 @@ function initProductSearch () {
   }
 
   function clearResults () {
-    // if (resultsContainer && resultsContainer.innerHTML)
     resultsContainer.innerHTML = ''
   }
 
@@ -440,6 +440,7 @@ function initProductSearch () {
     performProductSearch(value)
   }
 
+  clearButton.onclick = clearResults
   productBar.addEventListener('keyup', productSearch)
 
 }
