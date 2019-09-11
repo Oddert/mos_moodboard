@@ -120,39 +120,6 @@ function save () {
     .then(res => console.log({ res }))
 }
 
-// ========== / Top Level Functions ==========
-
-
-// ========== Page initialisation ==========
-
-function initPage () {
-
-const devButton = document.querySelector('button[name=dev]')
-if (devButton) devButton.onclick = () => userRender()
-
-
-function initialAjax () {
-  const params = new URLSearchParams(window.location.search)
-  const dataset = params.get('dataset')
-  const url = dataset ? `/api/projects/sample?dataset=${dataset}` : `/api/projects/sample`
-  // console.log(params, dataset, url)
-  const opts = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  }
-
-  function cb (res) {
-    console.log(res)
-    const { projects } = res.payload
-    data.projects = projects
-    render(data)
-  }
-
-  fetch(url, opts)
-  .then(res => res.json())
-  .then(cb)
-}
-
 function render (data) {
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
@@ -185,33 +152,6 @@ function render (data) {
   userRender()
 }
 
-const gridstackOptions = {
-  // width: 12,
-  width: 13,
-  minWidth: 500,
-  height: rows,
-  float: true,
-  animate: true,
-  removable: false,
-
-  // cellHeight: '50',
-  // cellHeightUnit: 'px'
-  // // removable: '.trash'
-  // removeTimeout: 100,
-  acceptWidgets: '.grid-stack-item'
-}
-
-function addOnePageContent (page) {
-  //.page__content as document.querySelector()
-  const thisPage = $(page)
-  const height = thisPage.height()
-  thisPage.gridstack({
-    ...gridstackOptions,
-    cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
-  })
-  page.style.height = '250px'
-  page.dataset.mosTest = '250'
-}
 
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
@@ -278,6 +218,66 @@ function createGridContent (pages, data) {
     })
 }
 
+const gridstackOptions = {
+  // width: 12,
+  width: 13,
+  minWidth: 500,
+  height: rows,
+  float: true,
+  animate: true,
+  removable: false,
+
+  // cellHeight: '50',
+  // cellHeightUnit: 'px'
+  // // removable: '.trash'
+  // removeTimeout: 100,
+  acceptWidgets: '.grid-stack-item'
+}
+
+function addOnePageContent (page, idx) {
+  //.page__content as document.querySelector()
+  const thisPage = $(page)
+  const height = thisPage.height()
+  thisPage.gridstack({
+    ...gridstackOptions,
+    cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
+  })
+  page.style.height = '250px'
+  page.dataset.mosTest = '250'
+  page.dataset.mosPageIdx = idx
+}
+
+// ========== / Top Level Functions ==========
+
+
+// ========== Page initialisation ==========
+
+function initPage () {
+
+const devButton = document.querySelector('button[name=dev]')
+if (devButton) devButton.onclick = () => userRender()
+
+function initialAjax () {
+  const params = new URLSearchParams(window.location.search)
+  const dataset = params.get('dataset')
+  const url = dataset ? `/api/projects/sample?dataset=${dataset}` : `/api/projects/sample`
+  // console.log(params, dataset, url)
+  const opts = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }
+
+  function cb (res) {
+    console.log(res)
+    const { projects } = res.payload
+    data.projects = projects
+    render(data)
+  }
+
+  fetch(url, opts)
+  .then(res => res.json())
+  .then(cb)
+}
 
 function changeDisplayMode (e) {
   const displayButtons = document.querySelectorAll('.control_display button')
@@ -579,24 +579,23 @@ function toggleTitleDelete () {
   const deleteButton = deleteContainer.querySelector('.page__title__delete--delete')
   if (deleteButton) {
     deleteContainer.removeChild(deleteButton)
+
     const message = document.createElement('p')
-    message.className=  'page__title__delete--message'
+    message.className =  'page__title__delete--message'
     message.textContent = `Warning: Are you Sure you want to delete this page?`
+
     const confirm = document.createElement('button')
     confirm.textContent = 'Delete'
     confirm.className = 'page__title__delete--confirm'
     confirm.name = 'delete_page_confirm'
-    confirm.onclick = e => {
-      // const serialised = serialise()
-      // const serialisedRemoved = serialised.split()
-      // data.projects = serialised
-      // render(data)
-    }
+    confirm.onclick = removePage
+
     const cancel = document.createElement('button')
     cancel.textContent = 'Cancel'
     confirm.className = 'page__title__delete--cancel'
     confirm.name = 'delete_page_cancel'
     cancel.onclick = toggleTitleDelete
+
     deleteContainer.appendChild(message)
     deleteContainer.appendChild(confirm)
     deleteContainer.appendChild(cancel)
@@ -609,6 +608,14 @@ function toggleTitleDelete () {
     deleteContainer.innerHTML = ``
     deleteContainer.appendChild(deleteButton)
   }
+}
+
+function removePage (e) {
+  const idx = Number(e.target.closest('.page').querySelector('.page__content').dataset.mosPageIdx)
+  const serialised = serialise()
+  const serialisedRemoved = [...serialised.slice(0, idx), ...serialised.slice(idx + 1)]
+  data.projects = serialisedRemoved
+  render(data)
 }
 
 function saveOneText (x, y, page, item, content, payload) {

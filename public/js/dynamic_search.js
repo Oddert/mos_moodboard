@@ -33,10 +33,15 @@ function performProductSearch (value) {
     })
 }
 
+function clearResults () {
+  const container = document.querySelector('.search_product__results ul')
+  container.innerHTML = ''
+}
+
 function productSearch (e) {
   const { value } = e.target
   if (value === lastSearchTerm) return
-  if (!/\w/gi.test(value)) return
+  if (!/\w/gi.test(value)) return clearResults()
   if (value.length < 3) return
   lastSearchTerm = value
   console.log(value)
