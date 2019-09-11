@@ -384,6 +384,66 @@ function initColourPicker () {
   }
 }
 
+function initProductSearch () {
+
+  const createResultItem = ({ title, design, price, img }) => `
+    <div class="result_product">
+      <div class="result_product__img">
+        <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+      </div>
+      <div class="result_product__text">
+        <p class="result_product__text--title">${title}</p>
+        <p class="result_product__text--design">${design}</p>
+        <p class="result_product__text--price">${price}</p>
+      </div>
+    </div>
+  `
+
+  const productBar = document.querySelector('.product_search__input--bar')
+  const resultsContainer = document.querySelector('.product_search__results ul')
+
+  let lastSearchTerm
+
+  function renderSearchResults (res) {
+    resultsContainer.innerHTML = ``
+    res.forEach(each => {
+      if (each) resultsContainer.innerHTML += createResultItem(each)
+    })
+  }
+
+  function performProductSearch (value) {
+    const url = `/api/product/${value}`
+    const opts = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    }
+    fetch(url, opts)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res)
+        renderSearchResults(res)
+      })
+  }
+
+  function clearResults () {
+    // if (resultsContainer && resultsContainer.innerHTML)
+    resultsContainer.innerHTML = ''
+  }
+
+  function productSearch (e) {
+    const { value } = e.target
+    if (value === lastSearchTerm) return
+    if (!/\w/gi.test(value)) return clearResults()
+    if (value.length < 3) return
+    lastSearchTerm = value
+    console.log(value)
+    performProductSearch(value)
+  }
+
+  productBar.addEventListener('keyup', productSearch)
+
+}
+
 function initialisePageAdd () {
   const newPage = document.querySelector('.new_page button')
   newPage.onclick = () => {
@@ -416,6 +476,7 @@ initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
 initialisePageAdd()
+initProductSearch()
 }
 
 // ========== / Page initialisation ==========

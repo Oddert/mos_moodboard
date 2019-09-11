@@ -160,7 +160,7 @@ const fora_payload = {
       entities: [
         {x: 4, y: 0, width: 5, height: 3, _type: "text", text: "Furnature Sample Finishes"},
         {x: 4, y: 4, width: 5, height: 15, _type: "image", src: "https://static1.squarespace.com/static/56abdcec22482ec2414c1aba/59663453d2b8576106524218/5c479a7a4ae23759d4d4eb7f/1548197007245/office+design+trends%2C+2019%2C+Nashville%2C+interior+design%2C+color+schemes%2C+texture%2C+material%2C+company+culture.jpg?format=2500w", alt: "A banner image from the storefront" },
-        {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
+        // {x: 0, y: 19, width: 1, height: 1, _type: "image", src: "", alt: "A banner image from the storefront" },
       ]
     },
     {
