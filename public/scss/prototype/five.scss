@@ -701,6 +701,8 @@ $page_margin: 10vh;
       padding: 0;
       list-style-type: none;
       .result_product {
+        border: none;
+        margin: 0;
         overflow: hidden;
         box-shadow: 5px 5px 10px rgba(0,0,0,.1);
         box-sizing: border-box;

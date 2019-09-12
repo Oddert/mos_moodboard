@@ -382,11 +382,40 @@ function initProductSearch () {
 
   let lastSearchTerm
 
+  function addProductWidget (event, each) {//##########################
+    const width = 1, height = 2
+    const { grid, gridElem, x, y } = lastClick
+    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+    const newWidget = $(`
+      <div>
+        <div
+          class="grid-stack-item-content"
+          data-mos-page="${gridElem.data('mosPageIdx')}"
+          data-mos-item="${gridElem.children().length + 1}"
+        >
+          ${createProduct(each)}
+        </div>
+      </div>
+    `)
+
+    console.log(grid, newWidget, gridPos.x, gridPos.y, 1, 1)
+    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
+    console.log('...success')
+    createdWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    hideProductSearch()
+  }//#####################
+
   function renderSearchResults (res, value) {
     if (res.length) {
       resultsContainer.innerHTML = ``
       res.forEach(each => {
         if (each) resultsContainer.innerHTML += createResultItem(each)
+      })
+      const allResults = resultsContainer.querySelectorAll('.result_product')
+      allResults.forEach((each, idx) => {
+        each.addEventListener('click', e => addProductWidget(e, res[idx]))
       })
     } else resultsContainer.innerHTML = `
         <div class="result_none">
@@ -415,13 +444,25 @@ function initProductSearch () {
     productBar.focus()
   }
 
+  function filter (value) {
+    let newValue = value
+      .replace('[', '')
+      .replace(']', '')
+      .replace('{', '')
+      .replace('}', '')
+      .replace('?', '')
+      .replace('&', '')
+      .replace('/', '')
+      .replace('http', '')
+    return newValue
+  }
+
   function productSearch (e) {
-    const { value } = e.target
+    const value = filter(e.target.value)
     if (value === lastSearchTerm) return
     if (!/\w/gi.test(value)) return clearResults()
     if (value.length < 3) return
     lastSearchTerm = value
-    // console.log(value)
     performProductSearch(value)
   }
 
