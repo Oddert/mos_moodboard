@@ -290,6 +290,7 @@ function initialiseNewItemMenu () {
   const colour = document.querySelector('.new_item_menu__item.colour button')
   const image = document.querySelector('.new_item_menu__item.image button')
   const product = document.querySelector('.new_item_menu__item.product button')
+  const material = document.querySelector('.new_item_menu__item.material button')
   const menu = document.querySelector('.new_item_menu--container')
   function addUserWidget (content, width = 1, height = 2) {
     menu.style.display = 'none'
@@ -334,6 +335,7 @@ function initialiseNewItemMenu () {
     createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
   }
   product.onclick = toggleProductSearch
+  material.onclick = toggleMaterialSearch
 }
 
 function initColourPicker () {
@@ -360,6 +362,24 @@ function initColourPicker () {
   }
 }
 
+function performLibSeach (extention, value, cb) {
+  const url = `/api/${extention}/${value}`
+  const opts = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }
+  fetch(url, opts)
+    .then(res => res.json())
+    .then(res => {
+      cb (res, value)
+    })
+}
+
+const filterSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
+
+// NOTE: For the sake of future itirations, material and product search, while using virtually
+//      the same code, are seperate functions and elements. They share a couple of functions but
+//      that's all for now.
 function initProductSearch () {
   const productSearchContainer = document.querySelector('.product_search')
 
@@ -382,7 +402,7 @@ function initProductSearch () {
 
   let lastSearchTerm
 
-  function addProductWidget (event, each) {//##########################
+  function addProductWidget (event, each) {
     const width = 1, height = 2
     const { grid, gridElem, x, y } = lastClick
     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
@@ -398,14 +418,12 @@ function initProductSearch () {
       </div>
     `)
 
-    console.log(grid, newWidget, gridPos.x, gridPos.y, 1, 1)
     const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
-    console.log('...success')
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     hideProductSearch()
-  }//#####################
+  }
 
   function renderSearchResults (res, value) {
     if (res.length) {
@@ -424,53 +442,107 @@ function initProductSearch () {
       `
   }
 
-  function performProductSearch (value) {
-    const url = `/api/product/${value}`
-    const opts = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    }
-    fetch(url, opts)
-      .then(res => res.json())
-      .then(res => {
-        // console.log(res)
-        renderSearchResults(res, value)
-      })
-  }
-
   function clearResults () {
     productBar.value = ''
     resultsContainer.innerHTML = ''
     productBar.focus()
   }
 
-  function filter (value) {
-    let newValue = value
-      .replace('[', '')
-      .replace(']', '')
-      .replace('{', '')
-      .replace('}', '')
-      .replace('?', '')
-      .replace('&', '')
-      .replace('/', '')
-      .replace('http', '')
-    return newValue
-  }
-
   function productSearch (e) {
-    const value = filter(e.target.value)
+    const value = filterSearchValue(e.target.value)
     if (value === lastSearchTerm) return
     if (!/\w/gi.test(value)) return clearResults()
     if (value.length < 3) return
     lastSearchTerm = value
-    performProductSearch(value)
+    performLibSeach ('product', value, renderSearchResults)
   }
 
   clearButton.onclick = clearResults
   productBar.addEventListener('keyup', productSearch)
-
   $(productSearchContainer).draggable()
+}
+function initMaterialSearch () {
+  const materialSearchContainer = document.querySelector('.material_search')
 
+  const createResultItem = ({ title, design, img }) => `
+    <div class="result_material">
+      <div class="result_material__img">
+        <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+      </div>
+      <div class="result_material__text">
+        <p class="result_material__text--title">${title}</p>
+        <p class="result_material__text--design">${design}</p>
+      </div>
+    </div>
+  `
+
+  const materialBar = materialSearchContainer.querySelector('.material_search__input--bar')
+  const resultsContainer = materialSearchContainer.querySelector('.material_search__results ul')
+  const clearButton = materialSearchContainer.querySelector('.material_search__input--clear')
+
+  let lastSearchTerm
+
+  function addMaterialWidget (event, each) {
+    const width = 1, height = 2
+    const { grid, gridElem, x, y } = lastClick
+    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+    const newWidget = $(`
+      <div>
+        <div
+          class="grid-stack-item-content"
+          data-mos-page="${gridElem.data('mosPageIdx')}"
+          data-mos-item="${gridElem.children().length + 1}"
+        >
+          ${createMaterial(each)}
+        </div>
+      </div>
+    `)
+
+    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
+    createdWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    hideMaterialSearch()
+  }
+
+  function renderSearchResults (res, value) {
+    if (res.length) {
+      resultsContainer.innerHTML = ``
+      res.forEach(each => {
+        if (each) resultsContainer.innerHTML += createResultItem(each)
+        else resultsContainer.innerHTML += `<div class="result_material"></div>`
+      })
+      const allResults = resultsContainer.querySelectorAll('.result_material')
+      allResults.forEach((each, idx) => {
+        each.addEventListener('click', e => addMaterialWidget(e, res[idx]))
+      })
+    } else resultsContainer.innerHTML = `
+        <div class="result_none">
+          <p>Sorry, no results for '${value}'</p>
+        </div>
+      `
+  }
+
+  function clearResults () {
+    materialBar.value = ''
+    resultsContainer.innerHTML = ''
+    materialBar.focus()
+  }
+
+  const filter = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
+
+  function materialSearch (e) {
+    const value = filterSearchValue(e.target.value)
+    if (value === lastSearchTerm) return
+    if (!/\w/gi.test(value)) return clearResults()
+    if (value.length < 3) return
+    lastSearchTerm = value
+    performLibSeach ('material', value, renderSearchResults)
+  }
+
+  clearButton.onclick = clearResults
+  materialBar.addEventListener('keyup', materialSearch)
+  $(materialSearchContainer).draggable()
 }
 
 function initialisePageAdd () {
@@ -500,12 +572,13 @@ document.addEventListener('click', e => {
   }
 })
 
-initColourPicker()
+initColourPicker ()
 initialiseNewItemMenu ()
 initialiseDisplayButtons ()
 initialAjax ()
-initialisePageAdd()
-initProductSearch()
+initialisePageAdd ()
+initProductSearch ()
+initMaterialSearch ()
 }
 
 // ========== / Page initialisation ==========
@@ -819,6 +892,28 @@ function showProductSearch (event) {
   productSearch.style.left = `${absoluteLeft}px`
   searchBar.focus()
 }
+function hideMaterialSearch () {
+  const materialSearch = document.querySelector('.material_search')
+  materialSearch.style.top = '0px'
+  materialSearch.style.left = '0px'
+  materialSearch.style.display = 'none'
+}
+
+function showMaterialSearch (event) {
+  const materialSearch = document.querySelector('.material_search')
+  const searchBar = materialSearch.querySelector('.material_search__input--bar')
+  materialSearch.style.display = 'flex'
+
+  const { offsetX, offsetY, target } = event
+  const rect = target.getBoundingClientRect()
+
+  const absoluteTop = offsetY + rect.top + window.scrollY - (50)
+  const absoluteLeft = offsetX + rect.left + window.scrollX - (materialSearch.offsetWidth / 2)
+
+  materialSearch.style.top = `${absoluteTop}px`
+  materialSearch.style.left = `${absoluteLeft}px`
+  searchBar.focus()
+}
 
 
 function toggleProductSearch (event) {
@@ -829,6 +924,16 @@ function toggleProductSearch (event) {
   } else {
     showProductSearch(event)
     productSearch.dataset.mosEdit = 'active'
+  }
+}
+function toggleMaterialSearch (event) {
+  const materialSearch = document.querySelector('.material_search')
+  if (materialSearch.dataset.mosEdit === 'active') {
+    hideMaterialSearch()
+    materialSearch.dataset.mosEdit = 'inactive'
+  } else {
+    showMaterialSearch(event)
+    materialSearch.dataset.mosEdit = 'active'
   }
 }
 

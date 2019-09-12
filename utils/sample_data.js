@@ -1,3 +1,5 @@
+const materials = require('./materials')
+
 const sampleProducts = [
   {
     title: 'Hand Painted Screen',
@@ -208,5 +210,6 @@ module.exports = {
   proto_one_items,
 
   default_payload,
-  fora_payload
+  fora_payload,
+  materials
 }
