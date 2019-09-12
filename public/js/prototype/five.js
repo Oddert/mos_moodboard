@@ -188,33 +188,7 @@ function createGridContent (pages, data) {
           createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
       }, this)
-      elem.on('mousedown', function (event) {
-        const { clientX, clientY, offsetX, offsetY, target } = event
-        const rect = target.getBoundingClientRect()
-        const newItemMenu = $('.new_item_menu--container')
-        if (event.target.classList.contains('grid-stack')) {
-          const absoluteTop = offsetY + rect.top + window.scrollY
-          const absoluteLeft = offsetX + rect.left + window.scrollX
-          newItemMenu.css({
-            display: 'flex',
-            top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
-            left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
-          })
-          // newItemMenu.addEventListener('click', function (e) {
-          //   console.log(this === e.target)
-          // })
-          lastClick.grid = grid,
-          lastClick.gridElem = elem
-          lastClick.x = offsetX + rect.left + window.scrollX
-          lastClick.y = offsetY + rect.top + window.scrollY
-        } else {
-          newItemMenu.css({
-            display: 'none',
-            top: '20px',
-            left: '20px'
-          })
-        }
-      })
+      elem.on('mousedown', e => openNewItemMenu(e, elem, grid))
     })
 }
 
@@ -312,9 +286,10 @@ function initialiseDisplayButtons () {
 }
 
 function initialiseNewItemMenu () {
-  const text = document.querySelector('.new_item_menu__item.text')
-  const colour = document.querySelector('.new_item_menu__item.colour')
-  const image = document.querySelector('.new_item_menu__item.image')
+  const text = document.querySelector('.new_item_menu__item.text button')
+  const colour = document.querySelector('.new_item_menu__item.colour button')
+  const image = document.querySelector('.new_item_menu__item.image button')
+  const product = document.querySelector('.new_item_menu__item.product button')
   const menu = document.querySelector('.new_item_menu--container')
   function addUserWidget (content, width = 1, height = 2) {
     menu.style.display = 'none'
@@ -358,6 +333,7 @@ function initialiseNewItemMenu () {
     const createdWidget = addUserWidget(createImage(defaultImg), 2, 4)
     createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
   }
+  product.onclick = toggleProductSearch
 }
 
 function initColourPicker () {
@@ -385,6 +361,7 @@ function initColourPicker () {
 }
 
 function initProductSearch () {
+  const productSearchContainer = document.querySelector('.product_search')
 
   const createResultItem = ({ title, design, price, img }) => `
     <div class="result_product">
@@ -399,17 +376,23 @@ function initProductSearch () {
     </div>
   `
 
-  const productBar = document.querySelector('.product_search__input--bar')
-  const resultsContainer = document.querySelector('.product_search__results ul')
-  const clearButton = document.querySelector('.product_search__input--clear')
+  const productBar = productSearchContainer.querySelector('.product_search__input--bar')
+  const resultsContainer = productSearchContainer.querySelector('.product_search__results ul')
+  const clearButton = productSearchContainer.querySelector('.product_search__input--clear')
 
   let lastSearchTerm
 
-  function renderSearchResults (res) {
-    resultsContainer.innerHTML = ``
-    res.forEach(each => {
-      if (each) resultsContainer.innerHTML += createResultItem(each)
-    })
+  function renderSearchResults (res, value) {
+    if (res.length) {
+      resultsContainer.innerHTML = ``
+      res.forEach(each => {
+        if (each) resultsContainer.innerHTML += createResultItem(each)
+      })
+    } else resultsContainer.innerHTML = `
+        <div class="result_none">
+          <p>Sorry, no results for '${value}'</p>
+        </div>
+      `
   }
 
   function performProductSearch (value) {
@@ -421,13 +404,15 @@ function initProductSearch () {
     fetch(url, opts)
       .then(res => res.json())
       .then(res => {
-        console.log(res)
-        renderSearchResults(res)
+        // console.log(res)
+        renderSearchResults(res, value)
       })
   }
 
   function clearResults () {
+    productBar.value = ''
     resultsContainer.innerHTML = ''
+    productBar.focus()
   }
 
   function productSearch (e) {
@@ -436,12 +421,14 @@ function initProductSearch () {
     if (!/\w/gi.test(value)) return clearResults()
     if (value.length < 3) return
     lastSearchTerm = value
-    console.log(value)
+    // console.log(value)
     performProductSearch(value)
   }
 
   clearButton.onclick = clearResults
   productBar.addEventListener('keyup', productSearch)
+
+  $(productSearchContainer).draggable()
 
 }
 
@@ -596,6 +583,34 @@ function getContent (eachItem) {
 
 // ========== Content Functions ==========
 
+function openNewItemMenu (event, elem, grid) {
+  const { clientX, clientY, offsetX, offsetY, target } = event
+  const rect = target.getBoundingClientRect()
+  const newItemMenu = $('.new_item_menu--container')
+  if (event.target.classList.contains('grid-stack')) {
+    const absoluteTop = offsetY + rect.top + window.scrollY
+    const absoluteLeft = offsetX + rect.left + window.scrollX
+    newItemMenu.css({
+      display: 'flex',
+      top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
+      left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
+    })
+    // newItemMenu.addEventListener('click', function (e) {
+    //   console.log(this === e.target)
+    // })
+    lastClick.grid = grid,
+    lastClick.gridElem = elem
+    lastClick.x = offsetX + rect.left + window.scrollX
+    lastClick.y = offsetY + rect.top + window.scrollY
+  } else {
+    newItemMenu.css({
+      display: 'none',
+      top: '20px',
+      left: '20px'
+    })
+  }
+}
+
 function toggleTitleEdit () {
   const title = this.closest('.page__title')
   console.log(title, title.dataset.mosEdit === "active")
@@ -737,6 +752,42 @@ function toggleTextEdit () {
     }
 
     parent.dataset.mosEdit = 'active'
+  }
+}
+
+
+function hideProductSearch () {
+  const productSearch = document.querySelector('.product_search')
+  productSearch.style.top = '0px'
+  productSearch.style.left = '0px'
+  productSearch.style.display = 'none'
+}
+
+function showProductSearch (event) {
+  const productSearch = document.querySelector('.product_search')
+  const searchBar = productSearch.querySelector('.product_search__input--bar')
+  productSearch.style.display = 'flex'
+
+  const { offsetX, offsetY, target } = event
+  const rect = target.getBoundingClientRect()
+
+  const absoluteTop = offsetY + rect.top + window.scrollY - (50)
+  const absoluteLeft = offsetX + rect.left + window.scrollX - (productSearch.offsetWidth / 2)
+
+  productSearch.style.top = `${absoluteTop}px`
+  productSearch.style.left = `${absoluteLeft}px`
+  searchBar.focus()
+}
+
+
+function toggleProductSearch (event) {
+  const productSearch = document.querySelector('.product_search')
+  if (productSearch.dataset.mosEdit === 'active') {
+    hideProductSearch()
+    productSearch.dataset.mosEdit = 'inactive'
+  } else {
+    showProductSearch(event)
+    productSearch.dataset.mosEdit = 'active'
   }
 }
 

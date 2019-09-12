@@ -607,6 +607,15 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
 }
+.product_search .product_search__results ul .result_none {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product_search .product_search__results ul .result_none p {
+  font-size: 20px;
+}
 
 .image_interface {
   position: absolute;

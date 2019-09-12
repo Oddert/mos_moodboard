@@ -730,6 +730,16 @@ $page_margin: 10vh;
           justify-content: center;
         }
       }
+      .result_none {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        p {
+          font-size: 20px;
+
+        }
+      }
     }
 
 
