@@ -26,20 +26,7 @@ const data = {
 }
 
 
-// ### Structure:
-//  -Constants and data containers
-//  -Serialise Functions
-//  -Top Level Functions
-//  -Page initislisatin
-//  -Content Creators
-//  -Content Functions
-//  -Interface Functions
-//  -Event Binding
-//  -Standard Functions
-
-
-
-// ========== Serialise Functions ==========
+// ========== Top Level Functions ==========
 
 function extractElementData (node) {
   const content = node.el.find('.content')
@@ -133,13 +120,6 @@ function save () {
     .then(res => console.log({ res }))
 }
 
-// ========== / Serialise Functions ==========
-
-
-
-
-// ========== Top Level Functions ==========
-
 function render (data) {
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
@@ -171,6 +151,7 @@ function render (data) {
   userRender = () => createGridContent (pages, data)
   userRender()
 }
+
 
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
@@ -243,7 +224,6 @@ function addOnePageContent (page, idx) {
 // ========== / Top Level Functions ==========
 
 
-
 // ========== Page initialisation ==========
 
 function initPage () {
@@ -271,6 +251,38 @@ function initialAjax () {
   fetch(url, opts)
   .then(res => res.json())
   .then(cb)
+}
+
+function changeDisplayMode (e) {
+  const displayButtons = document.querySelectorAll('.control_display button')
+  const pages = document.querySelector('.pages')
+  const { name } = e.target
+  displayButtons.forEach(each => each.classList.remove('active'))
+  switch (name) {
+    case "slides":
+      document.querySelector('.control_display button[name=slides]').classList.add('active')
+      pages.classList.add('horizontal')
+      pages.classList.remove('full_screen')
+      break;
+    case "scroll":
+      document.querySelector('.control_display button[name=scroll]').classList.add('active')
+      pages.classList.remove('horizontal')
+      pages.classList.remove('full_screen')
+      break;
+    case "fullscreen":
+      document.querySelector('.control_display button[name=fullscreen]').classList.add('active')
+      pages.classList.add('horizontal')
+      pages.classList.add('full_screen')
+      break;
+    default: break;
+  }
+}
+
+function initialiseDisplayButtons () {
+  const displayButtons = document.querySelectorAll('.control_display button')
+  displayButtons.forEach(each =>
+    each.onclick = changeDisplayMode
+  )
 }
 
 function initialiseNewItemMenu () {
@@ -562,6 +574,7 @@ document.addEventListener('click', e => {
 
 initColourPicker ()
 initialiseNewItemMenu ()
+initialiseDisplayButtons ()
 initialAjax ()
 initialisePageAdd ()
 initProductSearch ()
@@ -688,7 +701,7 @@ function openNewItemMenu (event, elem, grid) {
   const { clientX, clientY, offsetX, offsetY, target } = event
   const rect = target.getBoundingClientRect()
   const newItemMenu = $('.new_item_menu--container')
-  if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
+  if (event.target.classList.contains('grid-stack')) {
     const absoluteTop = offsetY + rect.top + window.scrollY
     const absoluteLeft = offsetX + rect.left + window.scrollX
     newItemMenu.css({
@@ -696,13 +709,14 @@ function openNewItemMenu (event, elem, grid) {
       top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
       left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
     })
+    // newItemMenu.addEventListener('click', function (e) {
+    //   console.log(this === e.target)
+    // })
     lastClick.grid = grid,
     lastClick.gridElem = elem
     lastClick.x = offsetX + rect.left + window.scrollX
     lastClick.y = offsetY + rect.top + window.scrollY
-    newItemMenu.data('mosEdit', 'active')
   } else {
-    newItemMenu.data('mosEdit', 'inactive')
     newItemMenu.css({
       display: 'none',
       top: '20px',
@@ -817,6 +831,7 @@ function saveOne (gridStackItem, payload) {
   }
 }
 
+// We are free from jquery somehow woooo
 function toggleTextEdit () {
   const parent = this.closest('.grid-stack-item')
   console.log(parent.dataset)
@@ -853,6 +868,7 @@ function toggleTextEdit () {
     parent.dataset.mosEdit = 'active'
   }
 }
+
 
 function hideProductSearch () {
   const productSearch = document.querySelector('.product_search')
@@ -950,11 +966,9 @@ function toggleImageEdit (event) {
     parent.dataset.mosEdit = 'inactive'
   } else {
     const interface = document.querySelector('.image_interface')
-    interface.style.display = `flex`
     const { top, left } = this.getBoundingClientRect()
-
-    const x = left + event.offsetX + window.scrollX - (interface.clientWidth / 2)
-    const y = top + event.offsetY + window.scrollY - (interface.clientHeight + 50)
+    const x = left + event.offsetX + window.scrollX - (interface.scrollWidth / 2)
+    const y = top + event.offsetY + window.scrollY - interface.scrollHeight - 50
     const uri = img.src
     const accept = imageUpdate => {
       img.src = imageUpdate
@@ -968,12 +982,11 @@ function toggleImageEdit (event) {
 // ========== / Content Functions ==========
 
 
-
 // ========== Interface Functions ==========
-
 let imageCurrentlyOpen
 
 function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
+  // console.log({ x, y, picker, startingColour, changeCb, acceptCb, declineCb })
   const colourPickerContainer = document.querySelector('.colour_picker')
   const decline = colourPickerContainer.querySelector('.colour_cancel')
   const accept = colourPickerContainer.querySelector('.colour_accept')
@@ -1016,6 +1029,7 @@ function showImageInterface (x, y, imageUri, acceptCb, declineCb) {
   const accept = imageInterfaceContainer.querySelector('.image_accept')
   const decline = imageInterfaceContainer.querySelector('.image_cancel')
   let currentUri = imageUri || url.value || ""
+  imageInterfaceContainer.style.display = `flex`
   imageInterfaceContainer.style.top = `${y}px`
   imageInterfaceContainer.style.left = `${x}px`
   url.onkeyup = e => currentUri = e.target.value
