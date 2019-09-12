@@ -498,7 +498,7 @@ function initMaterialSearch () {
       </div>
     `)
 
-    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
+    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 3, 2, 6)
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
