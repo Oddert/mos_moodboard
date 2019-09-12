@@ -24,10 +24,19 @@ button[name=dev] {
   background-color: #18bc9c;
 }
 
+// issue mixing percentages and vw / vh
 $menu_width: 30vw;
 // $page_height: 85vh;
 $page_width: 85vw;
 // $page_margin: 10vh;
+
+.main {
+  display: grid;
+  grid-template-columns: 250px 1fr 430px;
+  grid-template-rows: 1fr;
+  height: 100%;
+  width: 100%;
+}
 
 .pages--container {
   background: rgba(0,0,0,.1);
