@@ -26,7 +26,20 @@ const data = {
 }
 
 
-// ========== Top Level Functions ==========
+// ### Structure:
+//  -Constants and data containers
+//  -Serialise Functions
+//  -Top Level Functions
+//  -Page initislisatin
+//  -Content Creators
+//  -Content Functions
+//  -Interface Functions
+//  -Event Binding
+//  -Standard Functions
+
+
+
+// ========== Serialise Functions ==========
 
 function extractElementData (node) {
   const content = node.el.find('.content')
@@ -120,6 +133,13 @@ function save () {
     .then(res => console.log({ res }))
 }
 
+// ========== / Serialise Functions ==========
+
+
+
+
+// ========== Top Level Functions ==========
+
 function render (data) {
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
@@ -152,7 +172,6 @@ function render (data) {
   userRender()
 }
 
-
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
 
@@ -182,10 +201,10 @@ function createGridContent (pages, data) {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
         }
         if (node._type === "colour") {
-          createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+          // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
         }
         if (node._type === "image") {
-          createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
+          // createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
       }, this)
       elem.on('mousedown', e => openNewItemMenu(e, elem, grid))
@@ -224,6 +243,7 @@ function addOnePageContent (page, idx) {
 // ========== / Top Level Functions ==========
 
 
+
 // ========== Page initialisation ==========
 
 function initPage () {
@@ -252,298 +272,266 @@ function initialAjax () {
   .then(res => res.json())
   .then(cb)
 }
-
-function changeDisplayMode (e) {
-  const displayButtons = document.querySelectorAll('.control_display button')
-  const pages = document.querySelector('.pages')
-  const { name } = e.target
-  displayButtons.forEach(each => each.classList.remove('active'))
-  switch (name) {
-    case "slides":
-      document.querySelector('.control_display button[name=slides]').classList.add('active')
-      pages.classList.add('horizontal')
-      pages.classList.remove('full_screen')
-      break;
-    case "scroll":
-      document.querySelector('.control_display button[name=scroll]').classList.add('active')
-      pages.classList.remove('horizontal')
-      pages.classList.remove('full_screen')
-      break;
-    case "fullscreen":
-      document.querySelector('.control_display button[name=fullscreen]').classList.add('active')
-      pages.classList.add('horizontal')
-      pages.classList.add('full_screen')
-      break;
-    default: break;
-  }
-}
-
-function initialiseDisplayButtons () {
-  const displayButtons = document.querySelectorAll('.control_display button')
-  displayButtons.forEach(each =>
-    each.onclick = changeDisplayMode
-  )
-}
-
-function initialiseNewItemMenu () {
-  const text = document.querySelector('.new_item_menu__item.text button')
-  const colour = document.querySelector('.new_item_menu__item.colour button')
-  const image = document.querySelector('.new_item_menu__item.image button')
-  const product = document.querySelector('.new_item_menu__item.product button')
-  const material = document.querySelector('.new_item_menu__item.material button')
-  const menu = document.querySelector('.new_item_menu--container')
-  function addUserWidget (content, width = 1, height = 2) {
-    menu.style.display = 'none'
-    const { grid, gridElem, x, y } = lastClick
-    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
-    const newWidget = $(`
-      <div>
-        <div
-          class="grid-stack-item-content"
-          data-mos-page="${gridElem.data('mosPageIdx')}"
-          data-mos-item="${gridElem.children().length + 1}"
-        >
-          ${content}
-        </div>
-      </div>
-    `)
-    // I appologise profusely.
-    let adjustedX = gridPos.x
-    let adjustedY = gridPos.y
-    if (gridPos.x < 2) adjustedX = 0
-    if (gridPos.x > 10) adjustedX = 12 - width
-    if (gridPos.y < 2) adjustedY = 0
-    if (gridPos.y > 18) adjustedY = 20 - height
-    if (adjustedY > 1 && adjustedY < 18) adjustedY -= 1
-
-    const createdWidget = grid.addWidget(newWidget, adjustedX, adjustedY, width, height)
-    createdWidget.find('.content__controls--delete').click(function () {
-      grid.removeWidget(this.closest('.grid-stack-item'))
-    })
-    return createdWidget
-  }
-  text.onclick = e => {
-    const createdWidget = addUserWidget(createText({ text: 'New Text Box' }), 2, 3)
-    createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
-  }
-  colour.onclick = e => {
-    const createdWidget = addUserWidget(createColour({ hex: randomHex() }), 1, 2)
-    createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
-  }
-  image.onclick = e => {
-    const createdWidget = addUserWidget(createImage(defaultImg), 2, 4)
-    createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
-  }
-  product.onclick = toggleProductSearch
-  material.onclick = toggleMaterialSearch
-}
-
-function initColourPicker () {
-  const preview = document.querySelector('.colour_picker__preview--wrapper')
-  const previewInput = preview.querySelector('.colour_picker__preview__input')
-  const opts = {
-    width: 250,
-    color: '#1bbc9b'
-  }
-  colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
-  function handleColourChange (colour, change) {
-    preview.style.backgroundColor = colour.rgbString
-    previewInput.value = colour.hexString.toUpperCase()
-  }
-  colourPicker.on('color:change', handleColourChange)
-  previewInput.onchange = e => {
-    const { value } = e.target
-    if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
-      colourPicker.color.hexString = value
-    }
-    if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
-      colourPicker.color.hexString = '#' + value
-    }
-  }
-}
-
-function performLibSeach (extention, value, cb) {
-  const url = `/api/${extention}/${value}`
-  const opts = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  }
-  fetch(url, opts)
-    .then(res => res.json())
-    .then(res => {
-      cb (res, value)
-    })
-}
-
-const filterSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
-
-// NOTE: For the sake of future itirations, material and product search, while using virtually
-//      the same code, are seperate functions and elements. They share a couple of functions but
-//      that's all for now.
-function initProductSearch () {
-  const productSearchContainer = document.querySelector('.product_search')
-
-  const createResultItem = ({ title, design, price, img }) => `
-    <div class="result_product">
-      <div class="result_product__img">
-        <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
-      </div>
-      <div class="result_product__text">
-        <p class="result_product__text--title">${title}</p>
-        <p class="result_product__text--design">${design}</p>
-        <p class="result_product__text--price">${price}</p>
-      </div>
-    </div>
-  `
-
-  const productBar = productSearchContainer.querySelector('.product_search__input--bar')
-  const resultsContainer = productSearchContainer.querySelector('.product_search__results ul')
-  const clearButton = productSearchContainer.querySelector('.product_search__input--clear')
-
-  let lastSearchTerm
-
-  function addProductWidget (event, each) {
-    const width = 1, height = 2
-    const { grid, gridElem, x, y } = lastClick
-    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
-    const newWidget = $(`
-      <div>
-        <div
-          class="grid-stack-item-content"
-          data-mos-page="${gridElem.data('mosPageIdx')}"
-          data-mos-item="${gridElem.children().length + 1}"
-        >
-          ${createProduct(each)}
-        </div>
-      </div>
-    `)
-
-    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
-    createdWidget.find('.content__controls--delete').click(function () {
-      grid.removeWidget(this.closest('.grid-stack-item'))
-    })
-    hideProductSearch()
-  }
-
-  function renderSearchResults (res, value) {
-    if (res.length) {
-      resultsContainer.innerHTML = ``
-      res.forEach(each => {
-        if (each) resultsContainer.innerHTML += createResultItem(each)
-      })
-      const allResults = resultsContainer.querySelectorAll('.result_product')
-      allResults.forEach((each, idx) => {
-        each.addEventListener('click', e => addProductWidget(e, res[idx]))
-      })
-    } else resultsContainer.innerHTML = `
-        <div class="result_none">
-          <p>Sorry, no results for '${value}'</p>
-        </div>
-      `
-  }
-
-  function clearResults () {
-    productBar.value = ''
-    resultsContainer.innerHTML = ''
-    productBar.focus()
-  }
-
-  function productSearch (e) {
-    const value = filterSearchValue(e.target.value)
-    if (value === lastSearchTerm) return
-    if (!/\w/gi.test(value)) return clearResults()
-    if (value.length < 3) return
-    lastSearchTerm = value
-    performLibSeach ('product', value, renderSearchResults)
-  }
-
-  clearButton.onclick = clearResults
-  productBar.addEventListener('keyup', productSearch)
-  $(productSearchContainer).draggable()
-}
-function initMaterialSearch () {
-  const materialSearchContainer = document.querySelector('.material_search')
-
-  const createResultItem = ({ title, design, img }) => `
-    <div class="result_material">
-      <div class="result_material__img">
-        <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
-      </div>
-      <div class="result_material__text">
-        <p class="result_material__text--title">${title}</p>
-        <p class="result_material__text--design">${design}</p>
-      </div>
-    </div>
-  `
-
-  const materialBar = materialSearchContainer.querySelector('.material_search__input--bar')
-  const resultsContainer = materialSearchContainer.querySelector('.material_search__results ul')
-  const clearButton = materialSearchContainer.querySelector('.material_search__input--clear')
-
-  let lastSearchTerm
-
-  function addMaterialWidget (event, each) {
-    const width = 1, height = 2
-    const { grid, gridElem, x, y } = lastClick
-    const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
-    const newWidget = $(`
-      <div>
-        <div
-          class="grid-stack-item-content"
-          data-mos-page="${gridElem.data('mosPageIdx')}"
-          data-mos-item="${gridElem.children().length + 1}"
-        >
-          ${createMaterial(each)}
-        </div>
-      </div>
-    `)
-
-    const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 3, 2, 6)
-    createdWidget.find('.content__controls--delete').click(function () {
-      grid.removeWidget(this.closest('.grid-stack-item'))
-    })
-    hideMaterialSearch()
-  }
-
-  function renderSearchResults (res, value) {
-    if (res.length) {
-      resultsContainer.innerHTML = ``
-      res.forEach(each => {
-        if (each) resultsContainer.innerHTML += createResultItem(each)
-        else resultsContainer.innerHTML += `<div class="result_material"></div>`
-      })
-      const allResults = resultsContainer.querySelectorAll('.result_material')
-      allResults.forEach((each, idx) => {
-        each.addEventListener('click', e => addMaterialWidget(e, res[idx]))
-      })
-    } else resultsContainer.innerHTML = `
-        <div class="result_none">
-          <p>Sorry, no results for '${value}'</p>
-        </div>
-      `
-  }
-
-  function clearResults () {
-    materialBar.value = ''
-    resultsContainer.innerHTML = ''
-    materialBar.focus()
-  }
-
-  const filter = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
-
-  function materialSearch (e) {
-    const value = filterSearchValue(e.target.value)
-    if (value === lastSearchTerm) return
-    if (!/\w/gi.test(value)) return clearResults()
-    if (value.length < 3) return
-    lastSearchTerm = value
-    performLibSeach ('material', value, renderSearchResults)
-  }
-
-  clearButton.onclick = clearResults
-  materialBar.addEventListener('keyup', materialSearch)
-  $(materialSearchContainer).draggable()
-}
+//
+// function initialiseNewItemMenu () {
+//   const text = document.querySelector('.new_item_menu__item.text button')
+//   const colour = document.querySelector('.new_item_menu__item.colour button')
+//   const image = document.querySelector('.new_item_menu__item.image button')
+//   const product = document.querySelector('.new_item_menu__item.product button')
+//   const material = document.querySelector('.new_item_menu__item.material button')
+//   const menu = document.querySelector('.new_item_menu--container')
+//   function addUserWidget (content, width = 1, height = 2) {
+//     menu.style.display = 'none'
+//     const { grid, gridElem, x, y } = lastClick
+//     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+//     const newWidget = $(`
+//       <div>
+//         <div
+//           class="grid-stack-item-content"
+//           data-mos-page="${gridElem.data('mosPageIdx')}"
+//           data-mos-item="${gridElem.children().length + 1}"
+//         >
+//           ${content}
+//         </div>
+//       </div>
+//     `)
+//     // I appologise profusely.
+//     let adjustedX = gridPos.x
+//     let adjustedY = gridPos.y
+//     if (gridPos.x < 2) adjustedX = 0
+//     if (gridPos.x > 10) adjustedX = 12 - width
+//     if (gridPos.y < 2) adjustedY = 0
+//     if (gridPos.y > 18) adjustedY = 20 - height
+//     if (adjustedY > 1 && adjustedY < 18) adjustedY -= 1
+//
+//     const createdWidget = grid.addWidget(newWidget, adjustedX, adjustedY, width, height)
+//     createdWidget.find('.content__controls--delete').click(function () {
+//       grid.removeWidget(this.closest('.grid-stack-item'))
+//     })
+//     return createdWidget
+//   }
+//   text.onclick = e => {
+//     const createdWidget = addUserWidget(createText({ text: 'New Text Box' }), 2, 3)
+//     createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+//   }
+//   colour.onclick = e => {
+//     const createdWidget = addUserWidget(createColour({ hex: randomHex() }), 1, 2)
+//     createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+//   }
+//   image.onclick = e => {
+//     const createdWidget = addUserWidget(createImage(defaultImg), 2, 4)
+//     createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
+//   }
+//   product.onclick = toggleProductSearch
+//   material.onclick = toggleMaterialSearch
+// }
+//
+// function initColourPicker () {
+//   const preview = document.querySelector('.colour_picker__preview--wrapper')
+//   const previewInput = preview.querySelector('.colour_picker__preview__input')
+//   const opts = {
+//     width: 250,
+//     color: '#1bbc9b'
+//   }
+//   colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
+//   function handleColourChange (colour, change) {
+//     preview.style.backgroundColor = colour.rgbString
+//     previewInput.value = colour.hexString.toUpperCase()
+//   }
+//   colourPicker.on('color:change', handleColourChange)
+//   previewInput.onchange = e => {
+//     const { value } = e.target
+//     if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+//       colourPicker.color.hexString = value
+//     }
+//     if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+//       colourPicker.color.hexString = '#' + value
+//     }
+//   }
+// }
+//
+// function performLibSeach (extention, value, cb) {
+//   const url = `/api/${extention}/${value}`
+//   const opts = {
+//     method: 'GET',
+//     headers: { 'Content-Type': 'application/json' }
+//   }
+//   fetch(url, opts)
+//     .then(res => res.json())
+//     .then(res => {
+//       cb (res, value)
+//     })
+// }
+//
+// const filterSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
+//
+// // NOTE: For the sake of future itirations, material and product search, while using virtually
+// //      the same code, are seperate functions and elements. They share a couple of functions but
+// //      that's all for now.
+// function initProductSearch () {
+//   const productSearchContainer = document.querySelector('.product_search')
+//
+//   const createResultItem = ({ title, design, price, img }) => `
+//     <div class="result_product">
+//       <div class="result_product__img">
+//         <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+//       </div>
+//       <div class="result_product__text">
+//         <p class="result_product__text--title">${title}</p>
+//         <p class="result_product__text--design">${design}</p>
+//         <p class="result_product__text--price">${price}</p>
+//       </div>
+//     </div>
+//   `
+//
+//   const productBar = productSearchContainer.querySelector('.product_search__input--bar')
+//   const resultsContainer = productSearchContainer.querySelector('.product_search__results ul')
+//   const clearButton = productSearchContainer.querySelector('.product_search__input--clear')
+//
+//   let lastSearchTerm
+//
+//   function addProductWidget (event, each) {
+//     const width = 1, height = 2
+//     const { grid, gridElem, x, y } = lastClick
+//     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+//     const newWidget = $(`
+//       <div>
+//         <div
+//           class="grid-stack-item-content"
+//           data-mos-page="${gridElem.data('mosPageIdx')}"
+//           data-mos-item="${gridElem.children().length + 1}"
+//         >
+//           ${createProduct(each)}
+//         </div>
+//       </div>
+//     `)
+//
+//     const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
+//     createdWidget.find('.content__controls--delete').click(function () {
+//       grid.removeWidget(this.closest('.grid-stack-item'))
+//     })
+//     hideProductSearch()
+//   }
+//
+//   function renderSearchResults (res, value) {
+//     if (res.length) {
+//       resultsContainer.innerHTML = ``
+//       res.forEach(each => {
+//         if (each) resultsContainer.innerHTML += createResultItem(each)
+//       })
+//       const allResults = resultsContainer.querySelectorAll('.result_product')
+//       allResults.forEach((each, idx) => {
+//         each.addEventListener('click', e => addProductWidget(e, res[idx]))
+//       })
+//     } else resultsContainer.innerHTML = `
+//         <div class="result_none">
+//           <p>Sorry, no results for '${value}'</p>
+//         </div>
+//       `
+//   }
+//
+//   function clearResults () {
+//     productBar.value = ''
+//     resultsContainer.innerHTML = ''
+//     productBar.focus()
+//   }
+//
+//   function productSearch (e) {
+//     const value = filterSearchValue(e.target.value)
+//     if (value === lastSearchTerm) return
+//     if (!/\w/gi.test(value)) return clearResults()
+//     if (value.length < 3) return
+//     lastSearchTerm = value
+//     performLibSeach ('product', value, renderSearchResults)
+//   }
+//
+//   clearButton.onclick = clearResults
+//   productBar.addEventListener('keyup', productSearch)
+//   $(productSearchContainer).draggable()
+// }
+// function initMaterialSearch () {
+//   const materialSearchContainer = document.querySelector('.material_search')
+//
+//   const createResultItem = ({ title, design, img }) => `
+//     <div class="result_material">
+//       <div class="result_material__img">
+//         <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+//       </div>
+//       <div class="result_material__text">
+//         <p class="result_material__text--title">${title}</p>
+//         <p class="result_material__text--design">${design}</p>
+//       </div>
+//     </div>
+//   `
+//
+//   const materialBar = materialSearchContainer.querySelector('.material_search__input--bar')
+//   const resultsContainer = materialSearchContainer.querySelector('.material_search__results ul')
+//   const clearButton = materialSearchContainer.querySelector('.material_search__input--clear')
+//
+//   let lastSearchTerm
+//
+//   function addMaterialWidget (event, each) {
+//     const width = 1, height = 2
+//     const { grid, gridElem, x, y } = lastClick
+//     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
+//     const newWidget = $(`
+//       <div>
+//         <div
+//           class="grid-stack-item-content"
+//           data-mos-page="${gridElem.data('mosPageIdx')}"
+//           data-mos-item="${gridElem.children().length + 1}"
+//         >
+//           ${createMaterial(each)}
+//         </div>
+//       </div>
+//     `)
+//
+//     const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 3, 2, 6)
+//     createdWidget.find('.content__controls--delete').click(function () {
+//       grid.removeWidget(this.closest('.grid-stack-item'))
+//     })
+//     hideMaterialSearch()
+//   }
+//
+//   function renderSearchResults (res, value) {
+//     if (res.length) {
+//       resultsContainer.innerHTML = ``
+//       res.forEach(each => {
+//         if (each) resultsContainer.innerHTML += createResultItem(each)
+//         else resultsContainer.innerHTML += `<div class="result_material"></div>`
+//       })
+//       const allResults = resultsContainer.querySelectorAll('.result_material')
+//       allResults.forEach((each, idx) => {
+//         each.addEventListener('click', e => addMaterialWidget(e, res[idx]))
+//       })
+//     } else resultsContainer.innerHTML = `
+//         <div class="result_none">
+//           <p>Sorry, no results for '${value}'</p>
+//         </div>
+//       `
+//   }
+//
+//   function clearResults () {
+//     materialBar.value = ''
+//     resultsContainer.innerHTML = ''
+//     materialBar.focus()
+//   }
+//
+//   const filter = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
+//
+//   function materialSearch (e) {
+//     const value = filterSearchValue(e.target.value)
+//     if (value === lastSearchTerm) return
+//     if (!/\w/gi.test(value)) return clearResults()
+//     if (value.length < 3) return
+//     lastSearchTerm = value
+//     performLibSeach ('material', value, renderSearchResults)
+//   }
+//
+//   clearButton.onclick = clearResults
+//   materialBar.addEventListener('keyup', materialSearch)
+//   $(materialSearchContainer).draggable()
+// }
 
 function initialisePageAdd () {
   const newPage = document.querySelector('.new_page button')
@@ -559,26 +547,25 @@ function initialisePageAdd () {
 
 }
 
-document.addEventListener('click', e => {
-  const menu = document.querySelector('.new_item_menu--container')
-  let hide = true
-  document.querySelectorAll('.page__content').forEach(each => {
-    if (each.contains(e.target)) hide = false
-  })
-  if (hide) {
-    menu.style.display = 'none'
-    menu.style.top = '20px'
-    menu.style.left = '20px'
-  }
-})
+// document.addEventListener('click', e => {
+//   const menu = document.querySelector('.new_item_menu--container')
+//   let hide = true
+//   document.querySelectorAll('.page__content').forEach(each => {
+//     if (each.contains(e.target)) hide = false
+//   })
+//   if (hide) {
+//     menu.style.display = 'none'
+//     menu.style.top = '20px'
+//     menu.style.left = '20px'
+//   }
+// })
 
-initColourPicker ()
-initialiseNewItemMenu ()
-initialiseDisplayButtons ()
+// initColourPicker ()
+// initialiseNewItemMenu ()
 initialAjax ()
 initialisePageAdd ()
-initProductSearch ()
-initMaterialSearch ()
+// initProductSearch ()
+// initMaterialSearch ()
 }
 
 // ========== / Page initialisation ==========
@@ -701,7 +688,7 @@ function openNewItemMenu (event, elem, grid) {
   const { clientX, clientY, offsetX, offsetY, target } = event
   const rect = target.getBoundingClientRect()
   const newItemMenu = $('.new_item_menu--container')
-  if (event.target.classList.contains('grid-stack')) {
+  if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
     const absoluteTop = offsetY + rect.top + window.scrollY
     const absoluteLeft = offsetX + rect.left + window.scrollX
     newItemMenu.css({
@@ -709,14 +696,13 @@ function openNewItemMenu (event, elem, grid) {
       top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
       left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
     })
-    // newItemMenu.addEventListener('click', function (e) {
-    //   console.log(this === e.target)
-    // })
     lastClick.grid = grid,
     lastClick.gridElem = elem
     lastClick.x = offsetX + rect.left + window.scrollX
     lastClick.y = offsetY + rect.top + window.scrollY
+    newItemMenu.data('mosEdit', 'active')
   } else {
+    newItemMenu.data('mosEdit', 'inactive')
     newItemMenu.css({
       display: 'none',
       top: '20px',
@@ -831,7 +817,6 @@ function saveOne (gridStackItem, payload) {
   }
 }
 
-// We are free from jquery somehow woooo
 function toggleTextEdit () {
   const parent = this.closest('.grid-stack-item')
   console.log(parent.dataset)
@@ -869,208 +854,202 @@ function toggleTextEdit () {
   }
 }
 
-
-function hideProductSearch () {
-  const productSearch = document.querySelector('.product_search')
-  productSearch.style.top = '0px'
-  productSearch.style.left = '0px'
-  productSearch.style.display = 'none'
-}
-
-function showProductSearch (event) {
-  const productSearch = document.querySelector('.product_search')
-  const searchBar = productSearch.querySelector('.product_search__input--bar')
-  productSearch.style.display = 'flex'
-
-  const { offsetX, offsetY, target } = event
-  const rect = target.getBoundingClientRect()
-
-  const absoluteTop = offsetY + rect.top + window.scrollY - (50)
-  const absoluteLeft = offsetX + rect.left + window.scrollX - (productSearch.offsetWidth / 2)
-
-  productSearch.style.top = `${absoluteTop}px`
-  productSearch.style.left = `${absoluteLeft}px`
-  searchBar.focus()
-}
-function hideMaterialSearch () {
-  const materialSearch = document.querySelector('.material_search')
-  materialSearch.style.top = '0px'
-  materialSearch.style.left = '0px'
-  materialSearch.style.display = 'none'
-}
-
-function showMaterialSearch (event) {
-  const materialSearch = document.querySelector('.material_search')
-  const searchBar = materialSearch.querySelector('.material_search__input--bar')
-  materialSearch.style.display = 'flex'
-
-  const { offsetX, offsetY, target } = event
-  const rect = target.getBoundingClientRect()
-
-  const absoluteTop = offsetY + rect.top + window.scrollY - (50)
-  const absoluteLeft = offsetX + rect.left + window.scrollX - (materialSearch.offsetWidth / 2)
-
-  materialSearch.style.top = `${absoluteTop}px`
-  materialSearch.style.left = `${absoluteLeft}px`
-  searchBar.focus()
-}
-
-
-function toggleProductSearch (event) {
-  const productSearch = document.querySelector('.product_search')
-  if (productSearch.dataset.mosEdit === 'active') {
-    hideProductSearch()
-    productSearch.dataset.mosEdit = 'inactive'
-  } else {
-    showProductSearch(event)
-    productSearch.dataset.mosEdit = 'active'
-  }
-}
-function toggleMaterialSearch (event) {
-  const materialSearch = document.querySelector('.material_search')
-  if (materialSearch.dataset.mosEdit === 'active') {
-    hideMaterialSearch()
-    materialSearch.dataset.mosEdit = 'inactive'
-  } else {
-    showMaterialSearch(event)
-    materialSearch.dataset.mosEdit = 'active'
-  }
-}
-
-function toggleColourEdit (event) {
-  const parent = this.closest('.grid-stack-item')
-  const colourModule = parent.querySelector('.colour__module')
-  if (parent.dataset.mosEdit === 'active') {
-    hideColourPicker (colourPicker)
-    parent.dataset.mosEdit = 'inactive'
-  } else {
-    const pickerElem = document.querySelector('.colour_picker')
-    const { top, left } = this.getBoundingClientRect()
-    const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
-    const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
-    const startingColour = colourModule.style.backgroundColor
-    const accept = picker => {
-      colourModule.style.backgroundColor = picker.color.rgbString
-    }
-    const decline = () => {}
-    showColourPicker(x, y, colourPicker, startingColour, null, accept, decline)
-    parent.dataset.mosEdit = 'active'
-  }
-}
-
-function toggleImageEdit (event) {
-  const parent = this.closest('.grid-stack-item')
-  const img = parent.querySelector('.content_image__img img')
-  if (parent.dataset.mosEdit === 'active') {
-    hideImageInterface ()
-    parent.dataset.mosEdit = 'inactive'
-  } else {
-    const interface = document.querySelector('.image_interface')
-    const { top, left } = this.getBoundingClientRect()
-    const x = left + event.offsetX + window.scrollX - (interface.scrollWidth / 2)
-    const y = top + event.offsetY + window.scrollY - interface.scrollHeight - 50
-    const uri = img.src
-    const accept = imageUpdate => {
-      img.src = imageUpdate
-    }
-    showImageInterface (x, y, uri, accept)
-    parent.dataset.mosEdit = 'active'
-    imageCurrentlyOpen = parent
-  }
-}
+// function hideProductSearch () {
+//   const productSearch = document.querySelector('.product_search')
+//   productSearch.style.top = '0px'
+//   productSearch.style.left = '0px'
+//   productSearch.style.display = 'none'
+// }
+// function showProductSearch (event) {
+//   const productSearch = document.querySelector('.product_search')
+//   const searchBar = productSearch.querySelector('.product_search__input--bar')
+//   productSearch.style.display = 'flex'
+//
+//   const { offsetX, offsetY, target } = event
+//   const rect = target.getBoundingClientRect()
+//
+//   const absoluteTop = offsetY + rect.top + window.scrollY - (50)
+//   const absoluteLeft = offsetX + rect.left + window.scrollX - (productSearch.offsetWidth / 2)
+//
+//   productSearch.style.top = `${absoluteTop}px`
+//   productSearch.style.left = `${absoluteLeft}px`
+//   searchBar.focus()
+// }
+// function toggleProductSearch (event) {
+//   const productSearch = document.querySelector('.product_search')
+//   if (productSearch.dataset.mosEdit === 'active') {
+//     hideProductSearch()
+//     productSearch.dataset.mosEdit = 'inactive'
+//   } else {
+//     showProductSearch(event)
+//     productSearch.dataset.mosEdit = 'active'
+//   }
+// }
+// function hideMaterialSearch () {
+//   const materialSearch = document.querySelector('.material_search')
+//   materialSearch.style.top = '0px'
+//   materialSearch.style.left = '0px'
+//   materialSearch.style.display = 'none'
+// }
+// function showMaterialSearch (event) {
+//   const materialSearch = document.querySelector('.material_search')
+//   const searchBar = materialSearch.querySelector('.material_search__input--bar')
+//   materialSearch.style.display = 'flex'
+//
+//   const { offsetX, offsetY, target } = event
+//   const rect = target.getBoundingClientRect()
+//
+//   const absoluteTop = offsetY + rect.top + window.scrollY - (50)
+//   const absoluteLeft = offsetX + rect.left + window.scrollX - (materialSearch.offsetWidth / 2)
+//
+//   materialSearch.style.top = `${absoluteTop}px`
+//   materialSearch.style.left = `${absoluteLeft}px`
+//   searchBar.focus()
+// }
+// function toggleMaterialSearch (event) {
+//   const materialSearch = document.querySelector('.material_search')
+//   if (materialSearch.dataset.mosEdit === 'active') {
+//     hideMaterialSearch()
+//     materialSearch.dataset.mosEdit = 'inactive'
+//   } else {
+//     showMaterialSearch(event)
+//     materialSearch.dataset.mosEdit = 'active'
+//   }
+// }
+// function toggleColourEdit (event) {
+//   const parent = this.closest('.grid-stack-item')
+//   const colourModule = parent.querySelector('.colour__module')
+//   if (parent.dataset.mosEdit === 'active') {
+//     hideColourPicker (colourPicker)
+//     parent.dataset.mosEdit = 'inactive'
+//   } else {
+//     const pickerElem = document.querySelector('.colour_picker')
+//     const { top, left } = this.getBoundingClientRect()
+//     const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
+//     const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
+//     const startingColour = colourModule.style.backgroundColor
+//     const accept = picker => {
+//       colourModule.style.backgroundColor = picker.color.rgbString
+//     }
+//     const decline = () => {}
+//     showColourPicker(x, y, colourPicker, startingColour, null, accept, decline)
+//     parent.dataset.mosEdit = 'active'
+//   }
+// }
+// function toggleImageEdit (event) {
+//   const parent = this.closest('.grid-stack-item')
+//   const img = parent.querySelector('.content_image__img img')
+//   if (parent.dataset.mosEdit === 'active') {
+//     hideImageInterface ()
+//     parent.dataset.mosEdit = 'inactive'
+//   } else {
+//     const interface = document.querySelector('.image_interface')
+//     interface.style.display = `flex`
+//     const { top, left } = this.getBoundingClientRect()
+//
+//     const x = left + event.offsetX + window.scrollX - (interface.clientWidth / 2)
+//     const y = top + event.offsetY + window.scrollY - (interface.clientHeight + 50)
+//     const uri = img.src
+//     const accept = imageUpdate => {
+//       img.src = imageUpdate
+//     }
+//     showImageInterface (x, y, uri, accept)
+//     parent.dataset.mosEdit = 'active'
+//     imageCurrentlyOpen = parent
+//   }
+// }
 
 // ========== / Content Functions ==========
 
 
+
 // ========== Interface Functions ==========
-let imageCurrentlyOpen
 
-function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
-  // console.log({ x, y, picker, startingColour, changeCb, acceptCb, declineCb })
-  const colourPickerContainer = document.querySelector('.colour_picker')
-  const decline = colourPickerContainer.querySelector('.colour_cancel')
-  const accept = colourPickerContainer.querySelector('.colour_accept')
-  colourPickerContainer.style.display = 'block'
-  colourPickerContainer.style.top = `${y}px`
-  colourPickerContainer.style.left = `${x}px`
-  picker.color.rgbString = startingColour
-  picker.on('color:change', changeCb ? changeCb : () => {})
+// let imageCurrentlyOpen
+//
+// function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
+//   const colourPickerContainer = document.querySelector('.colour_picker')
+//   const decline = colourPickerContainer.querySelector('.colour_cancel')
+//   const accept = colourPickerContainer.querySelector('.colour_accept')
+//   colourPickerContainer.style.display = 'block'
+//   colourPickerContainer.style.top = `${y}px`
+//   colourPickerContainer.style.left = `${x}px`
+//   picker.color.rgbString = startingColour
+//   picker.on('color:change', changeCb ? changeCb : () => {})
+//
+//   setTimeout(() => {
+//     window.addEventListener('click', e => {
+//       if (colourPickerContainer.contains(e.target)) return
+//       else hideColourPicker(picker)
+//     })
+//   }, 500)
+//
+//   accept.onclick = () => {
+//     if (acceptCb) acceptCb(picker)
+//     hideColourPicker(picker)
+//   }
+//
+//   decline.onclick = () => {
+//     hideColourPicker(picker)
+//     if (declineCb) declineCb(picker)
+//   }
+// }
+//
+// function hideColourPicker (picker) {
+//   const colourPickerContainer = document.querySelector('.colour_picker')
+//   colourPickerContainer.style.display = 'none'
+//   colourPickerContainer.style.top = `0px`
+//   colourPickerContainer.style.left = `0px`
+//   if (picker) picker.on('color:change', () => {})
+// }
+//
+// function showImageInterface (x, y, imageUri, acceptCb, declineCb) {
+//   const imageInterfaceContainer = document.querySelector('.image_interface')
+//   const url = document.querySelector('.image_url')
+//   const accept = imageInterfaceContainer.querySelector('.image_accept')
+//   const decline = imageInterfaceContainer.querySelector('.image_cancel')
+//   let currentUri = imageUri || url.value || ""
+//   imageInterfaceContainer.style.top = `${y}px`
+//   imageInterfaceContainer.style.left = `${x}px`
+//   url.onkeyup = e => currentUri = e.target.value
+//
+//   if (imageUri) url.value = imageUri
+//
+//   setTimeout(() => {
+//     window.addEventListener('click', imageOOBListener)
+//   }, 500)
+//
+//   function handleInput () {
+//     if (acceptCb) acceptCb (currentUri)
+//     hideImageInterface ()
+//   }
+//
+//   accept.onclick = handleInput
+//   accept.onpaste = handleInput
+//   accept.oninput = handleInput
+//
+//   decline.onclick = () => {
+//     if (declineCb) declineCb (currentUri)
+//     hideImageInterface ()
+//   }
+// }
 
-  setTimeout(() => {
-    window.addEventListener('click', e => {
-      if (colourPickerContainer.contains(e.target)) return
-      else hideColourPicker(picker)
-    })
-  }, 500)
-
-  accept.onclick = () => {
-    if (acceptCb) acceptCb(picker)
-    hideColourPicker(picker)
-  }
-
-  decline.onclick = () => {
-    hideColourPicker(picker)
-    if (declineCb) declineCb(picker)
-  }
-}
-
-function hideColourPicker (picker) {
-  const colourPickerContainer = document.querySelector('.colour_picker')
-  colourPickerContainer.style.display = 'none'
-  colourPickerContainer.style.top = `0px`
-  colourPickerContainer.style.left = `0px`
-  if (picker) picker.on('color:change', () => {})
-}
-
-
-function showImageInterface (x, y, imageUri, acceptCb, declineCb) {
-  const imageInterfaceContainer = document.querySelector('.image_interface')
-  const url = document.querySelector('.image_url')
-  const accept = imageInterfaceContainer.querySelector('.image_accept')
-  const decline = imageInterfaceContainer.querySelector('.image_cancel')
-  let currentUri = imageUri || url.value || ""
-  imageInterfaceContainer.style.display = `flex`
-  imageInterfaceContainer.style.top = `${y}px`
-  imageInterfaceContainer.style.left = `${x}px`
-  url.onkeyup = e => currentUri = e.target.value
-
-  if (imageUri) url.value = imageUri
-
-  setTimeout(() => {
-    window.addEventListener('click', imageOOBListener)
-  }, 500)
-
-  function handleInput () {
-    if (acceptCb) acceptCb (currentUri)
-    hideImageInterface ()
-  }
-
-  accept.onclick = handleInput
-  accept.onpaste = handleInput
-  accept.oninput = handleInput
-
-  decline.onclick = () => {
-    if (declineCb) declineCb (currentUri)
-    hideImageInterface ()
-  }
-}
-
-function imageOOBListener (e) {
-  const imageInterfaceContainer = document.querySelector('.image_interface')
-  if (imageInterfaceContainer.contains(e.target)) return
-  else hideImageInterface ()
-}
-
-function hideImageInterface () {
-  const imageInterfaceContainer = document.querySelector('.image_interface')
-  const url = document.querySelector('.image_url')
-  imageInterfaceContainer.style.display = `none`
-  imageInterfaceContainer.style.top = `0px`
-  imageInterfaceContainer.style.left = `0px`
-  window.removeEventListener('click', imageOOBListener)
-  if (imageCurrentlyOpen) imageCurrentlyOpen.dataset.mosEdit = 'inactive'
-  // console.log('removed listener')
-}
+// function imageOOBListener (e) {
+//   const imageInterfaceContainer = document.querySelector('.image_interface')
+//   if (imageInterfaceContainer.contains(e.target)) return
+//   else hideImageInterface ()
+// }
+//
+// function hideImageInterface () {
+//   const imageInterfaceContainer = document.querySelector('.image_interface')
+//   const url = document.querySelector('.image_url')
+//   imageInterfaceContainer.style.display = `none`
+//   imageInterfaceContainer.style.top = `0px`
+//   imageInterfaceContainer.style.left = `0px`
+//   window.removeEventListener('click', imageOOBListener)
+//   if (imageCurrentlyOpen) imageCurrentlyOpen.dataset.mosEdit = 'inactive'
+//   // console.log('removed listener')
+// }
 
 // ========== / Interface Functions ==========
 
@@ -1123,3 +1102,7 @@ function randomHex () {
   const ran = colours[Math.floor(Math.random() * colours.length)]
   return convertToHex(`rgb(${ran.r}, ${ran.g}, ${ran.b})`)
 }
+
+
+// <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+// <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.svg.min.js"></script>

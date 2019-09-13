@@ -2,6 +2,7 @@
 * {
 
   box-sizing: border-box;
+  font-family: 'roboto', arial, sans-serif, helvetica, droid-sans;
 }
 
 body, html, h1, p {
@@ -27,12 +28,12 @@ button[name=dev] {
 // issue mixing percentages and vw / vh
 $menu_width: 30vw;
 // $page_height: 85vh;
-$page_width: 85vw;
+$page_width: 75vw;
 // $page_margin: 10vh;
 
 .main {
   display: grid;
-  grid-template-columns: 250px 1fr 430px;
+  grid-template-columns: 200px 1fr 330px;
   grid-template-rows: 1fr;
   height: 100%;
   width: 100%;
@@ -149,6 +150,115 @@ $page_width: 85vw;
 }
 }
 
+.item_menu--container {
+  min-height: 100%;
+  background: #EFE6FF;
+  width: 100%;
+  .item_menu {
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    h2 {
+      margin: 0;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    .item_menu__control {
+      width: 100%;
+      display: flex;
+
+      $text_main: #c1392b;
+      $text_hover: #e84c3d;
+      $text_active: #c1392b;
+      $image_main: #e67f22;
+      $image_hover: #f39c11;
+      $image_active: #e67f22;
+      $product_main: #16a086;
+      $product_hover: #1bbc9b;
+      $product_active: #16a086;
+      $material_main: #27ae61;
+      $material_hover: #2dcc70;
+      $material_active: #27ae61;
+      $colour_main: #297fb8;
+      $colour_hover: #3598db;
+      $colour_active: #297fb8;
+      $file_main: #8d44ad;
+      $file_hover: #9a59b5;
+      $file_active: #8d44ad;
+      $button_rad: 45px;
+      display: flex;
+      ul {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        .new_item_menu__item {
+          // display: flex;
+          // align-items: center;
+          // justify-content: center;
+          flex: 1;
+          button {
+            flex: 1;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            // width: $button_rad;
+            width: 100%;
+            height: $button_rad;
+            background: #1bbc9b;
+            // border-radius: 50%;
+            border: none;
+            border-bottom: 4px solid rgba(255,255,255,0);
+            padding: 0;
+            margin: 0;
+            &.active {
+              border-bottom: 4px solid #2d3e50;
+            }
+          }
+          &.text button {
+            font-weight: 700;
+            background: $text_main;
+            &:hover { background: $text_hover;}
+            &:active {background: $text_active; }
+          }
+          &.image button {
+            background: $image_main;
+            &:hover { background: $image_hover;}
+            &:active {background: $image_active; }
+          }
+          &.product button {
+            background: $product_main;
+            &:hover { background: $product_hover;}
+            &:active {background: $product_active; }
+          }
+          &.material button {
+            background: $material_main;
+            &:hover { background: $material_hover;}
+            &:active {background: $material_active; }
+          }
+          &.colour button {
+            background: $colour_main;
+            &:hover { background: $colour_hover; }
+            &:active { background: $colour_active; }
+          }
+          &.file button {
+            background: $file_main;
+            &:hover {  background: $file_hover; }
+            &:active { background: $file_active; }
+          }
+        }
+      }
+    }
+  }
+}
+
+
 
 .new_page {
   display: flex;
@@ -170,6 +280,8 @@ $page_width: 85vw;
       transition: .1s linear;
       cursor: pointer;
       color: #24495e;
+      padding: 0;
+      margin: 0;
       &:hover {
         background: #27ae61;
         color: #ecf0f1;
@@ -767,132 +879,9 @@ $page_width: 85vw;
       &[data-gs-max-width="#{$idx}"] { width: (100% / $columns) * $idx }
       &[data-gs-x="#{$idx}"] { left: (100% / $columns) * $idx; }
     }
-}
+  }
 }
 
 
 
 // ========== POSSIBLE REMOVE ==========
-.new_item_menu--container {
-  $text_main: #c1392b;
-  $text_hover: #e84c3d;
-  $text_active: #c1392b;
-  $image_main: #e67f22;
-  $image_hover: #f39c11;
-  $image_active: #e67f22;
-  $product_main: #16a086;
-  $product_hover: #1bbc9b;
-  $product_active: #16a086;
-  $material_main: #27ae61;
-  $material_hover: #2dcc70;
-  $material_active: #27ae61;
-  $colour_main: #297fb8;
-  $colour_hover: #3598db;
-  $colour_active: #297fb8;
-  $file_main: #8d44ad;
-  $file_hover: #9a59b5;
-  $file_active: #8d44ad;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  display: none;
-  .new_item_menu {
-    display: flex;
-    ul {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
-      .new_item_menu__item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 8px;
-        button {
-          font-size: 24px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 50px;
-          height: 50px;
-          background: #1bbc9b;
-          border-radius: 50%;
-          border: none;
-          &:hover {
-
-          }
-        }
-        &.text {
-          button {
-            font-weight: 700;
-            background: $text_main;
-            &:hover {
-              background: $text_hover;
-            }
-            &:active {
-              background: $text_active;
-            }
-          }
-        }
-        &.image {
-          button {
-            background: $image_main;
-            &:hover {
-              background: $image_hover;
-            }
-            &:active {
-              background: $image_active;
-            }
-          }
-        }
-        &.product {
-          button {
-            background: $product_main;
-            &:hover {
-              background: $product_hover;
-            }
-            &:active {
-              background: $product_active;
-            }
-          }
-        }
-        &.material {
-          button {
-            background: $material_main;
-            &:hover {
-              background: $material_hover;
-            }
-            &:active {
-              background: $material_active;
-            }
-          }
-        }
-        &.colour {
-          button {
-            background: $colour_main;
-            &:hover {
-              background: $colour_hover;
-            }
-            &:active {
-              background: $colour_active;
-            }
-          }
-        }
-        &.file {
-          button {
-            background: $file_main;
-            &:hover {
-              background: $file_hover;
-            }
-            &:active {
-              background: $file_active;
-            }
-          }
-        }
-      }
-    }
-  }
-}
