@@ -18,7 +18,6 @@ let sampleMaterials = () => sampleMaterialData
 
 router.route('/projects/:user')
   .get((req, res, next) => {
-    console.log(req.query)
     switch (req.query.dataset) {
       case 'fora':
         return res.json({

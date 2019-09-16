@@ -17,6 +17,8 @@ const lastClick = {
   y: null
 }
 
+let newItemMenuState = 'text'
+
 let rows = 20
 console.log({ rows })
 
@@ -546,6 +548,26 @@ function initialisePageAdd () {
   }
 
 }
+
+function initialiseMenuControl () {
+  const controlButtons = document.querySelectorAll('.item_menu__control .new_item_menu__item')
+  function swapActive (buttonContainers, type) {
+    buttonContainers.forEach(each => {
+      const button = each.querySelector('button')
+      if (each.dataset.mosType === type) {
+        button.classList.add('active')
+        newItemMenuState = type
+      } else button.classList.remove('active')
+    })
+  }
+  controlButtons.forEach(each => {
+    each.querySelector('button').onclick = function () {
+      swapActive(controlButtons, this.closest('.new_item_menu__item').dataset.mosType)
+    }
+  })
+}
+
+initialiseMenuControl()
 
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
