@@ -14,7 +14,20 @@ let userRender, colourPicker;
 const lastClick = {
   grid: null,
   x: null,
-  y: null
+  y: null,
+  gridElem: null,
+  widget: null,
+  cutPasteData: {
+    _type: "",
+    lastAction: null,
+    attributes: {
+      //, src, hex, url ...etc
+    },
+    previousPosition: {
+      wasOnGrid: false
+      //, x, y, width, height
+    }
+  }
 }
 
 let newItemMenuState = 'text'
@@ -50,59 +63,64 @@ const data = {
 
 // ========== Serialise Functions ==========
 
-function extractElementData (node) {
-  const content = node.el.find('.content')
+function extractElementData (jQueryElem) {
+  const content = jQueryElem.find('.content')
   const dataType = content.data('mosContenttype')
   switch (dataType) {
     case "text":
-      return {
-        _type: "text",
-        text: content.find('.content_text__text') ? content.find('.content_text__text').text() : content.find('.content_text__input').val()
-      }
+    return {
+      _type: "text",
+      text: content.find('.content_text__text') ? content.find('.content_text__text').text() : content.find('.content_text__input').val()
+    }
     case "image":
-      return {
-        _type: "image",
-        src: content.find('img').attr('src') || "",
-        alt: content.find('img').attr('alt') || ""
-      }
+    return {
+      _type: "image",
+      src: content.find('img').attr('src') || "",
+      alt: content.find('img').attr('alt') || ""
+    }
     case "colour":
-      return {
-        _type: "colour",
-        hex: convertToHex(content.find('.colour__module').css('background-color')) || "000000"
-      }
+    return {
+      _type: "colour",
+      hex: convertToHex(content.find('.colour__module').css('background-color')) || "000000"
+    }
     case "file":
-      return {
-        _type: "file",
-        format: content.find('.file__data').data('mosFormat'),
-        name: content.find('.file__cover__title p').text(),
-        image: {
-          src: content.css('background-image').replace('url("', '').replace('")', '')
-        }
+    return {
+      _type: "file",
+      format: content.find('.file__data').data('mosFormat'),
+      name: content.find('.file__cover__title p').text(),
+      image: {
+        src: content.css('background-image').replace('url("', '').replace('")', '')
       }
+    }
     case "product":
-      return {
-        _type: "product",
-        img: {
-          src: content.find('.content_product__img img').attr('src'),
-          alt: content.find('.content_product__img img').attr('alt')
-        },
-        title: content.find('.content_product__text--title').text(),
-        design: content.find('.content_product__text--design').text(),
-        price: content.find('.content_product__text--price').text()
-      }
+    return {
+      _type: "product",
+      img: {
+        src: content.find('.content_product__img img').attr('src'),
+        alt: content.find('.content_product__img img').attr('alt')
+      },
+      title: content.find('.content_product__text--title').text(),
+      design: content.find('.content_product__text--design').text(),
+      price: content.find('.content_product__text--price').text()
+    }
     case "material":
-      return {
-        _type: "material",
-        img: {
-          src: content.find('.content_material__img img').attr('src'),
-          alt: content.find('.content_material__img img').attr('alt')
-        },
-        title: content.find('.content_material__text--title').text(),
-        design: content.find('.content_material__text--design').text()
-      }
+    return {
+      _type: "material",
+      img: {
+        src: content.find('.content_material__img img').attr('src'),
+        alt: content.find('.content_material__img img').attr('alt')
+      },
+      title: content.find('.content_material__text--title').text(),
+      design: content.find('.content_material__text--design').text()
+    }
     default:
-      return {}
+    return {}
   }
+}
+
+function extractElementDataGridstack (node) {
+  const { el } = node
+  return extractElementData (el)
 }
 
 function serialise () {
@@ -113,7 +131,7 @@ function serialise () {
     const items = $(grid).find('.grid-stack-item:visible')
       .map((idx, each) => {
         const node = $(each).data('_gridstack_node')
-        const nodeData = extractElementData(node)
+        const nodeData = extractElementDataGridstack(node)
         entities.push ({
           x: node.x,
           y: node.y,
@@ -285,6 +303,32 @@ function pageScrollHandler () {
   focusedPage = getClosestToCenter()
 }
 
+function copy () {
+  const copyOfLastClicked = {
+    grid: null,
+    x: null,
+    y: null,
+    gridElem: null,
+    widget: null,
+    cutPasteData: {
+      lastAction: null,
+      attributes: {
+        _type: "",
+        //, src, hex, url ...etc
+      },
+      previousPosition: {
+        wasOnGrid: false
+        //, x, y, width, height
+      }
+    }
+  }
+  const { cutPasteData: { lastAction }, widget } = lastClick
+  lastClick.cutPasteData.lastAction = 'COPY'
+  lastClick.cutPasteData.attributes = extractElementData ($(widget))
+  console.log(widget)
+  console.log(widget.querySelector('.content').dataset.mosType)
+}
+
 function handleGlobalKeyPress (event) {
       // Going to have to go on faith that this works before testing
       // can be crried out on mac devices
@@ -293,6 +337,7 @@ function handleGlobalKeyPress (event) {
   // ==================================
     if (event.key === 'c' && event.ctrlKey) {
       console.log('COPY')
+      copy ()
     }
     if (event.key === 'x' && event.ctrlKey) {
       console.log('CUT')
