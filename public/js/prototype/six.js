@@ -581,7 +581,6 @@ function initialisePageAdd () {
     data.projects = serialised
     render(data)
   }
-
 }
 
 function initialiseItemMenuControl () {
@@ -610,30 +609,30 @@ function initialiseItemMenuControl () {
 function initialiseItemMenuInterface () {
   const interfaces = document.querySelectorAll('.item_menu__interface__variant')
   const text = document.querySelector('.item_menu__interface__variant.text')
-  text.querySelector('.new_text__insert').onclick = e => {
-    console.log('where is my grid?? ?? ? ???')
-    if (focusedPage.grid) {
-      const { grid, gridElem, idx } = focusedPage
-      const entityCount = $(gridElem).children().length
-      const newTextWidget = $(`
-        <div>
-          <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
-            ${createText({ text: 'New Text Box' })}
-          </div>
-        </div>
-      `)
-      const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 3, 3, true)
-      createdTextWidget.find('.content__controls--delete').click(function () {
-        grid.removeWidget(this.closest('.grid-stack-item'))
-      })
-      createdTextWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+  const image = document.querySelector('.item_menu__interface__variant.image')
 
-    }
+  function initText (text) {
+    const add = text.querySelector('.new_text__insert button')
+    add.onclick = newTextBox
   }
-}
 
-initialiseItemMenuControl()
-initialiseItemMenuInterface()
+  function initImage (image) {
+    const urlInput = image.querySelector('input[type=url]')
+    const preview = image.querySelector('.image_interface__preview img')
+    const add = image.querySelector('.new_image__insert button')
+    function handleInput (e) {
+      // WARNING: Need some sort of broken link detector, copy from Oddert/odd-blog blog engine later
+      preview.src = e.target.value
+    }
+    urlInput.onmousedown = handleInput
+    urlInput.onpaste = handleInput
+    urlInput.oninput = handleInput
+    add.onclick = e => newImage(urlInput.value, '')
+  }
+
+  initText(text)
+  initImage(image)
+}
 
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
@@ -654,6 +653,8 @@ initialAjax ()
 initialisePageAdd ()
 // initProductSearch ()
 // initMaterialSearch ()
+initialiseItemMenuControl()
+initialiseItemMenuInterface()
 }
 
 // ========== / Page initialisation ==========
@@ -1052,6 +1053,44 @@ function toggleTextEdit () {
 
 
 // ========== Interface Functions ==========
+
+function newTextBox () {
+  if (focusedPage.grid) {
+    const { grid, gridElem, idx } = focusedPage
+    const entityCount = $(gridElem).children().length
+    const newTextWidget = $(`
+      <div>
+        <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+          ${createText({ text: 'New Text Box' })}
+        </div>
+      </div>
+    `)
+    const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 3, 3, true)
+    createdTextWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    createdTextWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+  }
+}
+
+function newImage (src, alt) {
+  if (focusedPage.grid) {
+    const { grid, gridElem, idx } = focusedPage
+    const entityCount = $(gridElem).children().length
+    const newTextWidget = $(`
+      <div>
+        <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+          ${createImage({ src, alt })}
+        </div>
+      </div>
+    `)
+    const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 2, 4, true)
+    createdTextWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    // createdTextWidget.find('.content__controls--image_edit').click(toggleImageEdit)
+  }
+}
 
 // let imageCurrentlyOpen
 //

@@ -259,6 +259,9 @@ $page_width: 75vw;
     .item_menu__interface {
       .item_menu__interface__variant {
         display: none;
+        .insert {
+          width: 100%;
+        }
         &.active {
           display: flex;
         }
@@ -313,7 +316,10 @@ $page_width: 75vw;
 
 .grid-stack-item-content {
   // border: 1px solid darkgreen;
-  box-shadow: 5px 5px 10px rgba(0,0,0,.1);
+  // box-shadow: 5px 5px 10px rgba(0,0,0,.1);
+  border: 1px solid #ecf0f1;
+  border-radius: 3px;
+
   box-sizing: border-box;
   & * { box-sizing: border-box; }
   .content {
@@ -832,48 +838,60 @@ $page_width: 75vw;
   justify-content: center;
   box-shadow: 10px 10px 30px rgba(0,0,0,.1);
   display: none;
-  .image_interface--wrapper {
-    width: 500px;
+}
+.image_interface--wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .image_interface__preview {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    label {
-      border: 1px solid #ecf0f1;
-      margin: 10px;
-      background: black;
-      color: white;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 12px;
-      text-align: center;
-      flex: 1;
-      white-space: nowrap;
-      &:hover {
-        text-decoration: underline;
-      }
+    img {
+      max-width: 70%;
+      max-height: 200px;
+      object-fit: contain;
     }
-    input {
-      &[type=file] {
-        width: .1px;
-        height: .1px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-      }
-      &[type=url] {
-        margin: 10px;
-        flex: 4;
-        padding: 10px 20px;
-      }
+  }
+  label {
+    border: 1px solid #ecf0f1;
+    margin: 5px;
+    background: black;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    flex: 1;
+    white-space: nowrap;
+    &:hover {
+      text-decoration: underline;
     }
-    .image_interface__control {
-      display: flex;
-      button {
-        @include control_buttons;
-        margin: 0;
-      }
+  }
+  input {
+    &[type=file] {
+      width: .1px;
+      height: .1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    &[type=url] {
+      margin: 5px;
+      flex: 4;
+      padding: 5px 10px;
+      align-self: stretch;
+    }
+  }
+  .image_interface__control {
+    display: flex;
+    button {
+      @include control_buttons;
+      margin: 0;
     }
   }
 }

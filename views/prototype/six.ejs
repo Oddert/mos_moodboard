@@ -86,27 +86,39 @@
             </div>
             <div class="item_menu__interface__variant image" data-mos-type="image">
               <div class="insert new_image__insert">
-                <button type="button" name="new_text__insert">Insert Image +</button>
+                <div class="image_interface--wrapper">
+                  <label for="image_upload">Upload Image</label>
+                  <input type="file" name="image_upload" class="image_upload" id="image_upload" />
+                  <input type="url" name="image_url" class="image_url" placeholder="Paste Image URL" />
+                  <div class="image_interface__preview">
+                    <img src="https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png" alt="Placeholder Image">
+                  </div>
+                </div>
+                <button type="button" name="new_image__insert">Insert Image +</button>
               </div>
             </div>
             <div class="item_menu__interface__variant product active" data-mos-type="product">
               <div class="insert new_product__insert">
-                <button type="button" name="new_text__insert">Insert Product +</button>
+                <p>New Product Instert Interface</p>
+                <button type="button" name="new_product__insert">Insert Product +</button>
               </div>
             </div>
             <div class="item_menu__interface__variant material" data-mos-type="material">
               <div class="insert new_material__insert">
-                <button type="button" name="new_text__insert">Insert Material +</button>
+                <p>New Material Instert Interface</p>
+                <button type="button" name="new_material__insert">Insert Material +</button>
               </div>
             </div>
             <div class="item_menu__interface__variant colour" data-mos-type="colour">
               <div class="insert new_colour__insert">
-                <button type="button" name="new_text__insert">Insert Colour Swatch +</button>
+                <p>New Colour Instert Interface</p>
+                <button type="button" name="new_colour__insert">Insert Colour Swatch +</button>
               </div>
             </div>
             <div class="item_menu__interface__variant file" data-mos-type="file">
               <div class="insert new_file__insert">
-                <button type="button" name="new_text__insert">Insert File +</button>
+                <p>New File Instert Interface</p>
+                <button type="button" name="new_file__insert">Insert File +</button>
               </div>
             </div>
           </div>
