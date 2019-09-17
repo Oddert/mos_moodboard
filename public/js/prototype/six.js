@@ -322,11 +322,17 @@ function copy () {
       }
     }
   }
-  const { cutPasteData: { lastAction }, widget } = lastClick
-  lastClick.cutPasteData.lastAction = 'COPY'
-  lastClick.cutPasteData.attributes = extractElementData ($(widget))
-  console.log(widget)
-  console.log(widget.querySelector('.content').dataset.mosType)
+  if (lastClick.widget) {
+    const { cutPasteData: { lastAction }, widget } = lastClick
+    const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = widget.dataset
+    const { mosPageIdx: gridIdx } = widget.closest('.page__content').dataset
+    lastClick.cutPasteData.lastAction = 'COPY'
+    lastClick.cutPasteData.attributes = extractElementData ($(widget))
+    lastClick.cutPasteData.previousPosition = {
+      wasOnGrid: true,
+      x, y, width, height, gridIdx
+    }
+  }
 }
 
 function handleGlobalKeyPress (event) {
