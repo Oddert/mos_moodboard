@@ -285,6 +285,24 @@ function pageScrollHandler () {
   focusedPage = getClosestToCenter()
 }
 
+function handleGlobalKeyPress (event) {
+      // Going to have to go on faith that this works before testing
+      // can be crried out on mac devices
+  // ==================================
+  if ((navigator.platform === "MacIntel" && event.metaKey) || (!(navigator.platform === "MacIntel" && event.metaKey) && event.ctrlKey)) {
+  // ==================================
+    if (event.key === 'c' && event.ctrlKey) {
+      console.log('COPY')
+    }
+    if (event.key === 'x' && event.ctrlKey) {
+      console.log('CUT')
+    }
+    if (event.key === 'v' && event.ctrlKey) {
+      console.log('PASTE')
+    }
+  }
+}
+
 // ========== / Top Level Functions ==========
 
 
@@ -1270,6 +1288,7 @@ function newColour (picker) {
 window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
+window.addEventListener('keydown', handleGlobalKeyPress)
 
 // ========== / Event Binding ==========
 
