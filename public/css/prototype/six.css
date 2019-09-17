@@ -117,6 +117,7 @@ button[name=dev] {
   top: 0px;
   left: 0px;
   width: 100%;
+  overflow-y: auto;
 }
 .item_menu--container .item_menu h2 {
   margin: 0;
@@ -212,6 +213,12 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__control ul .new_item_menu__item.file button:active {
   background: #8d44ad;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant {
+  display: none;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant.active {
+  display: flex;
 }
 
 .new_page {

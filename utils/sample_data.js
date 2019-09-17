@@ -127,7 +127,7 @@ const fora_payload = {
       ]
     },
     {
-      title: 'Page Two',
+      title: 'Page Three',
       entities: [
         {x: 4, y: 1, width: 6, height: 3, _type: "text", text: "Shapes and Inspiration"},
         {x: 1, y: 6, width: 3, height: 10, _type: "image", src: "https://cdn.mos.cms.futurecdn.net/U4BRsKHqqUrs3wcXVY49ub-768-80.jpg", alt: "A banner image from the storefront" },
@@ -136,14 +136,14 @@ const fora_payload = {
       ]
     },
     {
-      title: 'Page Three',
+      title: 'Page Four',
       entities: [
         {x: 4, y: 1, width: 5, height: 3, _type: "text", text: "Shapes and Inspiration"},
         {x: 0, y: 4, width: 13, height: 13, _type: "image", src: "https://www.luxurylifestylemag.co.uk/wp-content/uploads/2019/08/19-0124151-IG-Creative-Collaboration.jpg", alt: "A banner image from the storefront" },
       ]
     },
     {
-      title: 'Page Four',
+      title: 'Page Five',
       entities: [
         {x: 2, y: 3, width: 3, height: 13, _type: "image", src: "https://www.extreme-design.co.uk/wp-content/uploads/2019/07/kitchen-design-trend-2019-colour-blocking-and-geometric-interior.jpg", alt: "A banner image from the storefront" },
         {x: 5, y: 3, width: 3, height: 13, _type: "image", src: "https://www.interiorsandsources.com/Portals/0/Images/2018-August/2020-trends/IS_SHAW_CALPE_2019_RGB.jpg", alt: "A banner image from the storefront" },
@@ -151,14 +151,14 @@ const fora_payload = {
       ]
     },
     {
-      title: 'Page Five',
+      title: 'Page Six',
       entities: [
         {x: 4, y: 0, width: 5, height: 3, _type: "text", text: "Shample Board"},
         {x: 2, y: 4, width: 9, height: 15, _type: "image", src: "https://lodgingmagazine.com/wp-content/uploads/2019/05/Inclusivity_Palette_HR.jpg", alt: "A banner image from the storefront" },
       ]
     },
     {
-      title: 'Page Six',
+      title: 'Page Seven',
       entities: [
         {x: 4, y: 0, width: 5, height: 3, _type: "text", text: "Furnature Sample Finishes"},
         {x: 4, y: 4, width: 5, height: 15, _type: "image", src: "https://static1.squarespace.com/static/56abdcec22482ec2414c1aba/59663453d2b8576106524218/5c479a7a4ae23759d4d4eb7f/1548197007245/office+design+trends%2C+2019%2C+Nashville%2C+interior+design%2C+color+schemes%2C+texture%2C+material%2C+company+culture.jpg?format=2500w", alt: "A banner image from the storefront" },
@@ -166,7 +166,7 @@ const fora_payload = {
       ]
     },
     {
-      title: 'Page Seven',
+      title: 'Page Eight',
       entities: [
         {x: 4, y: 0, width: 5, height: 3, _type: "text", text: "Colour Moodboard"},
         {x: 1, y: 4, width: 4, height: 15, _type: "image", src: "https://essentialhome.eu/inspirations/wp-content/uploads/2018/08/Untitled-design-740x560.png", alt: "A banner image from the storefront" },

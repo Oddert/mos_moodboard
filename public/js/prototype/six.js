@@ -19,6 +19,13 @@ const lastClick = {
 
 let newItemMenuState = 'text'
 
+let focusedPage = {
+  offset: 0,
+  grid: null,
+  gridElem: null,
+  idx: 0
+}
+
 let rows = 20
 console.log({ rows })
 
@@ -126,7 +133,7 @@ function save () {
   const opts = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+    body: JSON.stringify ({
       payload: serialise()
     })
   }
@@ -136,7 +143,6 @@ function save () {
 }
 
 // ========== / Serialise Functions ==========
-
 
 
 
@@ -164,12 +170,16 @@ function render (data) {
     `
     pages.innerHTML += page
   }
-  data.projects.forEach(addPage)
-  $('.page').each(function () {
+
+  function pageCreateListeners () {
     $(this).find('.page__title h3').dblclick(toggleTitleEdit)
     $(this).find('.page__title .page__title__delete--delete').click(toggleTitleDelete)
-  })
+  }
 
+  data.projects.forEach(addPage)
+  $('.page').each(pageCreateListeners)
+
+  // NOTE: Are we still using user render ??
   userRender = () => createGridContent (pages, data)
   userRender()
 }
@@ -240,6 +250,31 @@ function addOnePageContent (page, idx) {
   page.style.height = '250px'
   page.dataset.mosTest = '250'
   page.dataset.mosPageIdx = idx
+}
+
+function pageScrollHandler () {
+  const pages = document.querySelectorAll('.page')
+  const { scrollY } = window
+  const heights = []
+  pages.forEach((each, idx) => heights.push({
+    offset: each.offsetTop + (each.scrollHeight / 2),
+    gridElem: each,
+    grid: $(each).find('.page__content').data('gridstack'),
+    idx
+  }))
+
+  const nextDown = heights.filter(each => each.offset < scrollY).pop()
+  const nextUp = heights.filter(each => each.offset > scrollY).shift()
+
+  function getClosestToCenter () {
+    if (!nextDown) return nextUp
+    if (!nextUp) return nextDown
+    // get whole object instead of just offsets from Maths.Min
+    else return [nextDown, nextUp].filter(
+      each => each.offset === Math.max(nextDown.offset, nextUp.offset)
+    )[0]
+  }
+  focusedPage = getClosestToCenter()
 }
 
 // ========== / Top Level Functions ==========
@@ -549,8 +584,9 @@ function initialisePageAdd () {
 
 }
 
-function initialiseMenuControl () {
+function initialiseItemMenuControl () {
   const controlButtons = document.querySelectorAll('.item_menu__control .new_item_menu__item')
+  const interfaces = document.querySelectorAll('.item_menu__interface__variant')
   function swapActive (buttonContainers, type) {
     buttonContainers.forEach(each => {
       const button = each.querySelector('button')
@@ -558,6 +594,10 @@ function initialiseMenuControl () {
         button.classList.add('active')
         newItemMenuState = type
       } else button.classList.remove('active')
+    })
+    interfaces.forEach(each => {
+      if (each.dataset.mosType === type) each.classList.add('active')
+      else each.classList.remove('active')
     })
   }
   controlButtons.forEach(each => {
@@ -567,7 +607,33 @@ function initialiseMenuControl () {
   })
 }
 
-initialiseMenuControl()
+function initialiseItemMenuInterface () {
+  const interfaces = document.querySelectorAll('.item_menu__interface__variant')
+  const text = document.querySelector('.item_menu__interface__variant.text')
+  text.querySelector('.new_text__insert').onclick = e => {
+    console.log('where is my grid?? ?? ? ???')
+    if (focusedPage.grid) {
+      const { grid, gridElem, idx } = focusedPage
+      const entityCount = $(gridElem).children().length
+      const newTextWidget = $(`
+        <div>
+          <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+            ${createText({ text: 'New Text Box' })}
+          </div>
+        </div>
+      `)
+      const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 3, 3, true)
+      createdTextWidget.find('.content__controls--delete').click(function () {
+        grid.removeWidget(this.closest('.grid-stack-item'))
+      })
+      createdTextWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+
+    }
+  }
+}
+
+initialiseItemMenuControl()
+initialiseItemMenuInterface()
 
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
@@ -1081,6 +1147,7 @@ function toggleTextEdit () {
 
 window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
+window.addEventListener('scroll', debounce(pageScrollHandler, 50))
 
 // ========== / Event Binding ==========
 
