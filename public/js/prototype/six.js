@@ -227,7 +227,7 @@ function createGridContent (pages, data) {
         }
       }, this)
       // old lastClick detector:
-      // elem.on('mousedown', e => openNewItemMenu(e, elem, grid))
+      elem.on('click', e => openNewItemMenu(e, elem, grid))
     })
 }
 
@@ -810,34 +810,38 @@ function getContent (eachItem) {
 
 // ========== Content Functions ==========
 
-// function openNewItemMenu (event, elem, grid) {
-//   // NOTE: Revamp this asap.
-//   //  -Target widgets and grids => use as "select" implamentation
-//   const { clientX, clientY, offsetX, offsetY, target } = event
-//   const rect = target.getBoundingClientRect()
-//   const newItemMenu = $('.new_item_menu--container')
-//   if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
-//     const absoluteTop = offsetY + rect.top + window.scrollY
-//     const absoluteLeft = offsetX + rect.left + window.scrollX
-//     newItemMenu.css({
-//       display: 'flex',
-//       top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
-//       left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
-//     })
-//     lastClick.grid = grid,
-//     lastClick.gridElem = elem
-//     lastClick.x = offsetX + rect.left + window.scrollX
-//     lastClick.y = offsetY + rect.top + window.scrollY
-//     newItemMenu.data('mosEdit', 'active')
-//   } else {
-//     newItemMenu.data('mosEdit', 'inactive')
-//     newItemMenu.css ({
-//       display: 'none',
-//       top: '20px',
-//       left: '20px'
-//     })
-//   }
-// }
+function openNewItemMenu (event, elem, grid) {
+  // NOTE: Revamp this asap.
+  //  -Target widgets and grids => use as "select" implamentation
+  // const { clientX, clientY, offsetX, offsetY, target } = event
+  // const rect = target.getBoundingClientRect()
+  // const newItemMenu = $('.new_item_menu--container')
+
+  // if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
+  if (event.target.classList.contains('grid-stack')) {
+    if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+    lastClick.widget = null
+    // const absoluteTop = offsetY + rect.top + window.scrollY
+    // const absoluteLeft = offsetX + rect.left + window.scrollX
+    // newItemMenu.css({
+    //   display: 'flex',
+    //   top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
+    //   left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
+    // })
+    // lastClick.grid = grid,
+    // lastClick.gridElem = elem
+    // lastClick.x = offsetX + rect.left + window.scrollX
+    // lastClick.y = offsetY + rect.top + window.scrollY
+    // newItemMenu.data('mosEdit', 'active')
+  } //else {
+  //   newItemMenu.data('mosEdit', 'inactive')
+  //   newItemMenu.css ({
+  //     display: 'none',
+  //     top: '20px',
+  //     left: '20px'
+  //   })
+  // }
+}
 
 function toggleTitleEdit () {
   const title = this.closest('.page__title')
@@ -1105,6 +1109,13 @@ function newTextBox () {
       </div>
     `)
     const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 3, 3, true)
+    createdTextWidget.click(function () {
+      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+      lastClick.widget = this
+      lastClick.grid = grid
+      lastClick.gridElem = gridElem
+      this.classList.add('user_focus')
+    })
     createdTextWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
@@ -1116,15 +1127,22 @@ function newImage (src, alt) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
-    const newTextWidget = $(`
+    const newColourWidget = $(`
       <div>
         <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
           ${createImage({ src, alt })}
         </div>
       </div>
     `)
-    const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 2, 4, true)
-    createdTextWidget.find('.content__controls--delete').click(function () {
+    const createdImageWidget = grid.addWidget(newColourWidget, 1, 1, 2, 4, true)
+    createdImageWidget.click(function () {
+      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+      lastClick.widget = this
+      lastClick.grid = grid
+      lastClick.gridElem = gridElem
+      this.classList.add('user_focus')
+    })
+    createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     // createdTextWidget.find('.content__controls--image_edit').click(toggleImageEdit)
@@ -1143,6 +1161,13 @@ function newColour (picker) {
       </div>
     `)
     const createdColourWidget = grid.addWidget(newColourWidget, 1, 1, 1, 3, true)
+    createdColourWidget.click(function () {
+      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+      lastClick.widget = this
+      lastClick.grid = grid
+      lastClick.gridElem = gridElem
+      this.classList.add('user_focus')
+    })
     createdColourWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
