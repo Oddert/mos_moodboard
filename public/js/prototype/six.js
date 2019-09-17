@@ -208,6 +208,13 @@ function createGridContent (pages, data) {
         createdWidget.find('.content__controls--delete').click(function () {
           grid.removeWidget(this.closest('.grid-stack-item'))
         })
+        createdWidget.click(function () {
+          if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+          lastClick.widget = this
+          lastClick.grid = grid
+          lastClick.gridElem = elem
+          this.classList.add('user_focus')
+        })
         // createdWidget.data('mospage', `${pageIdx}`)
         if (node._type === "text") {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
@@ -219,7 +226,8 @@ function createGridContent (pages, data) {
           // createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
       }, this)
-      elem.on('mousedown', e => openNewItemMenu(e, elem, grid))
+      // old lastClick detector:
+      // elem.on('mousedown', e => openNewItemMenu(e, elem, grid))
     })
 }
 
@@ -802,32 +810,34 @@ function getContent (eachItem) {
 
 // ========== Content Functions ==========
 
-function openNewItemMenu (event, elem, grid) {
-  const { clientX, clientY, offsetX, offsetY, target } = event
-  const rect = target.getBoundingClientRect()
-  const newItemMenu = $('.new_item_menu--container')
-  if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
-    const absoluteTop = offsetY + rect.top + window.scrollY
-    const absoluteLeft = offsetX + rect.left + window.scrollX
-    newItemMenu.css({
-      display: 'flex',
-      top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
-      left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
-    })
-    lastClick.grid = grid,
-    lastClick.gridElem = elem
-    lastClick.x = offsetX + rect.left + window.scrollX
-    lastClick.y = offsetY + rect.top + window.scrollY
-    newItemMenu.data('mosEdit', 'active')
-  } else {
-    newItemMenu.data('mosEdit', 'inactive')
-    newItemMenu.css({
-      display: 'none',
-      top: '20px',
-      left: '20px'
-    })
-  }
-}
+// function openNewItemMenu (event, elem, grid) {
+//   // NOTE: Revamp this asap.
+//   //  -Target widgets and grids => use as "select" implamentation
+//   const { clientX, clientY, offsetX, offsetY, target } = event
+//   const rect = target.getBoundingClientRect()
+//   const newItemMenu = $('.new_item_menu--container')
+//   if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
+//     const absoluteTop = offsetY + rect.top + window.scrollY
+//     const absoluteLeft = offsetX + rect.left + window.scrollX
+//     newItemMenu.css({
+//       display: 'flex',
+//       top: `${absoluteTop - (newItemMenu.height() + 15)}px`,
+//       left: `${absoluteLeft - (newItemMenu.width() / 2)}px`
+//     })
+//     lastClick.grid = grid,
+//     lastClick.gridElem = elem
+//     lastClick.x = offsetX + rect.left + window.scrollX
+//     lastClick.y = offsetY + rect.top + window.scrollY
+//     newItemMenu.data('mosEdit', 'active')
+//   } else {
+//     newItemMenu.data('mosEdit', 'inactive')
+//     newItemMenu.css ({
+//       display: 'none',
+//       top: '20px',
+//       left: '20px'
+//     })
+//   }
+// }
 
 function toggleTitleEdit () {
   const title = this.closest('.page__title')
