@@ -111,7 +111,14 @@
             </div>
             <div class="item_menu__interface__variant colour" data-mos-type="colour">
               <div class="insert new_colour__insert">
-                <p>New Colour Instert Interface</p>
+                <div class="colour_picker__iro">
+
+                </div>
+                <div class="colour_picker__preview">
+                  <div class="colour_picker__preview--wrapper">
+                    <input value="#1bbc9b" class="colour_picker__preview__input" />
+                  </div>
+                </div>
                 <button type="button" name="new_colour__insert">Insert Colour Swatch +</button>
               </div>
             </div>
@@ -127,57 +134,58 @@
     </section>
     <!-- <button name="dev">Re Render</button> -->
 
-    <div class="colour_picker">
-      <div class="colour_picker__iro">
+    <div class="removed" style="display: none !important;">
+      <div class="colour_picker">
+        <div class="colour_picker__iro">
 
-      </div>
-      <div class="colour_picker__preview">
-        <div class="colour_picker__preview--wrapper">
-          <input value="#1bbc9b" class="colour_picker__preview__input" />
+        </div>
+        <div class="colour_picker__preview">
+          <div class="colour_picker__preview--wrapper">
+            <input value="#1bbc9b" class="colour_picker__preview__input" />
+          </div>
+        </div>
+        <div class="colour_picker__control">
+          <div class="colour_picker__control--wrapper">
+            <button type="button" name="colour_cancel" class="colour_cancel control_cancel">
+              <i class="fas fa-times"></i>
+            </button>
+            <button type="button" name="colour_accept" class="colour_accept control_accept">
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="colour_picker__control">
-        <div class="colour_picker__control--wrapper">
-          <button type="button" name="colour_cancel" class="colour_cancel control_cancel">
-            <i class="fas fa-times"></i>
-          </button>
-          <button type="button" name="colour_accept" class="colour_accept control_accept">
-            <i class="fas fa-check"></i>
-          </button>
+      <div class="product_search" style="display: none;">
+        <div class="product_search__input">
+          <div class="product_search__input--wrapper">
+            <input class="product_search__input--bar" type="text" name="product_search" placeholder="Search MOS Products..." />
+            <button class="product_search__input--clear" type="button" name="product_search_clear">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="product_search" style="display: none;">
-      <div class="product_search__input">
-        <div class="product_search__input--wrapper">
-          <input class="product_search__input--bar" type="text" name="product_search" placeholder="Search MOS Products..." />
-          <button class="product_search__input--clear" type="button" name="product_search_clear">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div class="product_search__results">
-        <ul>
+        <div class="product_search__results">
+          <ul>
 
-        </ul>
-      </div>
-    </div>
-    <div class="material_search" style="display: none;">
-      <div class="material_search__input">
-        <div class="material_search__input--wrapper">
-          <input class="material_search__input--bar" type="text" name="material_search" placeholder="Search the Material Library..." />
-          <button class="material_search__input--clear" type="button" name="material_search_clear">
-            <i class="fas fa-times"></i>
-          </button>
+          </ul>
         </div>
       </div>
-      <div class="material_search__results">
-        <ul>
+      <div class="material_search" style="display: none;">
+        <div class="material_search__input">
+          <div class="material_search__input--wrapper">
+            <input class="material_search__input--bar" type="text" name="material_search" placeholder="Search the Material Library..." />
+            <button class="material_search__input--clear" type="button" name="material_search_clear">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="material_search__results">
+          <ul>
 
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="image_interface">
+      <div class="image_interface">
       <div class="image_interface--wrapper">
         <label for="image_upload">Upload Image</label>
         <input type="file" name="image_upload" class="image_upload" id="image_upload" />
@@ -191,6 +199,7 @@
           </button>
         </div>
       </div>
+    </div>
     </div>
 
     <div class="dashboard--container">

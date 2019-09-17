@@ -363,29 +363,9 @@ function initialAjax () {
 //   material.onclick = toggleMaterialSearch
 // }
 //
-// function initColourPicker () {
-//   const preview = document.querySelector('.colour_picker__preview--wrapper')
-//   const previewInput = preview.querySelector('.colour_picker__preview__input')
-//   const opts = {
-//     width: 250,
-//     color: '#1bbc9b'
-//   }
-//   colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
-//   function handleColourChange (colour, change) {
-//     preview.style.backgroundColor = colour.rgbString
-//     previewInput.value = colour.hexString.toUpperCase()
-//   }
-//   colourPicker.on('color:change', handleColourChange)
-//   previewInput.onchange = e => {
-//     const { value } = e.target
-//     if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
-//       colourPicker.color.hexString = value
-//     }
-//     if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
-//       colourPicker.color.hexString = '#' + value
-//     }
-//   }
-// }
+
+// REMOVED initColourPicker
+
 //
 // function performLibSeach (extention, value, cb) {
 //   const url = `/api/${extention}/${value}`
@@ -610,6 +590,7 @@ function initialiseItemMenuInterface () {
   const interfaces = document.querySelectorAll('.item_menu__interface__variant')
   const text = document.querySelector('.item_menu__interface__variant.text')
   const image = document.querySelector('.item_menu__interface__variant.image')
+  const colour = document.querySelector('.item_menu__interface__variant.colour')
 
   function initText (text) {
     const add = text.querySelector('.new_text__insert button')
@@ -630,8 +611,55 @@ function initialiseItemMenuInterface () {
     add.onclick = e => newImage(urlInput.value, '')
   }
 
+  function initColour (colour) {
+    const add = colour.querySelector('.new_colour__insert button')
+    const preview = colour.querySelector('.colour_picker__preview--wrapper')
+    const previewInput = preview.querySelector('.colour_picker__preview__input')
+    const opts = {
+      width: 175,
+      color: '#1bbc9b',
+      wheelLightness: false
+    }
+    function handleColourChange (colour, change) {
+      preview.style.backgroundColor = colour.rgbString
+      previewInput.value = colour.hexString.toUpperCase()
+    }
+    function handleColourInput (e) {
+      const { value } = e.target
+      if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+        colourPicker.color.hexString = value
+      }
+      if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+        colourPicker.color.hexString = '#' + value
+      }
+    }
+    colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
+    colourPicker.on('color:change', handleColourChange)
+    previewInput.onchange = handleColourInput
+    add.onclick = () => newColour (colourPicker)
+  }
+
   initText(text)
   initImage(image)
+  initColour(colour)
+}
+
+function initDragDrop () {
+  const pages = document.querySelector('.pages')
+  function nodrop (e) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  function drop (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    const url = e.dataTransfer.getData('text/plain')
+    newImage (url, '')
+  }
+  pages.addEventListener('dragenter', nodrop, false)
+  pages.addEventListener('dragexit', nodrop, false)
+  pages.addEventListener('dragover', nodrop, false)
+  pages.addEventListener('drop', drop, false)
 }
 
 // document.addEventListener('click', e => {
@@ -655,6 +683,7 @@ initialisePageAdd ()
 // initMaterialSearch ()
 initialiseItemMenuControl()
 initialiseItemMenuInterface()
+initDragDrop()
 }
 
 // ========== / Page initialisation ==========
@@ -724,7 +753,7 @@ const createColour = ({ hex }) => `
       <button class="content__controls--colour_edit">✎</button>
       <button class="content__controls--delete">✖</button>
     </div>
-    <div class="colour__module" style="background-color: #${hex};"></div>
+    <div class="colour__module" style="background-color: ${hex};"></div>
   </div>
 `
 const createFile = ({ format, name, image: { src } }) => {
@@ -761,7 +790,7 @@ function getContent (eachItem) {
     case "image": return createImage (eachItem)
     case "product": return createProduct (eachItem)
     case "material": return createMaterial (eachItem)
-    case "colour": return createColour (eachItem)
+    case "colour": return createColour ({ hex: '#' + eachItem.hex })
     case "file": return createFile (eachItem)
     default: return `<div>${JSON.stringify(eachItem)}</div>`
   }
@@ -1005,26 +1034,26 @@ function toggleTextEdit () {
 //     materialSearch.dataset.mosEdit = 'active'
 //   }
 // }
-// function toggleColourEdit (event) {
-//   const parent = this.closest('.grid-stack-item')
-//   const colourModule = parent.querySelector('.colour__module')
-//   if (parent.dataset.mosEdit === 'active') {
-//     hideColourPicker (colourPicker)
-//     parent.dataset.mosEdit = 'inactive'
-//   } else {
-//     const pickerElem = document.querySelector('.colour_picker')
-//     const { top, left } = this.getBoundingClientRect()
-//     const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
-//     const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
-//     const startingColour = colourModule.style.backgroundColor
-//     const accept = picker => {
-//       colourModule.style.backgroundColor = picker.color.rgbString
-//     }
-//     const decline = () => {}
-//     showColourPicker(x, y, colourPicker, startingColour, null, accept, decline)
-//     parent.dataset.mosEdit = 'active'
-//   }
-// }
+function toggleColourEdit (event) {
+  const parent = this.closest('.grid-stack-item')
+  const colourModule = parent.querySelector('.colour__module')
+  if (parent.dataset.mosEdit === 'active') {
+    hideColourPicker (colourPicker)
+    parent.dataset.mosEdit = 'inactive'
+  } else {
+    const pickerElem = document.querySelector('.colour_picker')
+    const { top, left } = this.getBoundingClientRect()
+    const x = left + event.offsetX + window.scrollX - (pickerElem.scrollWidth / 2)
+    const y = top + event.offsetY + window.scrollY - pickerElem.scrollHeight - 50
+    const startingColour = colourModule.style.backgroundColor
+    const accept = picker => {
+      colourModule.style.backgroundColor = picker.color.rgbString
+    }
+    const decline = () => {}
+    showColourPicker(x, y, colourPicker, startingColour, null, accept, decline)
+    parent.dataset.mosEdit = 'active'
+  }
+}
 // function toggleImageEdit (event) {
 //   const parent = this.closest('.grid-stack-item')
 //   const img = parent.querySelector('.content_image__img img')
@@ -1092,6 +1121,25 @@ function newImage (src, alt) {
   }
 }
 
+function newColour (picker) {
+  if (focusedPage.grid) {
+    const { grid, gridElem, idx } = focusedPage
+    const entityCount = $(gridElem).children().length
+    const newColourWidget = $(`
+      <div>
+        <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+          ${createColour({ hex: picker.color.hexString })}
+        </div>
+      </div>
+    `)
+    const createdColourWidget = grid.addWidget(newColourWidget, 1, 1, 1, 3, true)
+    createdColourWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    // createdColourWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+  }
+}
+
 // let imageCurrentlyOpen
 //
 // function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
@@ -1121,7 +1169,7 @@ function newImage (src, alt) {
 //     if (declineCb) declineCb(picker)
 //   }
 // }
-//
+
 // function hideColourPicker (picker) {
 //   const colourPickerContainer = document.querySelector('.colour_picker')
 //   colourPickerContainer.style.display = 'none'
@@ -1160,7 +1208,7 @@ function newImage (src, alt) {
 //     hideImageInterface ()
 //   }
 // }
-
+//
 // function imageOOBListener (e) {
 //   const imageInterfaceContainer = document.querySelector('.image_interface')
 //   if (imageInterfaceContainer.contains(e.target)) return

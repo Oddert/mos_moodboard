@@ -189,6 +189,7 @@ $page_width: 75vw;
       $file_active: #8d44ad;
       $button_rad: 45px;
       display: flex;
+      margin-bottom: 10px;
       ul {
         display: flex;
         width: 100%;
@@ -312,6 +313,8 @@ $page_width: 75vw;
 // for overriding default css settings without indenting the main tree too much
 .grid-stack > .grid-stack-item > .grid-stack-item-content {
   overflow: hidden;
+  left: 4px;
+  right: 4px;
 }
 
 .grid-stack-item-content {
@@ -537,10 +540,26 @@ $page_width: 75vw;
   box-shadow: 10px 10px 30px rgba(0,0,0,.1);
   display: none;
 
-  .colour_picker__iro {
-
+  .colour_picker__control {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    .colour_picker__control--wrapper {
+      // width: 100%;
+      // display: flex;
+      // justify-content: space-between;
+      button {
+        @include control_buttons;
+      }
+    }
   }
-  .colour_picker__preview {
+}
+.colour_picker__iro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.colour_picker__preview {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -571,20 +590,6 @@ $page_width: 75vw;
       }
     }
   }
-  .colour_picker__control {
-    display: flex;
-    justify-content: center;
-    margin-top: 12px;
-    .colour_picker__control--wrapper {
-      // width: 100%;
-      // display: flex;
-      // justify-content: space-between;
-      button {
-        @include control_buttons;
-      }
-    }
-  }
-}
 
 .product_search {
   position: absolute;

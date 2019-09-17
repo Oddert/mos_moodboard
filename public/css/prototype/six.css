@@ -128,6 +128,7 @@ button[name=dev] {
   width: 100%;
   display: flex;
   display: flex;
+  margin-bottom: 10px;
 }
 .item_menu--container .item_menu .item_menu__control ul {
   display: flex;
@@ -262,6 +263,8 @@ button[name=dev] {
 
 .grid-stack > .grid-stack-item > .grid-stack-item-content {
   overflow: hidden;
+  left: 4px;
+  right: 4px;
 }
 
 .grid-stack-item-content {
@@ -426,35 +429,6 @@ button[name=dev] {
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
   display: none;
 }
-.colour_picker .colour_picker__preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.colour_picker .colour_picker__preview .colour_picker__preview--wrapper {
-  height: 40px;
-  width: 70%;
-  margin-top: 12px;
-  border-radius: 20px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input {
-  font-family: "Ubuntu", Helvetica, sans-serif, arial, "Roboto";
-  letter-spacing: 4px;
-  text-shadow: 1px 1px 1px #ecf0f1;
-  text-align: center;
-  box-sizing: border-box;
-  background: none;
-  border: none;
-  font-size: 17px;
-  max-width: 100%;
-}
-.colour_picker .colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input:focus {
-  border-bottom: 1px solid #bec3c7;
-}
 .colour_picker .colour_picker__control {
   display: flex;
   justify-content: center;
@@ -489,6 +463,42 @@ button[name=dev] {
   --hover_back_color: #2dcc70;
   --hover_color: #ecf0f1;
   --color: #27ae61;
+}
+
+.colour_picker__iro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colour_picker__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.colour_picker__preview .colour_picker__preview--wrapper {
+  height: 40px;
+  width: 70%;
+  margin-top: 12px;
+  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input {
+  font-family: "Ubuntu", Helvetica, sans-serif, arial, "Roboto";
+  letter-spacing: 4px;
+  text-shadow: 1px 1px 1px #ecf0f1;
+  text-align: center;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  font-size: 17px;
+  max-width: 100%;
+}
+.colour_picker__preview .colour_picker__preview--wrapper .colour_picker__preview__input:focus {
+  border-bottom: 1px solid #bec3c7;
 }
 
 .product_search {
