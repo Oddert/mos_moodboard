@@ -361,6 +361,7 @@ function handleGlobalKeyPress (event) {
     }
     if (event.key === 'x' && event.ctrlKey) {
       console.log('CUT')
+      copy (true)
     }
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')

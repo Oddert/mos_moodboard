@@ -11,13 +11,28 @@ body, html, h1, p {
   padding: 0;
 }
 
-button[name=dev] {
-  position: fixed;
-  top: 0;
-  right: 10vw;
-  font-size: 1.2rem;
-  z-index: 10;
+button {
+  background: #000;
+  padding: 10px 15px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: .1s linear;
+  &:hover {
+    background-color: #404040;
+  }
+  &:active {
+    background-color: #7e7e7e;
+  }
+  &[name=dev] {
+    position: fixed;
+    top: 0;
+    right: 10vw;
+    font-size: 1.2rem;
+    z-index: 10;
+  }
 }
+
 
 .grid-stack-item-content {
   color: #2c3e50;
@@ -67,6 +82,7 @@ $page_width: 75vw;
           border: none;
           box-sizing: border-box;
           background: none;
+          color: #000;
           margin: 0;
           padding: 10px 30px;
           cursor: text;
@@ -98,6 +114,7 @@ $page_width: 75vw;
             color: #7e8c8d;
             font-size: 20px;
             cursor: pointer;
+            padding: 0;
             &:hover {
               color: #e84c3d;
               background: #fff;
@@ -214,6 +231,7 @@ $page_width: 75vw;
             width: 100%;
             height: $button_rad;
             background: #1bbc9b;
+            color: #000;
             // border-radius: 50%;
             border: none;
             border-bottom: 4px solid rgba(255,255,255,0);
@@ -342,6 +360,8 @@ $page_width: 75vw;
           background: #fff;
           border: none;
           cursor: pointer;
+          color: #000;
+          padding: 2px 5px;
         }
       }
       &.text {
@@ -514,6 +534,8 @@ $page_width: 75vw;
   border-radius: $radius;
   border: none;
   background: #fff;
+  color: #000;
+  padding: 0;
   cursor: pointer;
   font-size: 20px;
   padding: 0;
