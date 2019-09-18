@@ -1351,6 +1351,33 @@ function newProduct (product) {
   }
 }
 
+function newMaterial (product) {
+  if (focusedPage.grid) {
+    const { grid, gridElem, idx } = focusedPage
+    const entityCount = $(gridElem).children().length
+    const newMaterialWidget = $(`
+        <div>
+          <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+            ${createProduct(product)}
+          </div>
+        </div>
+      `)
+      const createdMaterialWidget = grid.addWidget(newMaterialWidget, null, null, 2, 9, true)
+      createdMaterialWidget.click(function (event) {
+        if (lastClick.widget.length && !event.shiftKey) {
+          lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        }
+        lastClick.widget.push(this)
+        lastClick.grid = grid
+        lastClick.gridElem = gridElem
+        this.classList.add('user_focus')
+      })
+      createdMaterialWidget.find('.content__controls--delete').click(function () {
+        grid.removeWidget(this.closest('.grid-stack-item'))
+      })
+  }
+}
+
 // let imageCurrentlyOpen
 //
 // function showColourPicker (x, y, picker, startingColour, changeCb, acceptCb, declineCb) {
