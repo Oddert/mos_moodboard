@@ -16,17 +16,21 @@ const lastClick = {
   x: null,
   y: null,
   gridElem: null,
-  widget: null,
+  widget: [],
+  wasOnGrid: false,
   cutPasteData: {
-    _type: "",
     lastAction: null,
-    attributes: {
-      //, src, hex, url ...etc
-    },
-    previousPosition: {
-      wasOnGrid: false
-      //, x, y, width, height
-    }
+    attributes: [
+      {
+        _type: "",
+        //, src, hex, url ...etc
+      }
+    ],
+    previousPosition: [
+      {
+        //, x, y, width, height
+      }
+    ]
   }
 }
 
@@ -226,9 +230,11 @@ function createGridContent (pages, data) {
         createdWidget.find('.content__controls--delete').click(function () {
           grid.removeWidget(this.closest('.grid-stack-item'))
         })
-        createdWidget.click(function () {
-          if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-          lastClick.widget = this
+        createdWidget.click(function (event) {
+          if (lastClick.widget.length && !event.shiftKey) {
+            lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+          }
+          lastClick.widget.push(this)
           lastClick.grid = grid
           lastClick.gridElem = elem
           this.classList.add('user_focus')
@@ -303,35 +309,43 @@ function pageScrollHandler () {
   focusedPage = getClosestToCenter()
 }
 
-function copy () {
-  const copyOfLastClicked = {
+function copy (cut = false) {
+  const noteTheRealVariableStopGettingThemConfusedFFS = {
     grid: null,
     x: null,
     y: null,
     gridElem: null,
     widget: null,
+    wasOnGrid: false,
     cutPasteData: {
       lastAction: null,
-      attributes: {
-        _type: "",
-        //, src, hex, url ...etc
-      },
+      attributes: [
+        {
+          _type: "",
+          //, src, hex, url ...etc
+        }
+      ],
       previousPosition: {
-        wasOnGrid: false
         //, x, y, width, height
       }
     }
   }
-  if (lastClick.widget) {
+  if (lastClick.widget.length) {
+    const attributes = []
+    const previousPosition = []
     const { cutPasteData: { lastAction }, widget } = lastClick
-    const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = widget.dataset
-    const { mosPageIdx: gridIdx } = widget.closest('.page__content').dataset
-    lastClick.cutPasteData.lastAction = 'COPY'
-    lastClick.cutPasteData.attributes = extractElementData ($(widget))
-    lastClick.cutPasteData.previousPosition = {
-      wasOnGrid: true,
-      x, y, width, height, gridIdx
-    }
+    widget.forEach(each => {
+      const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = each.dataset
+      const { mosPageIdx: gridIdx } = each.closest('.page__content').dataset
+      attributes.push(extractElementData($(each)))
+      previousPosition.push({
+        wasOnGrid: true,
+        x, y, width, height, gridIdx
+      })
+    })
+    lastClick.cutPasteData.attributes = attributes
+    lastClick.cutPasteData.previousPosition = previousPosition
+    lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
   }
 }
 
@@ -882,8 +896,8 @@ function getContent (eachItem) {
 function deselectOnGrid (event) {
   if (!!event.target.closest('.grid-stack-item')) return
   else {
-    if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-    lastClick.widget = null
+    if (lastClick.widget.length) lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+    lastClick.widget = []
   }
 }
 
@@ -898,8 +912,8 @@ function openNewItemMenu (event, elem, grid) {
   // if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
 
   if (event.target.classList.contains('grid-stack')) {
-    if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-    lastClick.widget = null
+    if (lastClick.widget) lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+    lastClick.widget = []
 
     // const absoluteTop = offsetY + rect.top + window.scrollY
     // const absoluteLeft = offsetX + rect.left + window.scrollX
@@ -1190,9 +1204,11 @@ function newTextBox () {
       </div>
     `)
     const createdTextWidget = grid.addWidget(newTextWidget, 1, 1, 3, 3, true)
-    createdTextWidget.click(function () {
-      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-      lastClick.widget = this
+    createdTextWidget.click(function (event) {
+      if (lastClick.widget.length && !event.shiftKey) {
+        lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+      }
+      lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
@@ -1216,9 +1232,11 @@ function newImage (src, alt) {
       </div>
     `)
     const createdImageWidget = grid.addWidget(newColourWidget, 1, 1, 2, 4, true)
-    createdImageWidget.click(function () {
-      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-      lastClick.widget = this
+    createdImageWidget.click(function (event) {
+      if (lastClick.widget.length && !event.shiftKey) {
+        lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+      }
+      lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
@@ -1242,9 +1260,11 @@ function newColour (picker) {
       </div>
     `)
     const createdColourWidget = grid.addWidget(newColourWidget, 1, 1, 1, 3, true)
-    createdColourWidget.click(function () {
-      if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
-      lastClick.widget = this
+    createdColourWidget.click(function (event) {
+      if (lastClick.widget.length && !event.shiftKey) {
+        lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+      }
+      lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
