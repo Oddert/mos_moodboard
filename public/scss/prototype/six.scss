@@ -11,6 +11,8 @@ body, html, h1, p {
   padding: 0;
 }
 
+$caption_text_size: 9px;
+
 button {
   background: #000;
   padding: 10px 15px;
@@ -418,7 +420,7 @@ $page_width: 75vw;
         }
       }
       .result_product__text {
-        font-size: 10px;
+        font-size: $caption_text_size;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -426,6 +428,9 @@ $page_width: 75vw;
         & > * {
           text-align: center;
         }
+      }
+      &.user_focus {
+        border-color: #1ac6e8;
       }
     }
     .result_none {
@@ -562,7 +567,7 @@ $page_width: 75vw;
           }
         }
         .content_product__text {
-          font-size: 11px;
+          font-size: $caption_text_size;
         }
       }
       &.material {
@@ -582,7 +587,7 @@ $page_width: 75vw;
           }
         }
         .content_material__text {
-          font-size: 11px;
+          font-size: $caption_text_size;
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -883,7 +888,7 @@ $page_width: 75vw;
           }
         }
         .result_material__text {
-          font-size: 11px;
+          font-size: $caption_text_size;
           display: flex;
           flex-direction: column;
           align-items: center;

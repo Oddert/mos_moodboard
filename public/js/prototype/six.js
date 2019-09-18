@@ -673,14 +673,40 @@ function initialiseItemMenuInterface () {
     const searchBar = product.querySelector('.product_search__input--bar')
     const resultsContainer = product.querySelector('.product_search__results ul')
     const clearButton = product.querySelector('.product_search__input--clear')
+    const acceptButton = product.querySelector('button[name=new_product__insert]')
 
     let lastSearchTerm
+    const selected = {
+      target: null,
+      data: null
+    }
+
+    function clearSelect (prev) {
+      if (prev) prev.classList.remove('user_focus')
+      selected.target = null
+      selected.data = null
+    }
+
+    function select (e, item) {
+      const thisItem = e.target.closest('.result_product')
+      function newTarget (prev) {
+        if (prev) pre.classList.remove('user_focus')
+        thisItem.classList.add('user_focus')
+        selected.target = thisItem
+        selected.data = item
+      }
+      if (selected.target && selected.target.classList) {
+        if (selected.target === thisItem) {
+          clearSelect (thisItem.classList.remove('user_focus'))
+        } else newTarget (selected.target.classList.remove('user_focus'))
+      } else newTarget ()
+    }
 
     function renderSearchResults (res, value) {
       if (res.length) {
         const previousResults = resultsContainer.querySelectorAll('.result_product')
         previousResults.forEach((each, idx) => {
-          each.removeEventListener('click', () => newProduct(res[idx]))
+          each.removeEventListener('click', e => select(e, res[idx]))
           each.remove()
         })
         resultsContainer.innerHTML = ``
@@ -689,7 +715,7 @@ function initialiseItemMenuInterface () {
         })
         const allResults = resultsContainer.querySelectorAll('.result_product')
         allResults.forEach((each, idx) => {
-          each.addEventListener('click', () => newProduct(res[idx]))
+          each.addEventListener('click', e => select(e, res[idx]))
         })
       } else resultsContainer.innerHTML = `
           <div class="result_none">
@@ -699,6 +725,7 @@ function initialiseItemMenuInterface () {
     }
 
     function clearResults () {
+      clearSelect (selected.target ? selected.target : null)
       searchBar.value = ''
       resultsContainer.innerHTML = ''
       searchBar.focus()
@@ -713,9 +740,17 @@ function initialiseItemMenuInterface () {
       performLibSeach ('product', value, renderSearchResults)
     }
 
+    function accept () {
+      if (selected.data) {
+        newProduct(selected.data)
+      }
+    }
+
+    acceptButton.onclick = accept
     clearButton.onclick = clearResults
     searchBar.addEventListener('keyup', productSearch)
   }
+
   function initMaterial (material) {
     const createResultItem = ({ title, design, img }) => `
       <div class="result_product">
