@@ -741,9 +741,7 @@ function initialiseItemMenuInterface () {
     }
 
     function accept () {
-      if (selected.data) {
-        newProduct(selected.data)
-      }
+      if (selected.data) newProduct (selected.data)
     }
 
     acceptButton.onclick = accept
@@ -767,14 +765,40 @@ function initialiseItemMenuInterface () {
     const searchBar = material.querySelector('.product_search__input--bar')
     const resultsContainer = material.querySelector('.product_search__results ul')
     const clearButton = material.querySelector('.product_search__input--clear')
+    const acceptButton = material.querySelector('button[name=new_material__insert]')
 
     let lastSearchTerm
+    const selected = {
+      target: null,
+      data: null
+    }
+
+    function clearSelect (prev) {
+      if (prev) prev.classList.remove('user_focus')
+      selected.target = null
+      selected.data = null
+    }
+
+    function select (e, item) {
+      const thisItem = e.target.closest('.result_product')
+      function newTarget (prev) {
+        if (prev) pre.classList.remove('user_focus')
+        thisItem.classList.add('user_focus')
+        selected.target = thisItem
+        selected.data = item
+      }
+      if (selected.target && selected.target.classList) {
+        if (selected.target === thisItem) {
+          clearSelect (thisItem.classList.remove('user_focus'))
+        } else newTarget (selected.target.classList.remove('user_focus'))
+      } else newTarget ()
+    }
 
     function renderSearchResults (res, value) {
       if (res.length) {
         const previousResults = resultsContainer.querySelectorAll('.result_product')
         previousResults.forEach((each, idx) => {
-          each.removeEventListener('click', () => newMaterial(res[idx]))
+          each.removeEventListener('click', e => select(e, res[idx]))
           each.remove()
         })
         resultsContainer.innerHTML = ``
@@ -783,7 +807,7 @@ function initialiseItemMenuInterface () {
         })
         const allResults = resultsContainer.querySelectorAll('.result_product')
         allResults.forEach((each, idx) => {
-          each.addEventListener('click', () => newMaterial(res[idx]))
+          each.addEventListener('click', e => select(e, res[idx]))
         })
       } else resultsContainer.innerHTML = `
           <div class="result_none">
@@ -793,6 +817,7 @@ function initialiseItemMenuInterface () {
     }
 
     function clearResults () {
+      clearSelect (selected.target ? selected.target : null)
       searchBar.value = ''
       resultsContainer.innerHTML = ''
       searchBar.focus()
@@ -807,6 +832,11 @@ function initialiseItemMenuInterface () {
       performLibSeach ('material', value, renderSearchResults)
     }
 
+    function accept () {
+      if (selected.data) newMaterial (selected.data)
+    }
+
+    acceptButton.onclick = accept
     clearButton.onclick = clearResults
     searchBar.addEventListener('keyup', productSearch)
   }
@@ -1370,7 +1400,7 @@ function newProduct (product) {
           </div>
         </div>
       `)
-      const createdProductWidget = grid.addWidget(newProductWidget, null, null, 2, 9, true)
+      const createdProductWidget = grid.addWidget(newProductWidget, null, null, 2, 7, true)
       createdProductWidget.click(function (event) {
         if (lastClick.widget.length && !event.shiftKey) {
           lastClick.widget.forEach(each => each.classList.remove('user_focus'))
@@ -1397,7 +1427,7 @@ function newMaterial (product) {
           </div>
         </div>
       `)
-      const createdMaterialWidget = grid.addWidget(newMaterialWidget, null, null, 2, 9, true)
+      const createdMaterialWidget = grid.addWidget(newMaterialWidget, null, null, 2, 7, true)
       createdMaterialWidget.click(function (event) {
         if (lastClick.widget.length && !event.shiftKey) {
           lastClick.widget.forEach(each => each.classList.remove('user_focus'))
