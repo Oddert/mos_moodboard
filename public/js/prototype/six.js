@@ -245,7 +245,7 @@ function createGridContent (pages, data) {
         }
       }, this)
       // old lastClick detector:
-      elem.on('click', e => openNewItemMenu(e, elem, grid))
+      // elem.on('click', e => openNewItemMenu(e, elem, grid))
     })
 }
 
@@ -879,7 +879,16 @@ function getContent (eachItem) {
 
 // ========== Content Functions ==========
 
+function deselectOnGrid (event) {
+  if (!!event.target.closest('.grid-stack-item')) return
+  else {
+    if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
+    lastClick.widget = null
+  }
+}
+
 function openNewItemMenu (event, elem, grid) {
+
   // NOTE: Revamp this asap.
   //  -Target widgets and grids => use as "select" implamentation
   // const { clientX, clientY, offsetX, offsetY, target } = event
@@ -887,9 +896,11 @@ function openNewItemMenu (event, elem, grid) {
   // const newItemMenu = $('.new_item_menu--container')
 
   // if (event.target.classList.contains('grid-stack') && newItemMenu.data('mosEdit') !== 'active') {
+
   if (event.target.classList.contains('grid-stack')) {
     if (lastClick.widget) lastClick.widget.classList.remove('user_focus')
     lastClick.widget = null
+
     // const absoluteTop = offsetY + rect.top + window.scrollY
     // const absoluteLeft = offsetX + rect.left + window.scrollX
     // newItemMenu.css({
@@ -910,6 +921,7 @@ function openNewItemMenu (event, elem, grid) {
   //     left: '20px'
   //   })
   // }
+
 }
 
 function toggleTitleEdit () {
@@ -1340,6 +1352,7 @@ window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
 window.addEventListener('keydown', handleGlobalKeyPress)
+document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 
 // ========== / Event Binding ==========
 
