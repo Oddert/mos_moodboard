@@ -776,19 +776,6 @@ $page_width: 75vw;
     }
   }
 
-.product_search {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  background: #fff;
-  border-radius: 15px;
-  padding: 10px 0;
-  box-shadow: 10px 10px 30px rgba(0,0,0,.1);
-  // display: none;
-  display: flex;
-  flex-direction: column;
-  width: 50vw;
-}
 
 .material_search {
   position: absolute;
@@ -910,19 +897,6 @@ $page_width: 75vw;
   }
 }
 
-.image_interface {
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  background: #fff;
-  padding: 10px 20px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 10px 10px 30px rgba(0,0,0,.1);
-  display: none;
-}
 .image_interface--wrapper {
   width: 100%;
   display: flex;

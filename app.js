@@ -82,9 +82,19 @@ const server = app.listen(
 //    -Text Edit ✓
 //    -Colour Picker ✓
 //    -Image Uploader ✓
-//    -Product / Material Browser
-//    -File Upload
+//    -Product / Material Browser ✓
+//    -File Upload ✓
 // -Implament Page Add ✓
-// -Implament Page Delete (1/2)
+// -Implament Page Delete (1/2) ✓
 // -Implament auto-save and actual save
 // -Implament undo, redo
+//  -Item edit via selector:
+//    -Image
+//    -Product
+//    -Material
+//    -Colour
+//  -Design slide side-bar
+//    -Render hooks
+//    -Find a way to do thumbnail
+//    -Page order modification
+//  -How to do page sizing without vh / vh units ?????
