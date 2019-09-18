@@ -170,6 +170,21 @@ function save () {
 
 // ========== Top Level Functions ==========
 
+const sanitiseSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
+
+function performLibSeach (extention, value, cb) {
+  const url = `/api/${extention}/${value}`
+  const opts = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }
+  fetch(url, opts)
+    .then(res => res.json())
+    .then(res => {
+      cb (res, value)
+    })
+}
+
 function render (data) {
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
@@ -459,105 +474,13 @@ function initialAjax () {
 // REMOVED initColourPicker
 
 //
-// function performLibSeach (extention, value, cb) {
-//   const url = `/api/${extention}/${value}`
-//   const opts = {
-//     method: 'GET',
-//     headers: { 'Content-Type': 'application/json' }
-//   }
-//   fetch(url, opts)
-//     .then(res => res.json())
-//     .then(res => {
-//       cb (res, value)
-//     })
-// }
-//
-// const filterSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
-//
 // // NOTE: For the sake of future itirations, material and product search, while using virtually
 // //      the same code, are seperate functions and elements. They share a couple of functions but
 // //      that's all for now.
-// function initProductSearch () {
-//   const productSearchContainer = document.querySelector('.product_search')
-//
-//   const createResultItem = ({ title, design, price, img }) => `
-//     <div class="result_product">
-//       <div class="result_product__img">
-//         <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
-//       </div>
-//       <div class="result_product__text">
-//         <p class="result_product__text--title">${title}</p>
-//         <p class="result_product__text--design">${design}</p>
-//         <p class="result_product__text--price">${price}</p>
-//       </div>
-//     </div>
-//   `
-//
-//   const productBar = productSearchContainer.querySelector('.product_search__input--bar')
-//   const resultsContainer = productSearchContainer.querySelector('.product_search__results ul')
-//   const clearButton = productSearchContainer.querySelector('.product_search__input--clear')
-//
-//   let lastSearchTerm
-//
-//   function addProductWidget (event, each) {
-//     const width = 1, height = 2
-//     const { grid, gridElem, x, y } = lastClick
-//     const gridPos = grid.getCellFromPixel({ top: y, left: x }, true)
-//     const newWidget = $(`
-//       <div>
-//         <div
-//           class="grid-stack-item-content"
-//           data-mos-page="${gridElem.data('mosPageIdx')}"
-//           data-mos-item="${gridElem.children().length + 1}"
-//         >
-//           ${createProduct(each)}
-//         </div>
-//       </div>
-//     `)
-//
-//     const createdWidget = grid.addWidget(newWidget, gridPos.x - 1, gridPos.y - 4, 3, 9)
-//     createdWidget.find('.content__controls--delete').click(function () {
-//       grid.removeWidget(this.closest('.grid-stack-item'))
-//     })
-//     hideProductSearch()
-//   }
-//
-//   function renderSearchResults (res, value) {
-//     if (res.length) {
-//       resultsContainer.innerHTML = ``
-//       res.forEach(each => {
-//         if (each) resultsContainer.innerHTML += createResultItem(each)
-//       })
-//       const allResults = resultsContainer.querySelectorAll('.result_product')
-//       allResults.forEach((each, idx) => {
-//         each.addEventListener('click', e => addProductWidget(e, res[idx]))
-//       })
-//     } else resultsContainer.innerHTML = `
-//         <div class="result_none">
-//           <p>Sorry, no results for '${value}'</p>
-//         </div>
-//       `
-//   }
-//
-//   function clearResults () {
-//     productBar.value = ''
-//     resultsContainer.innerHTML = ''
-//     productBar.focus()
-//   }
-//
-//   function productSearch (e) {
-//     const value = filterSearchValue(e.target.value)
-//     if (value === lastSearchTerm) return
-//     if (!/\w/gi.test(value)) return clearResults()
-//     if (value.length < 3) return
-//     lastSearchTerm = value
-//     performLibSeach ('product', value, renderSearchResults)
-//   }
-//
-//   clearButton.onclick = clearResults
-//   productBar.addEventListener('keyup', productSearch)
-//   $(productSearchContainer).draggable()
-// }
+function initProductSearch () {
+  // REMOVED
+  // $(productSearchContainer).draggable()
+}
 // function initMaterialSearch () {
 //   const materialSearchContainer = document.querySelector('.material_search')
 //
@@ -629,7 +552,7 @@ function initialAjax () {
 //   const filter = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
 //
 //   function materialSearch (e) {
-//     const value = filterSearchValue(e.target.value)
+//     const value = sanitiseSearchValue(e.target.value)
 //     if (value === lastSearchTerm) return
 //     if (!/\w/gi.test(value)) return clearResults()
 //     if (value.length < 3) return
@@ -682,6 +605,8 @@ function initialiseItemMenuInterface () {
   const interfaces = document.querySelectorAll('.item_menu__interface__variant')
   const text = document.querySelector('.item_menu__interface__variant.text')
   const image = document.querySelector('.item_menu__interface__variant.image')
+  const product = document.querySelector('.item_menu__interface__variant.product')
+  const material = document.querySelector('.item_menu__interface__variant.material')
   const colour = document.querySelector('.item_menu__interface__variant.colour')
 
   function initText (text) {
@@ -731,9 +656,131 @@ function initialiseItemMenuInterface () {
     add.onclick = () => newColour (colourPicker)
   }
 
+  function initProduct (product) {
+    const createResultItem = ({ title, design, price, img }) => `
+      <div class="result_product">
+        <div class="result_product__img">
+          <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+        </div>
+        <div class="result_product__text">
+          <p class="result_product__text--title">${title}</p>
+          <p class="result_product__text--design">${design}</p>
+          <p class="result_product__text--price">${price}</p>
+        </div>
+      </div>
+    `
+
+    const searchBar = product.querySelector('.product_search__input--bar')
+    const resultsContainer = product.querySelector('.product_search__results ul')
+    const clearButton = product.querySelector('.product_search__input--clear')
+
+    let lastSearchTerm
+
+    function renderSearchResults (res, value) {
+      if (res.length) {
+        const previousResults = resultsContainer.querySelectorAll('.result_product')
+        previousResults.forEach((each, idx) => {
+          each.removeEventListener('click', () => newProduct(res[idx]))
+          each.remove()
+        })
+        resultsContainer.innerHTML = ``
+        res.forEach(each => {
+          if (each) resultsContainer.innerHTML += createResultItem(each)
+        })
+        const allResults = resultsContainer.querySelectorAll('.result_product')
+        allResults.forEach((each, idx) => {
+          each.addEventListener('click', () => newProduct(res[idx]))
+        })
+      } else resultsContainer.innerHTML = `
+          <div class="result_none">
+            <p>Sorry, no results for '${value}'</p>
+          </div>
+        `
+    }
+
+    function clearResults () {
+      searchBar.value = ''
+      resultsContainer.innerHTML = ''
+      searchBar.focus()
+    }
+
+    function productSearch (e) {
+      const value = sanitiseSearchValue(e.target.value)
+      if (value === lastSearchTerm) return
+      if (!/\w/gi.test(value)) return clearResults()
+      if (value.length < 3) return
+      lastSearchTerm = value
+      performLibSeach ('product', value, renderSearchResults)
+    }
+
+    clearButton.onclick = clearResults
+    searchBar.addEventListener('keyup', productSearch)
+  }
+  function initMaterial (material) {
+    const createResultItem = ({ title, design, img }) => `
+      <div class="result_product">
+        <div class="result_product__img">
+          <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
+        </div>
+        <div class="result_product__text">
+          <p class="result_product__text--title">${title}</p>
+          <p class="result_product__text--design">${design}</p>
+        </div>
+      </div>
+    `
+
+    const searchBar = material.querySelector('.product_search__input--bar')
+    const resultsContainer = material.querySelector('.product_search__results ul')
+    const clearButton = material.querySelector('.product_search__input--clear')
+
+    let lastSearchTerm
+
+    function renderSearchResults (res, value) {
+      if (res.length) {
+        const previousResults = resultsContainer.querySelectorAll('.result_product')
+        previousResults.forEach((each, idx) => {
+          each.removeEventListener('click', () => newMaterial(res[idx]))
+          each.remove()
+        })
+        resultsContainer.innerHTML = ``
+        res.forEach(each => {
+          if (each) resultsContainer.innerHTML += createResultItem(each)
+        })
+        const allResults = resultsContainer.querySelectorAll('.result_product')
+        allResults.forEach((each, idx) => {
+          each.addEventListener('click', () => newMaterial(res[idx]))
+        })
+      } else resultsContainer.innerHTML = `
+          <div class="result_none">
+            <p>Sorry, no results for '${value}'</p>
+          </div>
+        `
+    }
+
+    function clearResults () {
+      searchBar.value = ''
+      resultsContainer.innerHTML = ''
+      searchBar.focus()
+    }
+
+    function productSearch (e) {
+      const value = sanitiseSearchValue(e.target.value)
+      if (value === lastSearchTerm) return
+      if (!/\w/gi.test(value)) return clearResults()
+      if (value.length < 3) return
+      lastSearchTerm = value
+      performLibSeach ('material', value, renderSearchResults)
+    }
+
+    clearButton.onclick = clearResults
+    searchBar.addEventListener('keyup', productSearch)
+  }
+
   initText(text)
   initImage(image)
   initColour(colour)
+  initProduct(product)
+  initMaterial(material)
 }
 
 function initDragDrop () {
@@ -1274,6 +1321,33 @@ function newColour (picker) {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     // createdColourWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+  }
+}
+
+function newProduct (product) {
+  if (focusedPage.grid) {
+    const { grid, gridElem, idx } = focusedPage
+    const entityCount = $(gridElem).children().length
+    const newProductWidget = $(`
+        <div>
+          <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+            ${createProduct(product)}
+          </div>
+        </div>
+      `)
+      const createdProductWidget = grid.addWidget(newProductWidget, null, null, 2, 9, true)
+      createdProductWidget.click(function (event) {
+        if (lastClick.widget.length && !event.shiftKey) {
+          lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        }
+        lastClick.widget.push(this)
+        lastClick.grid = grid
+        lastClick.gridElem = gridElem
+        this.classList.add('user_focus')
+      })
+      createdProductWidget.find('.content__controls--delete').click(function () {
+        grid.removeWidget(this.closest('.grid-stack-item'))
+      })
   }
 }
 
