@@ -11,6 +11,8 @@ const defaultImg = {
 
 let userRender, colourPicker;
 
+let oddert
+
 const lastClick = {
   grid: null,
   x: null,
@@ -456,25 +458,71 @@ function initialiseItemMenuControl () {
   }
 }
 
-function initialiseItemMenuInterface () {
-  const interfaces  = document.querySelectorAll('.item_menu__interface__variant')
-  const text        = document.querySelector('.item_menu__interface__variant.text')
-  const image       = document.querySelector('.item_menu__interface__variant.image')
-  const product     = document.querySelector('.item_menu__interface__variant.product')
-  const material    = document.querySelector('.item_menu__interface__variant.material')
-  const colour      = document.querySelector('.item_menu__interface__variant.colour')
+function handleEditMenuChange (type, close = false) {
+  const controlButtons  = document.querySelectorAll('.item_menu__control .new_item_menu__item button')
+  const inputInterfaces = document.querySelectorAll('.item_menu__interface__variant')
+  const editInterfaces  = document.querySelectorAll('.item_edit__interface__variant')
+  const types = ["text", "image", "product", "material", "colour", "file"]
 
-  function initText (text) {
-    const add         = text.querySelector('.new_text__insert button[name=new_text__insert]')
-    const sizeButtons = text.querySelectorAll('.new_text__size button')
-    const textBox     = text.querySelector('textarea')
+  if (close) {
+    const menuState = JSON.parse(localStorage.getItem('mos-menu-state'))
+    if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
+      controlButtons.forEach(each => {
+        if (each.dataset.mosType === menuState.lastActive) each.classList.add('active')
+      })
+      inputInterfaces.forEach(each => {
+        if (each.dataset.mosType === menuState.lastActive) each.classList.add('active')
+      })
+    } else {
+      controlButtons[0].classList.add('active')
+      inputInterfaces[0].classList.add('active')
+    }
+  } else {
+    controlButtons.forEach(each => each.classList.remove('active'))
+    inputInterfaces.forEach(each => {
+      if (each.classList.contains('active')) localStorage.setItem('mos-menu-state', JSON.stringify({ lastActive: each.dataset.mosType }))
+      each.classList.remove('active')
+    })
+    editInterfaces.forEach(each => {
+      if (each.dataset.mosType === type) each.classList.add('active')
+      else each.classList.remove('active')
+    })
+  }
+}
+
+oddert = handleEditMenuChange
+
+function initialiseEditMenu () {
+  const closeButtons = document.querySelectorAll ('.edit_close')
+  closeButtons.forEach(each => each.querySelector('button').onclick = () => {})
+}
+
+function initialiseItemMenuInterface () {
+  const inputInterfaces = document.querySelectorAll('.item_menu__interface__variant')
+  const newText         = document.querySelector('.item_menu__interface__variant.text')
+  const newImage        = document.querySelector('.item_menu__interface__variant.image')
+  const newProduct      = document.querySelector('.item_menu__interface__variant.product')
+  const newMaterial     = document.querySelector('.item_menu__interface__variant.material')
+  const newColour       = document.querySelector('.item_menu__interface__variant.colour')
+
+  const editInterfaces = document.querySelectorAll('.item_edit__interface__variant')
+  const editText         = document.querySelector('.item_menu__interface__variant.text')
+  // const newImage        = document.querySelector('.item_menu__interface__variant.image')
+  // const newProduct      = document.querySelector('.item_menu__interface__variant.product')
+  // const newMaterial     = document.querySelector('.item_menu__interface__variant.material')
+  // const newColour       = document.querySelector('.item_menu__interface__variant.colour')
+
+  function initNewText (newText) {
+    const add         = newText.querySelector('.new_text__insert button[name=new_text__insert]')
+    const sizeButtons = newText.querySelectorAll('.new_text__size button')
+    const textBox     = newText.querySelector('textarea')
     let value = ''
     let size = 'medium'
     function changeSize (e) {
       const { name } = e.target
       if (name === size) return
       else {
-        text.querySelector(`button[name=${size}]`).classList.remove('active')
+        newText.querySelector(`button[name=${size}]`).classList.remove('active')
         this.classList.add('active')
         size = name
       }
@@ -482,16 +530,16 @@ function initialiseItemMenuInterface () {
     sizeButtons.forEach(each => each.onclick = changeSize)
     textBox.onchange = e => value = e.target.value
     add.onclick = () => {
-      newTextBox (value, size)
+      createTextWidget (value, size)
       textBox.value = ''
       value = ''
     }
   }
 
-  function initImage (image) {
-    const urlInput = image.querySelector('input[type=url]')
-    const preview = image.querySelector('.image_interface__preview img')
-    const add = image.querySelector('.new_image__insert button')
+  function initNewImage (newImage) {
+    const urlInput = newImage.querySelector('input[type=url]')
+    const preview = newImage.querySelector('.image_interface__preview img')
+    const add = newImage.querySelector('.new_image__insert button')
     function handleInput (e) {
       // WARNING: Need some sort of broken link detector, copy from Oddert/odd-blog blog engine later
       preview.src = e.target.value
@@ -499,12 +547,12 @@ function initialiseItemMenuInterface () {
     urlInput.onmousedown = handleInput
     urlInput.onpaste = handleInput
     urlInput.oninput = handleInput
-    add.onclick = e => newImage(urlInput.value, '')
+    add.onclick = e => createImageWidget(urlInput.value, '')
   }
 
-  function initColour (colour) {
-    const add = colour.querySelector('.new_colour__insert button')
-    const preview = colour.querySelector('.colour_picker__preview--wrapper')
+  function initNewColour (newColour) {
+    const add = newColour.querySelector('.new_colour__insert button')
+    const preview = newColour.querySelector('.colour_picker__preview--wrapper')
     const previewInput = preview.querySelector('.colour_picker__preview__input')
     const opts = {
       width: 175,
@@ -527,10 +575,10 @@ function initialiseItemMenuInterface () {
     colourPicker = new iro.ColorPicker('.colour_picker__iro', opts)
     colourPicker.on('color:change', handleColourChange)
     previewInput.onchange = handleColourInput
-    add.onclick = () => newColour (colourPicker)
+    add.onclick = () => createColourWidget (colourPicker)
   }
 
-  function initProduct (product) {
+  function initNewProduct (newProduct) {
     const createResultItem = ({ title, design, price, img }) => `
       <div class="result_product">
         <div class="result_product__img">
@@ -544,10 +592,10 @@ function initialiseItemMenuInterface () {
       </div>
     `
 
-    const searchBar = product.querySelector('.product_search__input--bar')
-    const resultsContainer = product.querySelector('.product_search__results ul')
-    const clearButton = product.querySelector('.product_search__input--clear')
-    const acceptButton = product.querySelector('button[name=new_product__insert]')
+    const searchBar = newProduct.querySelector('.product_search__input--bar')
+    const resultsContainer = newProduct.querySelector('.product_search__results ul')
+    const clearButton = newProduct.querySelector('.product_search__input--clear')
+    const acceptButton = newProduct.querySelector('button[name=new_product__insert]')
 
     let lastSearchTerm
     const selected = {
@@ -615,7 +663,7 @@ function initialiseItemMenuInterface () {
     }
 
     function accept () {
-      if (selected.data) newProduct (selected.data)
+      if (selected.data) createProductWidget (selected.data)
     }
 
     acceptButton.onclick = accept
@@ -623,7 +671,7 @@ function initialiseItemMenuInterface () {
     searchBar.addEventListener('keyup', productSearch)
   }
 
-  function initMaterial (material) {
+  function initNewMaterial (newMaterial) {
     const createResultItem = ({ title, design, img }) => `
       <div class="result_product">
         <div class="result_product__img">
@@ -636,10 +684,10 @@ function initialiseItemMenuInterface () {
       </div>
     `
 
-    const searchBar = material.querySelector('.product_search__input--bar')
-    const resultsContainer = material.querySelector('.product_search__results ul')
-    const clearButton = material.querySelector('.product_search__input--clear')
-    const acceptButton = material.querySelector('button[name=new_material__insert]')
+    const searchBar = newMaterial.querySelector('.product_search__input--bar')
+    const resultsContainer = newMaterial.querySelector('.product_search__results ul')
+    const clearButton = newMaterial.querySelector('.product_search__input--clear')
+    const acceptButton = newMaterial.querySelector('button[name=new_material__insert]')
 
     let lastSearchTerm
     const selected = {
@@ -707,7 +755,7 @@ function initialiseItemMenuInterface () {
     }
 
     function accept () {
-      if (selected.data) newMaterial (selected.data)
+      if (selected.data) createMaterialWidget (selected.data)
     }
 
     acceptButton.onclick = accept
@@ -715,11 +763,17 @@ function initialiseItemMenuInterface () {
     searchBar.addEventListener('keyup', productSearch)
   }
 
-  initText(text)
-  initImage(image)
-  initColour(colour)
-  initProduct(product)
-  initMaterial(material)
+  // ===========================================
+
+  function initEditText (editText) {
+
+  }
+
+  initNewText(newText)
+  initNewImage(newImage)
+  initNewColour(newColour)
+  initNewProduct(newProduct)
+  initNewMaterial(newMaterial)
 }
 
 function initDragDrop () {
@@ -1086,8 +1140,7 @@ function toggleColourEdit (event) {
 
 // ========== Interface Functions ==========
 
-function newTextBox (value, size) {
-  console.log(value)
+function createTextWidget (value, size) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
@@ -1115,7 +1168,7 @@ function newTextBox (value, size) {
   }
 }
 
-function newImage (src, alt) {
+function createImageWidget (src, alt) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
@@ -1143,7 +1196,7 @@ function newImage (src, alt) {
   }
 }
 
-function newColour (picker) {
+function createColourWidget (picker) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
@@ -1171,7 +1224,7 @@ function newColour (picker) {
   }
 }
 
-function newProduct (product) {
+function createProductWidget (product) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
@@ -1198,14 +1251,14 @@ function newProduct (product) {
   }
 }
 
-function newMaterial (product) {
+function createMaterialWidget (product) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
     const newMaterialWidget = $(`
         <div>
           <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
-            ${createProduct(product)}
+            ${createMaterial(product)}
           </div>
         </div>
       `)
