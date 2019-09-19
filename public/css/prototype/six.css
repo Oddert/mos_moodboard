@@ -281,9 +281,19 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--large {
   font-size: 16px;
 }
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button:hover {
+  background-color: #ecf0f1;
+}
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.active {
   background-color: #000;
   color: #fff;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value {
+  display: flex;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value textarea {
+  text-align: center;
+  width: 100%;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert {
   flex: 1;

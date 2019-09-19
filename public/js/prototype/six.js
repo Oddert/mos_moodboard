@@ -457,16 +457,17 @@ function initialiseItemMenuControl () {
 }
 
 function initialiseItemMenuInterface () {
-  const interfaces = document.querySelectorAll('.item_menu__interface__variant')
-  const text = document.querySelector('.item_menu__interface__variant.text')
-  const image = document.querySelector('.item_menu__interface__variant.image')
-  const product = document.querySelector('.item_menu__interface__variant.product')
-  const material = document.querySelector('.item_menu__interface__variant.material')
-  const colour = document.querySelector('.item_menu__interface__variant.colour')
+  const interfaces  = document.querySelectorAll('.item_menu__interface__variant')
+  const text        = document.querySelector('.item_menu__interface__variant.text')
+  const image       = document.querySelector('.item_menu__interface__variant.image')
+  const product     = document.querySelector('.item_menu__interface__variant.product')
+  const material    = document.querySelector('.item_menu__interface__variant.material')
+  const colour      = document.querySelector('.item_menu__interface__variant.colour')
 
   function initText (text) {
-    const add = text.querySelector('.new_text__insert button[name=new_text__insert]')
+    const add         = text.querySelector('.new_text__insert button[name=new_text__insert]')
     const sizeButtons = text.querySelectorAll('.new_text__size button')
+    const textBox     = text.querySelector('textarea')
     let value = ''
     let size = 'medium'
     function changeSize (e) {
@@ -479,7 +480,12 @@ function initialiseItemMenuInterface () {
       }
     }
     sizeButtons.forEach(each => each.onclick = changeSize)
-    add.onclick = () => newTextBox (value, size)
+    textBox.onchange = e => value = e.target.value
+    add.onclick = () => {
+      newTextBox (value, size)
+      textBox.value = ''
+      value = ''
+    }
   }
 
   function initImage (image) {
@@ -1081,6 +1087,7 @@ function toggleColourEdit (event) {
 // ========== Interface Functions ==========
 
 function newTextBox (value, size) {
+  console.log(value)
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length

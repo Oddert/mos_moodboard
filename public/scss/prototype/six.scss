@@ -332,11 +332,22 @@ $page_width: 75vw;
                       font-size: $large_font;
                     }
                   }
+                  &:hover {
+                    background-color: #ecf0f1;
+                  }
                   &.active {
                     background-color: #000;
                     color: #fff;
                   }
                 }
+              }
+            }
+            .new_text__value {
+              display: flex;
+
+              textarea {
+                text-align: center;
+                width: 100%;
               }
             }
           }
