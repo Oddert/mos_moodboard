@@ -465,8 +465,21 @@ function initialiseItemMenuInterface () {
   const colour = document.querySelector('.item_menu__interface__variant.colour')
 
   function initText (text) {
-    const add = text.querySelector('.new_text__insert button')
-    add.onclick = newTextBox
+    const add = text.querySelector('.new_text__insert button[name=new_text__insert]')
+    const sizeButtons = text.querySelectorAll('.new_text__size button')
+    let value = ''
+    let size = 'medium'
+    function changeSize (e) {
+      const { name } = e.target
+      if (name === size) return
+      else {
+        text.querySelector(`button[name=${size}]`).classList.remove('active')
+        this.classList.add('active')
+        size = name
+      }
+    }
+    sizeButtons.forEach(each => each.onclick = changeSize)
+    add.onclick = () => newTextBox (value, size)
   }
 
   function initImage (image) {
@@ -749,13 +762,13 @@ initDragDrop()
 
 // ========== Content Creators ==========
 
-const createText = ({ text }) => `
+const createText = ({ text, size }) => `
   <div class="content text" data-mos-contenttype="text">
     <div class="content__controls">
       <button class="content__controls--text_edit">✎</button>
       <button class="content__controls--delete">✖</button>
     </div>
-    <p class="content_text__text">${text}</p>
+    <p class="content_text__text ${size ? size : 'medium'}">${text}</p>
   </div>
 `
 
@@ -1067,14 +1080,14 @@ function toggleColourEdit (event) {
 
 // ========== Interface Functions ==========
 
-function newTextBox () {
+function newTextBox (value, size) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
     const newTextWidget = $(`
       <div>
         <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
-          ${createText({ text: 'New Text Box' })}
+          ${createText({ text: /\w/gi.test(value) ? value : 'New Text Box', size })}
         </div>
       </div>
     `)

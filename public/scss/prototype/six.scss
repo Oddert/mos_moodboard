@@ -14,8 +14,8 @@ body, html, h1, p {
 $caption_text_size: 9px;
 
 $small_font: 8px;
-$medium_font: 11px;
-$large_font: 15px;
+$medium_font: 12px;
+$large_font: 16px;
 
 button {
   background: #000;
@@ -313,18 +313,28 @@ $page_width: 75vw;
               display: flex;
               align-items: flex-end;
               justify-content: center;
-              margin: 10px 0;
+              margin: 20px 0;
               li {
                 margin: 0 10px;
-                button.new_text__size {
-                  &--small {
-                    font-size: $small_font;
+                button {
+                  color: #000;
+                  background: #fff;
+                  border: 3px solid #000;
+                  font-weight: 800;
+                  &.new_text__size {
+                    &--small {
+                      font-size: $small_font;
+                    }
+                    &--medium {
+                      font-size: $medium_font;
+                    }
+                    &--large {
+                      font-size: $large_font;
+                    }
                   }
-                  &--medium {
-                    font-size: $medium_font;
-                  }
-                  &--large {
-                    font-size: $large_font;
+                  &.active {
+                    background-color: #000;
+                    color: #fff;
                   }
                 }
               }
@@ -564,6 +574,12 @@ $page_width: 75vw;
           justify-content: center;
           text-align: center;
           vertical-align: middle;
+        }
+        .content_text__text {
+          font-size: $medium_font;
+          &.small { font-size: $small_font; }
+          &.medium { font-size: $medium_font; }
+          &.large { font-size: $large_font; }
         }
       }
       &.image {

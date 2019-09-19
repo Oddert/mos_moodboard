@@ -261,19 +261,29 @@ button[name=dev] {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  margin: 10px 0;
+  margin: 20px 0;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li {
   margin: 0 10px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button {
+  color: #000;
+  background: #fff;
+  border: 3px solid #000;
+  font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--small {
   font-size: 8px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--medium {
-  font-size: 11px;
+  font-size: 12px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--large {
-  font-size: 15px;
+  font-size: 16px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.active {
+  background-color: #000;
+  color: #fff;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert {
   flex: 1;
@@ -497,6 +507,18 @@ button[name=dev] {
   justify-content: center;
   text-align: center;
   vertical-align: middle;
+}
+.grid-stack-item .grid-stack-item-content .content.text .content_text__text {
+  font-size: 12px;
+}
+.grid-stack-item .grid-stack-item-content .content.text .content_text__text.small {
+  font-size: 8px;
+}
+.grid-stack-item .grid-stack-item-content .content.text .content_text__text.medium {
+  font-size: 12px;
+}
+.grid-stack-item .grid-stack-item-content .content.text .content_text__text.large {
+  font-size: 16px;
 }
 .grid-stack-item .grid-stack-item-content .content.image {
   display: flex;
