@@ -254,6 +254,27 @@ button[name=dev] {
   height: 100%;
   position: relative;
 }
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 10px 0;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li {
+  margin: 0 10px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--small {
+  font-size: 8px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--medium {
+  font-size: 11px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--large {
+  font-size: 15px;
+}
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert {
   flex: 1;
   height: 100%;

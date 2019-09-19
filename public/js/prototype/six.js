@@ -424,24 +424,36 @@ function initialisePageAdd () {
 function initialiseItemMenuControl () {
   const controlButtons = document.querySelectorAll('.item_menu__control .new_item_menu__item')
   const interfaces = document.querySelectorAll('.item_menu__interface__variant')
+  const types = ["text", "image", "product", "material", "colour", "file"]
+
   function swapActive (buttonContainers, type) {
-    buttonContainers.forEach(each => {
-      const button = each.querySelector('button')
-      if (each.dataset.mosType === type) {
-        button.classList.add('active')
-        newItemMenuState = type
-      } else button.classList.remove('active')
-    })
-    interfaces.forEach(each => {
-      if (each.dataset.mosType === type) each.classList.add('active')
-      else each.classList.remove('active')
-    })
+    if (types.includes(type)) {
+      buttonContainers.forEach(each => {
+        const button = each.querySelector('button')
+        if (each.dataset.mosType === type) {
+          button.classList.add('active')
+          newItemMenuState = type
+        } else button.classList.remove('active')
+      })
+      interfaces.forEach(each => {
+        if (each.dataset.mosType === type) each.classList.add('active')
+        else each.classList.remove('active')
+      })
+      localStorage.setItem('mos-menu-state', JSON.stringify({ lastActive: type }))
+    } else {
+      console.error(`Invalid type supplied to swapActive; cannot read type of: ${type}`)
+    }
   }
   controlButtons.forEach(each => {
     each.querySelector('button').onclick = function () {
       swapActive(controlButtons, this.closest('.new_item_menu__item').dataset.mosType)
     }
   })
+  const menuState = JSON.parse(localStorage.getItem('mos-menu-state'))
+  console.log(menuState)
+  if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
+    swapActive(controlButtons, menuState.lastActive)
+  }
 }
 
 function initialiseItemMenuInterface () {
@@ -1202,7 +1214,7 @@ function newMaterial (product) {
 window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
-window.addEventListener('keydown', handleGlobalKeyPress)
+document.querySelector('.pages').addEventListener('keydown', handleGlobalKeyPress)
 document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 
 // ========== / Event Binding ==========
