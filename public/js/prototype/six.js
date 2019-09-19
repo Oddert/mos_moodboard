@@ -388,8 +388,9 @@ function handleGlobalKeyPress (event) {
 }
 
 function openTextEditor (event) {
-  const text = this.querySelector('.content_text__text').textContent
-  const size = this.querySelector('.content_text__text').className.match(/small|medium|large/gi)
+  const displayText = this.querySelector('.content_text__text')
+  const text = displayText.textContent
+  const size = displayText.className.match(/small|medium|large/gi)
   editor.editing = true
   editor.target = this
   editor.type = 'text'
@@ -400,7 +401,15 @@ function openTextEditor (event) {
     if (each.name === size[0]) each.classList.add('active')
     else each.classList.remove('active')
   })
-  globalHandleEditMenuChange ('text', false, editor.data)
+  document.querySelector('.edit_text button[name=edit_text__save]').onclick = () => {
+    displayText.classList.remove('small', 'medium', 'large')
+    displayText.classList.add(editor.data.size)
+    displayText.textContent = editor.data.text
+  }
+  document.querySelector('.edit_text button[name=edit_text__cancel]').onclick = () => {
+    globalHandleEditMenuChange ('text', true)
+  }
+  globalHandleEditMenuChange ('text', false)
 }
 
 // ========== / Top Level Functions ==========
@@ -497,10 +506,11 @@ function handleEditMenuChange (type, close = false) {
   const types = ["text", "image", "product", "material", "colour", "file"]
 
   if (close) {
+    editInterfaces.forEach(each => each.classList.remove('active'))
     const menuState = JSON.parse(localStorage.getItem('mos-menu-state'))
     if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
       controlButtons.forEach(each => {
-        if (each.dataset.mosType === menuState.lastActive) each.classList.add('active')
+        if (each.closest('.new_item_menu__item').dataset.mosType === menuState.lastActive) each.classList.add('active')
       })
       inputInterfaces.forEach(each => {
         if (each.dataset.mosType === menuState.lastActive) each.classList.add('active')
@@ -816,10 +826,10 @@ function initialiseItemMenuInterface () {
     sizeButtons.forEach(each => each.onclick = changeSize)
     textBox.onchange = e => editor.data.text = e.target.value
     save.onclick = () => {
-      console.warn('save goes here')
+      console.warn('save function not supplied')
     }
     cancel.onclick = () => {
-      console.warn('cancel action goes here')
+      console.warn('cancel action not supplied')
     }
   }
 
@@ -993,6 +1003,7 @@ function deselectOnGrid (event) {
   else {
     if (lastClick.widget.length) lastClick.widget.forEach(each => each.classList.remove('user_focus'))
     lastClick.widget = []
+    if (editor.unsavedChanges) globalHandleEditMenuChange (null, true)
   }
 }
 
