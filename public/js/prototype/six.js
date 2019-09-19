@@ -278,6 +278,7 @@ function createGridContent (pages, data) {
           // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
         }
         if (node._type === "image") {
+          createdWidget.dblclick(openImageEditor)
           // createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
       }, this)
@@ -409,7 +410,27 @@ function openTextEditor (event) {
   document.querySelector('.edit_text button[name=edit_text__cancel]').onclick = () => {
     globalHandleEditMenuChange ('text', true)
   }
-  globalHandleEditMenuChange ('text', false)
+}
+
+function openImageEditor (event) {
+  const img = event.target.closest('.grid-stack-item').querySelector('.content_image__img img')
+  const input = document.querySelector('.edit_image .image_url')
+  const preview = document.querySelector('.edit_image .image_interface__preview img')
+  const accept = document.querySelector('.edit_image button[name=edit_image__save]')
+  const cancel = document.querySelector('.edit_image button[name=edit_image__cancel]')
+  globalHandleEditMenuChange('image')
+  editor.editing = true
+  editor.target = this
+  editor.type = 'image'
+  editor.data.imageSrc = img.src
+  preview.src = img.src
+  input.value = img.src
+  accept.onclick = () => {
+    img.src = editor.data.imageSrc
+  }
+  cancel.onclick = () => {
+    globalHandleEditMenuChange ('image', true)
+  }
 }
 
 // ========== / Top Level Functions ==========
@@ -547,12 +568,12 @@ function initialiseItemMenuInterface () {
   const newMaterial     = document.querySelector('.item_menu__interface__variant.material')
   const newColour       = document.querySelector('.item_menu__interface__variant.colour')
 
-  const editInterfaces = document.querySelectorAll('.item_edit__interface__variant')
-  const editText         = document.querySelector('.item_edit__interface__variant.text')
-  // const newImage        = document.querySelector('.item_menu__interface__variant.image')
-  // const newProduct      = document.querySelector('.item_menu__interface__variant.product')
-  // const newMaterial     = document.querySelector('.item_menu__interface__variant.material')
-  // const newColour       = document.querySelector('.item_menu__interface__variant.colour')
+  const editInterfaces  = document.querySelectorAll('.item_edit__interface__variant')
+  const editText        = document.querySelector('.item_edit__interface__variant.text')
+  const editImage       = document.querySelector('.item_edit__interface__variant.image')
+  // const editProduct      = document.querySelector('.item_edit__interface__variant.product')
+  // const editMaterial     = document.querySelector('.item_edit__interface__variant.material')
+  // const editColour       = document.querySelector('.item_edit__interface__variant.colour')
 
   function initNewText (newText) {
     const add         = newText.querySelector('.new_text__insert button[name=new_text__insert]')
@@ -833,6 +854,26 @@ function initialiseItemMenuInterface () {
     }
   }
 
+  function initEditImage (editImage) {
+    const input   = editImage.querySelector('input[type=url]')
+    const preview = editImage.querySelector('.image_interface__preview img')
+    const save    = editImage.querySelector('.edit_image button[name=edit_image__save]')
+    const cancel  = editImage.querySelector('.edit_image button[name=edit_image__cancel]')
+    function handleChange (e) {
+      editor.data.imageSrc = e.target.value
+      preview.src = e.target.value
+    }
+    input.onchange = handleChange
+    input.onpaste = handleChange
+    input.onmousedown = handleChange
+    save.onclick = () => {
+      console.warn('save function not supplied')
+    }
+    cancel.onclick = () => {
+      console.warn('cancel function not supplied')
+    }
+  }
+
   initNewText(newText)
   initNewImage(newImage)
   initNewColour(newColour)
@@ -840,6 +881,7 @@ function initialiseItemMenuInterface () {
   initNewMaterial(newMaterial)
 
   initEditText(editText)
+  initEditImage(editImage)
 }
 
 function initDragDrop () {
@@ -1235,7 +1277,7 @@ function createImageWidget (src, alt) {
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
-
+    createdImageWidget.dblclick(openImageEditor)
     createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
