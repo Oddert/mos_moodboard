@@ -376,6 +376,91 @@ $page_width: 75vw;
           display: flex;
         }
       }
+      .item_edit__interface__variant {
+        position: relative;
+        flex: 1;
+        flex-direction: column;
+        height: 100%;
+        display: none;
+
+        .edit {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          &.edit_text {
+            ul.edit_text__size {
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+              display: flex;
+              align-items: flex-end;
+              justify-content: center;
+              margin: 20px 0;
+              li {
+                margin: 0 10px;
+                button {
+                  color: #000;
+                  background: #fff;
+                  border: 3px solid #000;
+                  font-weight: 800;
+                  &.edit_text__size {
+                    &--small {
+                      font-size: $small_font;
+                    }
+                    &--medium {
+                      font-size: $medium_font;
+                    }
+                    &--large {
+                      font-size: $large_font;
+                    }
+                  }
+                  &:hover {
+                    background-color: #ecf0f1;
+                  }
+                  &.active {
+                    background-color: #000;
+                    color: #fff;
+                  }
+                }
+              }
+            }
+            .edit_text__value {
+              display: flex;
+
+              textarea {
+                text-align: center;
+                width: 100%;
+              }
+            }
+          }
+          // &.new_product__insert, &.new_material__insert {
+          //   //  this time we're keeping the naming conventons the same
+          //   //  I mean a material is a ~kind~ of product
+          //   flex: 1;
+          //   height: 100%;
+          //   max-height: 100%;
+          //   min-height: 100%;
+          //   display: flex;
+          //   flex-direction: column;
+          //   position: relative;
+          //   .product_search__input {}
+          //   .product_search__results {
+          //     flex: 1;
+          //     overflow-y: auto;
+          //   }
+          //   button[name=new_product__insert] {}
+          //   button[name=new_material__insert] {}
+          // }
+        }
+
+
+
+
+
+        &.active {
+          display: flex;
+        }
+      }
     }
   }
 }

@@ -9,7 +9,7 @@ const defaultImg = {
   alt: 'Placeholder Image'
 }
 
-let userRender, colourPicker;
+let userRender, colourPicker, globalHandleEditMenuChange;
 
 let oddert
 
@@ -33,6 +33,19 @@ const lastClick = {
         //, x, y, width, height
       }
     ]
+  }
+}
+
+// 'mon now everyone,
+// lets all hold hands and summon the ghost of flux-like architecture
+// chant with me now..
+const editor = {
+  editing: false,
+  target: null,
+  type: null,
+  data: {
+    text: 'lets test come sudo flux architecture',
+    size: 'large'
   }
 }
 
@@ -259,6 +272,7 @@ function createGridContent (pages, data) {
         // createdWidget.data('mospage', `${pageIdx}`)
         if (node._type === "text") {
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+          createdWidget.dblclick(openTextEditor)
         }
         if (node._type === "colour") {
           // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
@@ -373,6 +387,22 @@ function handleGlobalKeyPress (event) {
   }
 }
 
+function openTextEditor (event) {
+  const text = this.querySelector('.content_text__text').textContent
+  const size = this.querySelector('.content_text__text').className.match(/small|medium|large/gi)
+  editor.editing = true
+  editor.target = this
+  editor.type = 'text'
+  editor.data.text = text
+  editor.data.size = size[0]
+  document.querySelector('.edit_text__value textarea').value = text
+  document.querySelectorAll('.edit_text__size button').forEach(each => {
+    if (each.name === size[0]) each.classList.add('active')
+    else each.classList.remove('active')
+  })
+  globalHandleEditMenuChange ('text', false, editor.data)
+}
+
 // ========== / Top Level Functions ==========
 
 
@@ -426,10 +456,12 @@ function initialisePageAdd () {
 function initialiseItemMenuControl () {
   const controlButtons = document.querySelectorAll('.item_menu__control .new_item_menu__item')
   const interfaces = document.querySelectorAll('.item_menu__interface__variant')
+  const editInterfaces = document.querySelectorAll('.item_edit__interface__variant')
   const types = ["text", "image", "product", "material", "colour", "file"]
 
   function swapActive (buttonContainers, type) {
     if (types.includes(type)) {
+      editInterfaces.forEach(each => each.classList.remove('active'))
       buttonContainers.forEach(each => {
         const button = each.querySelector('button')
         if (each.dataset.mosType === type) {
@@ -490,7 +522,7 @@ function handleEditMenuChange (type, close = false) {
   }
 }
 
-oddert = handleEditMenuChange
+globalHandleEditMenuChange = handleEditMenuChange
 
 function initialiseEditMenu () {
   const closeButtons = document.querySelectorAll ('.edit_close')
@@ -506,7 +538,7 @@ function initialiseItemMenuInterface () {
   const newColour       = document.querySelector('.item_menu__interface__variant.colour')
 
   const editInterfaces = document.querySelectorAll('.item_edit__interface__variant')
-  const editText         = document.querySelector('.item_menu__interface__variant.text')
+  const editText         = document.querySelector('.item_edit__interface__variant.text')
   // const newImage        = document.querySelector('.item_menu__interface__variant.image')
   // const newProduct      = document.querySelector('.item_menu__interface__variant.product')
   // const newMaterial     = document.querySelector('.item_menu__interface__variant.material')
@@ -766,7 +798,29 @@ function initialiseItemMenuInterface () {
   // ===========================================
 
   function initEditText (editText) {
-
+    const save        = editText.querySelector('.edit_text button[name=edit_text__save]')
+    const cancel      = editText.querySelector('.edit_text button[name=edit_text__cancel]')
+    const sizeButtons = editText.querySelectorAll('.edit_text__size button')
+    const textBox     = editText.querySelector('textarea')
+    const sizes = ["small", "medium", "large"]
+    function changeSize (e) {
+      const { name } = e.target
+      console.log(editor.data.size, name)
+      if (editor.data.size && name === editor.data.size) return
+      else {
+        sizeButtons.forEach(each => each.classList.remove('active'))
+        this.classList.add('active')
+        editor.data.size = name
+      }
+    }
+    sizeButtons.forEach(each => each.onclick = changeSize)
+    textBox.onchange = e => editor.data.text = e.target.value
+    save.onclick = () => {
+      console.warn('save goes here')
+    }
+    cancel.onclick = () => {
+      console.warn('cancel action goes here')
+    }
   }
 
   initNewText(newText)
@@ -774,6 +828,8 @@ function initialiseItemMenuInterface () {
   initNewColour(newColour)
   initNewProduct(newProduct)
   initNewMaterial(newMaterial)
+
+  initEditText(editText)
 }
 
 function initDragDrop () {
@@ -1111,28 +1167,6 @@ function toggleColourEdit (event) {
     parent.dataset.mosEdit = 'active'
   }
 }
-// function toggleImageEdit (event) {
-//   const parent = this.closest('.grid-stack-item')
-//   const img = parent.querySelector('.content_image__img img')
-//   if (parent.dataset.mosEdit === 'active') {
-//     hideImageInterface ()
-//     parent.dataset.mosEdit = 'inactive'
-//   } else {
-//     const interface = document.querySelector('.image_interface')
-//     interface.style.display = `flex`
-//     const { top, left } = this.getBoundingClientRect()
-//
-//     const x = left + event.offsetX + window.scrollX - (interface.clientWidth / 2)
-//     const y = top + event.offsetY + window.scrollY - (interface.clientHeight + 50)
-//     const uri = img.src
-//     const accept = imageUpdate => {
-//       img.src = imageUpdate
-//     }
-//     showImageInterface (x, y, uri, accept)
-//     parent.dataset.mosEdit = 'active'
-//     imageCurrentlyOpen = parent
-//   }
-// }
 
 // ========== / Content Functions ==========
 
@@ -1161,6 +1195,7 @@ function createTextWidget (value, size) {
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
+    createdTextWidget.dblclick(openTextEditor)
     createdTextWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
@@ -1189,6 +1224,7 @@ function createImageWidget (src, alt) {
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
+
     createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
