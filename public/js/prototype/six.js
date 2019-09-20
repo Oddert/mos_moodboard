@@ -239,15 +239,19 @@ function render (data) {
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
 
-  all.forEach(addOnePageContent)
+  const containerWidth = document.querySelector('.pages').offsetWidth
+  const pageWidth = Math.floor(containerWidth * .95)
+  const pageHeight = Math.floor(pageWidth * (9/16))
+
+  all.forEach((each, idx) => addOnePageContent (each, idx, pageWidth, pageHeight))
 
   $('.page .page__content')
     .each(function (pageIdx) {
       const elem = $(this)
-      elem.data('mosPageIdx', pageIdx)
       const grid = elem.data('gridstack')
-      if (grid) grid.removeAll()
       const items = data.projects[pageIdx].entities
+      if (grid) grid.removeAll()
+      elem.data('mosPageIdx', pageIdx)
       _.each(items, function (node, itemIdx) {
         const newWidget = $(`
           <div>
@@ -277,10 +281,8 @@ function createGridContent (pages, data) {
         }
         if (node._type === "image") {
           createdWidget.dblclick(openImageEditor)
-          // createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
         }
         if (node._type === "colour") {
-          // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
           createdWidget.dblclick(openColourEditor)
         }
       }, this)
@@ -312,16 +314,22 @@ const gridstackOptions = {
   acceptWidgets: '.grid-stack-item'
 }
 
-function addOnePageContent (page, idx) {
+function addOnePageContent (page, idx, width, height) {
   //.page__content as document.querySelector()
   const thisPage = $(page)
-  const height = thisPage.height()
+  // const height = thisPage.height()
   thisPage.gridstack({
     ...gridstackOptions,
     cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
   })
-  page.style.height = '250px'
-  page.dataset.mosTest = '250'
+  // page.style.height = '250px'
+  page.style.height = `${height}px`
+  page.style.minHeight = `${height}px`
+  page.style.maxHeight = `${height}px`
+  page.style.width = `${width}px`
+  page.style.minWidth = `${width}px`
+  page.style.maxWidth = `${width}px`
+  // page.dataset.mosTest = '250'
   page.dataset.mosPageIdx = idx
 }
 
@@ -394,17 +402,22 @@ function openTextEditor (event) {
   const displayText = this.closest('.grid-stack-item').querySelector('.content_text__text')
   const text = displayText.textContent
   const size = displayText.className.match(/small|medium|large/gi)
+  if (lastClick.widget.length > 1) {
+    lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+    lastClick.widget = [this]
+    this.classList.add('user_focus')
+  }
   editor.editing = true
   editor.target = this
   editor.type = 'text'
   editor.data.text = text
   editor.data.size = size[0]
+  globalHandleEditMenuChange ('text')
   document.querySelector('.edit_text__value textarea').value = text
   document.querySelectorAll('.edit_text__size button').forEach(each => {
     if (each.name === size[0]) each.classList.add('active')
     else each.classList.remove('active')
   })
-  globalHandleEditMenuChange ('text')
   document.querySelector('.edit_text button[name=edit_text__save]').onclick = () => {
     displayText.classList.remove('small', 'medium', 'large')
     displayText.classList.add(editor.data.size)
@@ -421,13 +434,18 @@ function openImageEditor (event) {
   const preview = document.querySelector('.edit_image .image_interface__preview img')
   const accept = document.querySelector('.edit_image button[name=edit_image__save]')
   const cancel = document.querySelector('.edit_image button[name=edit_image__cancel]')
-  globalHandleEditMenuChange('image')
+  if (lastClick.widget.length > 1) {
+    lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+    lastClick.widget = [this]
+    this.classList.add('user_focus')
+  }
   editor.editing = true
   editor.target = this
   editor.type = 'image'
   editor.data.imageSrc = img.src
   preview.src = img.src
   input.value = img.src
+  globalHandleEditMenuChange('image')
   accept.onclick = () => {
     img.src = editor.data.imageSrc
   }
@@ -441,6 +459,11 @@ function openColourEditor (event) {
   const accept = editImage.querySelector('button[name=edit_colour__save]')
   const cancel = editImage.querySelector('button[name=edit_colour__cancel]')
   const colourModule = event.target.closest('.grid-stack-item').querySelector('.colour__module')
+  if (lastClick.widget.length > 1) {
+    lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+    lastClick.widget = [this]
+    this.classList.add('user_focus')
+  }
   globalHandleEditMenuChange ('colour')
   accept.onclick = () => {
     colourModule.style.backgroundColor = editColourPicker.color.hexString
@@ -1001,7 +1024,6 @@ const createText = ({ text, size }) => `
 const createImage = ({ src, alt }) => `
   <div class="content image" data-mos-contenttype="image">
     <div class="content__controls">
-      <button class="content__controls--image_edit">✎</button>
       <button class="content__controls--delete">✖</button>
     </div>
     <div class="content_image__img">
@@ -1046,7 +1068,6 @@ const createMaterial = ({ img: { src, alt }, title, design }) => `
 const createColour = ({ hex }) => `
   <div class="content colour" data-mos-contenttype="colour">
     <div class="content__controls">
-      <button class="content__controls--colour_edit">✎</button>
       <button class="content__controls--delete">✖</button>
     </div>
     <div class="colour__module" style="background-color: ${hex};"></div>
@@ -1103,7 +1124,7 @@ function deselectOnGrid (event) {
   else {
     if (lastClick.widget.length) lastClick.widget.forEach(each => each.classList.remove('user_focus'))
     lastClick.widget = []
-    if (editor.unsavedChanges) globalHandleEditMenuChange (null, true)
+    if (!editor.unsavedChanges) globalHandleEditMenuChange (null, true)
   }
 }
 
@@ -1339,7 +1360,6 @@ function createImageWidget (src, alt) {
     createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
-    // createdTextWidget.find('.content__controls--image_edit').click(toggleImageEdit)
   }
 }
 
@@ -1368,7 +1388,6 @@ function createColourWidget (picker) {
     createdColourWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
-    // createdColourWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
   }
 }
 
