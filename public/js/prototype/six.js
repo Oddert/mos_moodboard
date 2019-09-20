@@ -236,6 +236,21 @@ function render (data) {
   userRender()
 }
 
+function addOnePageContent (page, idx, width, height) {
+  const thisPage = $(page)
+  thisPage.gridstack({
+    ...gridstackOptions,
+    cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
+  })
+  page.style.height = `${height}px`
+  page.style.minHeight = `${height}px`
+  page.style.maxHeight = `${height}px`
+  page.style.width = `${width}px`
+  page.style.minWidth = `${width}px`
+  page.style.maxWidth = `${width}px`
+  page.dataset.mosPageIdx = idx
+}
+
 function createGridContent (pages, data) {
   const all = pages.querySelectorAll('.page .page__content')
 
@@ -285,9 +300,10 @@ function createGridContent (pages, data) {
         if (node._type === "colour") {
           createdWidget.dblclick(openColourEditor)
         }
+        if (node._type === "product") {
+          createdWidget.dblclick(openProductEditor)
+        }
       }, this)
-      // old lastClick detector:
-      // elem.on('click', e => openNewItemMenu(e, elem, grid))
     })
   function initPageFocus () {
     const firstGrid = document.querySelectorAll('.page')[0]
@@ -314,24 +330,7 @@ const gridstackOptions = {
   acceptWidgets: '.grid-stack-item'
 }
 
-function addOnePageContent (page, idx, width, height) {
-  //.page__content as document.querySelector()
-  const thisPage = $(page)
-  // const height = thisPage.height()
-  thisPage.gridstack({
-    ...gridstackOptions,
-    cellHeight: `${(height - ((rows - 1) * 20)) / rows}`
-  })
-  // page.style.height = '250px'
-  page.style.height = `${height}px`
-  page.style.minHeight = `${height}px`
-  page.style.maxHeight = `${height}px`
-  page.style.width = `${width}px`
-  page.style.minWidth = `${width}px`
-  page.style.maxWidth = `${width}px`
-  // page.dataset.mosTest = '250'
-  page.dataset.mosPageIdx = idx
-}
+
 
 function pageScrollHandler () {
   const pages = document.querySelectorAll('.page')
@@ -471,6 +470,10 @@ function openColourEditor (event) {
   cancel.onclick = () => {
     globalHandleEditMenuChange ('colour', true)
   }
+}
+
+function openProductEditor (event) {
+  globalHandleEditMenuChange ('product')
 }
 
 // ========== / Top Level Functions ==========
