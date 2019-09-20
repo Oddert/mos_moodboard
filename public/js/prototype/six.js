@@ -9,7 +9,7 @@ const defaultImg = {
   alt: 'Placeholder Image'
 }
 
-let userRender, colourPicker, globalHandleEditMenuChange;
+let userRender, colourPicker, editColourPicker, globalHandleEditMenuChange;
 
 let oddert
 
@@ -271,15 +271,17 @@ function createGridContent (pages, data) {
         })
         // createdWidget.data('mospage', `${pageIdx}`)
         if (node._type === "text") {
+          // TODO: Integrate live update capabilities from bellow text edit, remove button
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
           createdWidget.dblclick(openTextEditor)
-        }
-        if (node._type === "colour") {
-          // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
         }
         if (node._type === "image") {
           createdWidget.dblclick(openImageEditor)
           // createdWidget.find('.content__controls--image_edit').click(toggleImageEdit)
+        }
+        if (node._type === "colour") {
+          // createdWidget.find('.content__controls--colour_edit').click(toggleColourEdit)
+          createdWidget.dblclick(openColourEditor)
         }
       }, this)
       // old lastClick detector:
@@ -389,7 +391,7 @@ function handleGlobalKeyPress (event) {
 }
 
 function openTextEditor (event) {
-  const displayText = this.querySelector('.content_text__text')
+  const displayText = this.closest('.grid-stack-item').querySelector('.content_text__text')
   const text = displayText.textContent
   const size = displayText.className.match(/small|medium|large/gi)
   editor.editing = true
@@ -402,6 +404,7 @@ function openTextEditor (event) {
     if (each.name === size[0]) each.classList.add('active')
     else each.classList.remove('active')
   })
+  globalHandleEditMenuChange ('text')
   document.querySelector('.edit_text button[name=edit_text__save]').onclick = () => {
     displayText.classList.remove('small', 'medium', 'large')
     displayText.classList.add(editor.data.size)
@@ -430,6 +433,20 @@ function openImageEditor (event) {
   }
   cancel.onclick = () => {
     globalHandleEditMenuChange ('image', true)
+  }
+}
+
+function openColourEditor (event) {
+  const editImage = document.querySelector('.edit_colour')
+  const accept = editImage.querySelector('button[name=edit_colour__save]')
+  const cancel = editImage.querySelector('button[name=edit_colour__cancel]')
+  const colourModule = event.target.closest('.grid-stack-item').querySelector('.colour__module')
+  globalHandleEditMenuChange ('colour')
+  accept.onclick = () => {
+    colourModule.style.backgroundColor = editColourPicker.color.hexString
+  }
+  cancel.onclick = () => {
+    globalHandleEditMenuChange ('colour', true)
   }
 }
 
@@ -557,7 +574,9 @@ globalHandleEditMenuChange = handleEditMenuChange
 
 function initialiseEditMenu () {
   const closeButtons = document.querySelectorAll ('.edit_close')
-  closeButtons.forEach(each => each.querySelector('button').onclick = () => {})
+  closeButtons.forEach(each => each.querySelector('button').onclick = () => {
+    globalHandleEditMenuChange(null, true)
+  })
 }
 
 function initialiseItemMenuInterface () {
@@ -573,7 +592,7 @@ function initialiseItemMenuInterface () {
   const editImage       = document.querySelector('.item_edit__interface__variant.image')
   // const editProduct      = document.querySelector('.item_edit__interface__variant.product')
   // const editMaterial     = document.querySelector('.item_edit__interface__variant.material')
-  // const editColour       = document.querySelector('.item_edit__interface__variant.colour')
+  const editColour       = document.querySelector('.item_edit__interface__variant.colour')
 
   function initNewText (newText) {
     const add         = newText.querySelector('.new_text__insert button[name=new_text__insert]')
@@ -874,6 +893,43 @@ function initialiseItemMenuInterface () {
     }
   }
 
+  function initEditColour (editColour) {
+    const save = editColour.querySelector('.edit_colour button[name=edit_colour__save]')
+    const cancel = editColour.querySelector('.edit_colour button[name=edit_colour__cancel]')
+    const preview = editColour.querySelector('.colour_edit__preview--wrapper')
+    const previewInput = preview.querySelector('.colour_edit__preview__input')
+    const opts = {
+      width: 175,
+      color: '#1bbc9b',
+      wheelLightness: false
+    }
+    function handleColourChange (colour, change) {
+      preview.style.backgroundColor = colour.rgbString
+      previewInput.value = colour.hexString.toUpperCase()
+      editor.data.hex = colour.hexString.toUpperCase()
+    }
+    function handleColourInput (e) {
+      const { value } = e.target
+      if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+        editColourPicker.color.hexString = value
+        editor.data.hex = value.toUpperCase()
+      }
+      if (/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi.test(value)) {
+        editColourPicker.color.hexString = '#' + value
+        editor.data.hex = `#${value.toUpperCase()}`
+      }
+    }
+    editColourPicker = new iro.ColorPicker('.colour_edit__iro', opts)
+    editColourPicker.on('color:change', handleColourChange)
+    previewInput.onchange = handleColourInput
+    save.onclick = () => {
+      console.warn('No save function supplied')
+    }
+    cancel.onclick = () => {
+      console.warn('No cencel function supplied')
+    }
+  }
+
   initNewText(newText)
   initNewImage(newImage)
   initNewColour(newColour)
@@ -882,6 +938,7 @@ function initialiseItemMenuInterface () {
 
   initEditText(editText)
   initEditImage(editImage)
+  initEditColour(editColour)
 }
 
 function initDragDrop () {
@@ -922,6 +979,7 @@ initialisePageAdd ()
 initialiseItemMenuControl()
 initialiseItemMenuInterface()
 initDragDrop()
+initialiseEditMenu()
 }
 
 // ========== / Page initialisation ==========
@@ -1306,6 +1364,7 @@ function createColourWidget (picker) {
       lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
+    createdColourWidget.dblclick(openColourEditor)
     createdColourWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })

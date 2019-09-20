@@ -176,8 +176,8 @@
             <div class="item_edit__interface__variant text" data-mos-type="text">
               <div class="edit edit_text">
                 <div class="edit_close edit_text__title">
-                  <h4>Edit text</h4>
-                  <button type="button" name="edit_text__close">X</button>
+                  <h4 class="edit_close__title">Edit text</h4>
+                  <button type="button" name="edit_text__close" class="edit_close__close">X</button>
                 </div>
                 <ul class="edit_text__size">
                   <li>
@@ -202,8 +202,8 @@
             <div class="item_edit__interface__variant image" data-mos-type="image">
               <div class="edit edit_image">
                 <div class="edit_close edit_image__title">
-                  <h4>Edit image</h4>
-                  <button type="button" name="edit_image__close">X</button>
+                  <h4 class="edit_close__title">Edit image</h4>
+                  <button type="button" name="edit_image__close" class="edit_close__close">X</button>
                 </div>
                 <div class="image_interface--wrapper">
                   <input type="url" name="image_url" class="image_url" placeholder="Paste Image URL" />
@@ -213,6 +213,25 @@
                 </div>
                 <button type="button" name="edit_image__save">Finished</button>
                 <button type="button" name="edit_image__cancel">Cancel</button>
+              </div>
+            </div>
+
+            <div class="item_edit__interface__variant colour" data-mos-type="colour">
+              <div class="edit_close edit_colour__title">
+                <h4 class="edit_close__title">Edit colour</h4>
+                <button type="button" name="edit_colour__close" class="edit_close__close">X</button>
+              </div>
+              <div class="edit edit_colour">
+                <div class="colour_edit__iro">
+
+                </div>
+                <div class="colour_edit__preview">
+                  <div class="colour_edit__preview--wrapper" style="background-color: #1bbc9b;">
+                    <input value="#1bbc9b" class="colour_edit__preview__input" />
+                  </div>
+                </div>
+                <button type="button" name="edit_colour__save">Finish</button>
+                <button type="button" name="edit_colour__cancel">Cancel</button>
               </div>
             </div>
 

@@ -383,6 +383,15 @@ $page_width: 75vw;
         height: 100%;
         display: none;
 
+        .edit_close {
+          display: flex;
+          align-items: center;
+          .edit_close__title {
+            flex: 1;
+            margin: 0;
+            padding: 10px 20px;
+          }
+        }
         .edit {
           width: 100%;
           height: 100%;
@@ -880,18 +889,18 @@ $page_width: 75vw;
     }
   }
 }
-.colour_picker__iro {
+.colour_picker__iro, .colour_edit__iro {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.colour_picker__preview {
+.colour_picker__preview, .colour_edit__preview {
     display: flex;
     align-items: center;
     justify-content: center;
     // width: 100%;
     // position: relative;
-    .colour_picker__preview--wrapper {
+    .colour_picker__preview--wrapper, .colour_edit__preview--wrapper {
       height: 40px;
       width: 70%;
       margin-top: 12px;
@@ -900,7 +909,7 @@ $page_width: 75vw;
       display: flex;
       align-items: center;
       justify-content: center;
-      .colour_picker__preview__input {
+      .colour_picker__preview__input, .colour_edit__preview__input {
         font-family: 'Ubuntu', Helvetica, sans-serif, arial, 'Roboto';
         letter-spacing: 4px;
         text-shadow: 1px 1px 1px #ecf0f1;
