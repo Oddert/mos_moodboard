@@ -487,14 +487,17 @@ function fetchFullProduct (typology, id, cb) {
 }
 
 function openProductEditor (event) {
-  const container = event.target.closest('.grid-stack-item')
-  const content = container.querySelector('.content')
+  const content = event.target.closest('.grid-stack-item').querySelector('.content')
+  const contentImage = content.querySelector('.content_product__img img')
 
   const editor = document.querySelector('.edit_product')
   const primaryImage = editor.querySelector('.carousel__image_container img')
   const extraImages = editor.querySelector('.carousel__image_select')
   const pageLeft = editor.querySelector('.carousel__page_left button')
   const pageRight = editor.querySelector('.carousel__page_right button')
+
+  const accept = editor.querySelector('button[name=edit_product__save]')
+  const cancel = editor.querySelector('button[name=edit_product__cancel]')
 
   const product_id = content.dataset.mosProduct_id
   fetchFullProduct('product', product_id, data => {
@@ -515,7 +518,6 @@ function openProductEditor (event) {
       `
     })
     function directImageSelect (e, idx) {
-      content.dataset.mosImage_idx = `${idx}`
       primaryImage.dataset.mosImage_idx = `${idx}`
       primaryImage.src = data.images[idx].src
       primaryImage.alt = data.images[idx].alt
@@ -544,7 +546,15 @@ function openProductEditor (event) {
     }
     pageLeft.onclick = () => pageImages (true)
     pageRight.onclick = () => pageImages (false)
-
+    accept.onclick = () => {
+      const idx = Number(primaryImage.dataset.mosImage_idx)
+      content.dataset.mosImage_idx = idx
+      contentImage.src = data.images[idx].src
+      contentImage.alt = data.images[idx].alt
+    }
+    cancel.onclick = () => {
+      globalHandleEditMenuChange ('product', true)
+    }
   })
   globalHandleEditMenuChange ('product')
 }
@@ -553,7 +563,54 @@ function openMaterialEditor (event) {
   const container = event.target.closest('.grid-stack-item')
   const content = container.querySelector('.content')
   const material_id = content.dataset.mosMaterial_id
-  fetchFullProduct('material', material_id, data => console.log(data))
+  // fetchFullProduct('material', material_id, data => {
+  //   if (!data.images) {
+  //     data.images = []
+  //     const numFakeImages = Math.floor(Math.random()*7) + 1
+  //     for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
+  //   }
+  //   primaryImage.src = data.images[0].src
+  //   extraImages.innerHTML = ''
+  //   data.images.forEach((each, idx) => {
+  //     extraImages.innerHTML += `
+  //       <li class="${idx === 0 ? 'active' : ''} carousel__image carousel__image_${idx}">
+  //         <button type="button" name="carousel__image_0">
+  //           <img src="${each.src}" alt="${each.alt}">
+  //         </button>
+  //       </li>
+  //     `
+  //   })
+  //   function directImageSelect (e, idx) {
+  //     content.dataset.mosImage_idx = `${idx}`
+  //     primaryImage.dataset.mosImage_idx = `${idx}`
+  //     primaryImage.src = data.images[idx].src
+  //     primaryImage.alt = data.images[idx].alt
+  //     carouselImages.forEach(each => each.classList.remove('active'))
+  //     e.target.closest('.carousel__image').classList.add('active')
+  //   }
+  //   const carouselImages = extraImages.querySelectorAll('.carousel__image')
+  //   carouselImages.forEach((each, idx) =>
+  //     each.querySelector('button').onclick = e => directImageSelect(e, idx)
+  //   )
+  //   function pageImages (subtract = false) {
+  //     const imageIdx = Number(content.dataset.mosImage_idx) || 0
+  //     const imgLen = data.images.length
+  //     if (imgLen === 1) return
+  //     const newImageIdx = subtract
+  //       ? (imageIdx <= 0 ? imgLen : imageIdx) - 1
+  //       : (imageIdx >= (imgLen-1) ? -1 : imageIdx) + 1
+  //     primaryImage.src = data.images[newImageIdx].src
+  //     primaryImage.alt = data.images[newImageIdx].alt
+  //     content.dataset.mosImage_idx = newImageIdx
+  //     primaryImage.dataset.mosImage_idx = newImageIdx
+  //     carouselImages.forEach((each, idx) => {
+  //       if (idx === newImageIdx) each.classList.add('active')
+  //       else each.classList.remove('active')
+  //     })
+  //   }
+  //   pageLeft.onclick = () => pageImages (true)
+  //   pageRight.onclick = () => pageImages (false)
+  // })
   globalHandleEditMenuChange ('material')
 }
 
@@ -1033,7 +1090,7 @@ function initialiseItemMenuInterface () {
       console.warn('No save function supplied')
     }
     cancel.onclick = () => {
-      console.warn('No cencel function supplied')
+      console.warn('No cancel function supplied')
     }
   }
 
