@@ -81,8 +81,8 @@ const default_payload = {
       entities: [
         {x: 8, y: 8, width: 5, height: 6, _type: "image", src: "http://mos.oddberries.com/wp-content/themes/oddb-storefront/_layouts/home_selection/decor-01.jpg", alt: "A banner image from the storefront" },
         {x: 0, y: 8, width: 4, height: 5, _type: "text", text: "Hello World! This is my first moodboard to test the various elements. Please be patient will they progress."},
-        {x: 5, y: 1, width: 2, height: 9, _type: "product", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
-        {x: 3, y: 1, width: 2, height: 7, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },
+        {x: 5, y: 1, width: 2, height: 9, _type: "product", product_id: "34027", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
+        {x: 3, y: 1, width: 2, height: 7, _type: "material", material_id: "22967", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },
         {x: 4, y: 10, width: 2, height: 2, _type: "colour", hex: "9a95b5" },
         {x: 0, y: 0, width: 2, height: 6, _type: "file", format: "pdf", name: "History of Italian Design", image: { src: "https://cdn.shopify.com/s/files/1/1709/9537/products/100977_1024x1024.jpg?v=1508977616" } },
         {x: 0, y: 16, width: 3, height: 4},
@@ -114,8 +114,8 @@ const fora_payload = {
       entities: [
         {x: 4, y: 3, width: 5, height: 16, _type: "image", src: "https://pbs.twimg.com/profile_images/844519182024761349/SBh9U9bN.jpg", alt: "A banner image from the storefront" },
         {x: 3, y: 0, width: 7, height: 2, _type: "text", text: "Fora 42 Berners St Moodboard."},
-        // {x: 5, y: 1, width: 2, height: 9, _type: "product", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
-        // {x: 3, y: 1, width: 2, height: 7, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },
+        // {x: 5, y: 1, width: 2, height: 9, _type: "product", product_id: "72957", img: { src: "http://mos.oddberries.com/wp-content/uploads/2018/08/serena-rame-front-1-768x767.jpg", alt: "" }, title: "Serena", design: "Patricia Urquiola / FLOS", price: "£729-£1528" },
+        // {x: 3, y: 1, width: 2, height: 7, _type: "material", material_id: "62955", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/material-rawearth-fuga-matteobrioni-matterofstuff20180910_0553.jpg", alt: "" }, title: "Fuga", design: "TerraTon" },
         // {x: 4, y: 10, width: 2, height: 2, _type: "colour", hex: "9a95b5" },
         // {x: 0, y: 0, width: 2, height: 6, _type: "file", format: "pdf", name: "History of Italian Design", image: { src: "https://cdn.shopify.com/s/files/1/1709/9537/products/100977_1024x1024.jpg?v=1508977616" } },
       ]
@@ -186,8 +186,8 @@ const fora_payload = {
         {x: 0, y: 14, width: 1, height: 3, _type: "image", src:  "https://matterofstuff.com/wp-content/uploads/2019/02/Veins_concrete_paper_pulp_ruts2-600x423.jpg", alt: "A banner image from the storefront" },
         {x: 0, y: 17, width: 1, height: 3, _type: "image", src:  "https://matterofstuff.com/wp-content/uploads/2019/02/Blue-Veins-Medium-600x900.jpg", alt: "A banner image from the storefront" },
         {x: 1, y: 11, width: 2, height: 9, _type: "image", src:  "http://ourstorycreative.com/wp-content/uploads/2019/03/Our_Story_Creative_Artisan_Atelier_Editorial-86-1.jpg", alt: "A banner image from the storefront" },
-        {x: 5, y: 11, width: 2, height: 9, _type: "product", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/06/Mariolina_miniforms-blue-1300x1300.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
-        {x: 3, y: 11, width: 2, height: 9, _type: "product", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/06/Mariolina_2-1-1300x1300.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
+        {x: 5, y: 11, width: 2, height: 9, _type: "product", product_id: "22028", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/fox-3723-chair-pedrali-wood-legs-orange-main-300x299.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
+        {x: 3, y: 11, width: 2, height: 9, _type: "product", product_id: "04547", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/05/Nemea-wood-diagonal-main-pedrali-300x300.jpg", alt: "A banner image from the storefront" }, title: "Mariolina Chair", design: "Miniforms", price: "Price On Request" },
       ]
     },
     {
@@ -199,7 +199,7 @@ const fora_payload = {
         {x: 7, y: 11, width: 6, height: 7, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-6-800x539.jpg", alt: "A banner image from the storefront" },
         {x: 4, y: 4, width: 3, height: 14, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-2-800x655.jpg", alt: "A banner image from the storefront" },
         {x: 0, y: 10, width: 3, height: 5, _type: "text", text: "3x Minuetto Console: https://www.bauline.it/en/products/minuetto/ Dimension \n(LxPxH): Closed cm 140x48x76 \nOpen cm 140x300x76 \nn° 05 external leaves, 50 cm \nCOD06 Light Oak"},
-        {x: 0, y: 15, width: 3, height: 4, _type: "material", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/04/Hand-Planed-1024x1022.jpg", alt: "" }, title: "Light Oak", design: "This guy" },
+        {x: 0, y: 15, width: 3, height: 4, _type: "material", material_id: "75136", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/04/Hand-Planed-1024x1022.jpg", alt: "" }, title: "Light Oak", design: "This guy" },
       ]
     },
   ]

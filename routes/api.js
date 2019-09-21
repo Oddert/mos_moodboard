@@ -48,9 +48,39 @@ router.route('/projects/:user')
     })
   })
 
+router.route('/update')
+  .get((req, res, next) => {
+    // const ids = []
+    // fs.readFile('./utils/material.txt', 'utf8', (err, data) => {
+    //   const r = () => `${Math.floor(Math.random() * 10)}`
+    //   function createId () {
+    //     let newId = r() + r() + r() + r() + r()
+    //     if (ids.includes(newId)) return createId()
+    //     else return newId
+    //   }
+    //   const parsed = JSON.parse(data)
+    //   parsed.materials = [...parsed.materials].map(each => ({ ...each, material_id: createId() }))
+    //   fs.writeFile('./utils/material.txt', JSON.stringify(parsed), err => {
+    //     if (err) throw new Error()
+    //     else res.json({ message: 'ok' })
+    //   })
+    // })
+    res.json({ message: 'ok' })
+  })
+
 router.route('/product')
   .get((req, res, next) => {
     res.json(sampleProducts())
+  })
+
+router.route('/product/id/:id')
+  .get((req, res, next) => {
+    const search = new RegExp(req.params.id, 'gi')
+    const data = () => [...sampleProducts()].filter(each => {
+      if (!each) return false
+      else return each.product_id.match(search)
+    })
+    res.json(data()[0] || {})
   })
 
 router.route('/product/:searchTerm')
@@ -61,6 +91,16 @@ router.route('/product/:searchTerm')
       else return each.title.match(search)
     })
     res.json(data())
+  })
+
+router.route('/material/id/:id')
+  .get((req, res, next) => {
+    const search = new RegExp(req.params.id, 'gi')
+    const data = () => [...sampleMaterials()].filter(each => {
+      if (!each) return false
+      else return each.material_id.match(search)
+    })
+    res.json(data()[0] || {})
   })
 
 router.route('/material/:searchTerm')

@@ -89,7 +89,9 @@ function extractElementData (jQueryElem) {
     case "text":
     return {
       _type: "text",
-      text: content.find('.content_text__text') ? content.find('.content_text__text').text() : content.find('.content_text__input').val()
+      text: content.find('.content_text__text')
+        ? content.find('.content_text__text').text()
+        : content.find('.content_text__input').val()
     }
     case "image":
     return {
@@ -114,6 +116,7 @@ function extractElementData (jQueryElem) {
     case "product":
     return {
       _type: "product",
+      product_id: `${content.data('mosProduct_id')}`,
       img: {
         src: content.find('.content_product__img img').attr('src'),
         alt: content.find('.content_product__img img').attr('alt')
@@ -125,6 +128,7 @@ function extractElementData (jQueryElem) {
     case "material":
     return {
       _type: "material",
+      material_id: `${content.data('mosMaterial_id')}`,
       img: {
         src: content.find('.content_material__img img').attr('src'),
         alt: content.find('.content_material__img img').attr('alt')
@@ -303,6 +307,9 @@ function createGridContent (pages, data) {
         if (node._type === "product") {
           createdWidget.dblclick(openProductEditor)
         }
+        if (node._type === "material") {
+          createdWidget.dblclick(openMaterialEditor)
+        }
       }, this)
     })
   function initPageFocus () {
@@ -472,8 +479,82 @@ function openColourEditor (event) {
   }
 }
 
+function fetchFullProduct (typology, id, cb) {
+  fetch(`/api/${typology}/id/${id}`)
+    .then(res => res.json())
+    .then(cb ? cb : () => {})
+    .catch(err => console.error(err))
+}
+
 function openProductEditor (event) {
+  const container = event.target.closest('.grid-stack-item')
+  const content = container.querySelector('.content')
+
+  const editor = document.querySelector('.edit_product')
+  const primaryImage = editor.querySelector('.carousel__image_container img')
+  const extraImages = editor.querySelector('.carousel__image_select')
+  const pageLeft = editor.querySelector('.carousel__page_left button')
+  const pageRight = editor.querySelector('.carousel__page_right button')
+
+  const product_id = content.dataset.mosProduct_id
+  fetchFullProduct('product', product_id, data => {
+    if (!data.images) {
+      data.images = []
+      const numFakeImages = Math.floor(Math.random()*7) + 1
+      for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
+    }
+    primaryImage.src = data.images[0].src
+    extraImages.innerHTML = ''
+    data.images.forEach((each, idx) => {
+      extraImages.innerHTML += `
+        <li class="${idx === 0 ? 'active' : ''} carousel__image carousel__image_${idx}">
+          <button type="button" name="carousel__image_0">
+            <img src="${each.src}" alt="${each.alt}">
+          </button>
+        </li>
+      `
+    })
+    function directImageSelect (e, idx) {
+      content.dataset.mosImage_idx = `${idx}`
+      primaryImage.dataset.mosImage_idx = `${idx}`
+      primaryImage.src = data.images[idx].src
+      primaryImage.alt = data.images[idx].alt
+      carouselImages.forEach(each => each.classList.remove('active'))
+      e.target.closest('.carousel__image').classList.add('active')
+    }
+    const carouselImages = extraImages.querySelectorAll('.carousel__image')
+    carouselImages.forEach((each, idx) =>
+      each.querySelector('button').onclick = e => directImageSelect(e, idx)
+    )
+    function pageImages (subtract = false) {
+      const imageIdx = Number(content.dataset.mosImage_idx) || 0
+      const imgLen = data.images.length
+      if (imgLen === 1) return
+      const newImageIdx = subtract
+        ? (imageIdx <= 0 ? imgLen : imageIdx) - 1
+        : (imageIdx >= (imgLen-1) ? -1 : imageIdx) + 1
+      primaryImage.src = data.images[newImageIdx].src
+      primaryImage.alt = data.images[newImageIdx].alt
+      content.dataset.mosImage_idx = newImageIdx
+      primaryImage.dataset.mosImage_idx = newImageIdx
+      carouselImages.forEach((each, idx) => {
+        if (idx === newImageIdx) each.classList.add('active')
+        else each.classList.remove('active')
+      })
+    }
+    pageLeft.onclick = () => pageImages (true)
+    pageRight.onclick = () => pageImages (false)
+
+  })
   globalHandleEditMenuChange ('product')
+}
+
+function openMaterialEditor (event) {
+  const container = event.target.closest('.grid-stack-item')
+  const content = container.querySelector('.content')
+  const material_id = content.dataset.mosMaterial_id
+  fetchFullProduct('material', material_id, data => console.log(data))
+  globalHandleEditMenuChange ('material')
 }
 
 // ========== / Top Level Functions ==========
@@ -687,8 +768,8 @@ function initialiseItemMenuInterface () {
   }
 
   function initNewProduct (newProduct) {
-    const createResultItem = ({ title, design, price, img }) => `
-      <div class="result_product">
+    const createResultItem = ({ title, design, price, img, product_id }) => `
+      <div class="result_product" data-mos-product_id="${product_id}">
         <div class="result_product__img">
           <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
         </div>
@@ -780,8 +861,8 @@ function initialiseItemMenuInterface () {
   }
 
   function initNewMaterial (newMaterial) {
-    const createResultItem = ({ title, design, img }) => `
-      <div class="result_product">
+    const createResultItem = ({ title, design, img, material_id }) => `
+      <div class="result_product" data-mos-material_id="${material_id}">
         <div class="result_product__img">
           <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
         </div>
@@ -1025,7 +1106,7 @@ const createText = ({ text, size }) => `
 `
 
 const createImage = ({ src, alt }) => `
-  <div class="content image" data-mos-contenttype="image">
+  <div class="content image" data-mos-contenttype="image" data-mos-image_idx="0">
     <div class="content__controls">
       <button class="content__controls--delete">✖</button>
     </div>
@@ -1035,8 +1116,8 @@ const createImage = ({ src, alt }) => `
   </div>
 `
 
-const createProduct = ({ img: { src, alt }, title, design, price }) => `
-  <div class="content product" data-mos-contenttype="product">
+const createProduct = ({ img: { src, alt }, title, design, price, product_id }) => `
+  <div class="content product" data-mos-contenttype="product" data-mos-product_id="${product_id}">
     <div class="content__controls">
       <button class="content__controls--product_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -1052,8 +1133,8 @@ const createProduct = ({ img: { src, alt }, title, design, price }) => `
   </div>
 `
 
-const createMaterial = ({ img: { src, alt }, title, design }) => `
-  <div class="content material" data-mos-contenttype="material">
+const createMaterial = ({ img: { src, alt }, title, design, material_id }) => `
+  <div class="content material" data-mos-contenttype="material" data-mos-material_id="${material_id}">
     <div class="content__controls">
       <button class="content__controls--material_edit">✎</button>
       <button class="content__controls--delete">✖</button>
