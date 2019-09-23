@@ -107,7 +107,7 @@ button[name=dev] {
 .slides--wrapper .slides__grid .slide {
   width: 100%;
   height: 60px;
-  margin: 10px 0;
+  padding: 5px 0;
   position: relative;
   display: flex;
 }
@@ -123,6 +123,12 @@ button[name=dev] {
 }
 .slides--wrapper .slides__grid .slide.dragging {
   opacity: 0.5;
+}
+.slides--wrapper .slides__grid .slide.selected {
+  background: rgba(26, 198, 232, 0.1);
+}
+.slides--wrapper .slides__grid .slide.selected .slide__image {
+  border-color: #1ac6e8;
 }
 
 .pages--container {

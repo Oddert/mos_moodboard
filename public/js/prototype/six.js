@@ -23,6 +23,7 @@ const lastClick = {
   x: null,
   y: null,
   gridElem: null,
+  slide: null,
   widget: [],
   wasOnGrid: false,
   cutPasteData: {
@@ -213,21 +214,29 @@ function save () {
 
 // ========== Top Level Functions ==========
 
+function updateSlideBar (idx) {
+  const allSlides = document.querySelectorAll('.slide')
+  // TODO: make "check if in view" detection for slides later
+  allSlides.forEach((each, i) => {
+    if (i === idx) {
+      lastClick.slide = each
+      each.classList.add('selected')
+    } else each.classList.remove('selected')
+  })
+}
+
 function handleSlideChange (event) {
-  console.log(event)
   const allPages = document.querySelectorAll('.page')
   const idx = Number(event.target.closest('.slide').dataset.mosSlide_idx)
   const rect = allPages[idx].getBoundingClientRect()
-  console.log(rect)
-  console.log(window.scrollY + rect.top)
   window.scrollTo(null, window.scrollY + rect.top)
-  console.log(window.scrollY)
+  updateSlideBar(idx)
 }
 
 function reassignIndeces () {
   const slides = document.querySelectorAll('.slide')
   slides.forEach((each, idx) => {
-    each.querySelector('.slide__idx').textContent = `${idx}`
+    each.querySelector('.slide__idx').textContent = `${idx + 1}`
     each.dataset.mosSlide_idx = `${idx}`
   })
 }
@@ -242,9 +251,15 @@ function createSlideInterfaceGrid (clearPrevious) {
   }
   function stop (e, ui) {
     ui.item.endPos = ui.item.index()
-    console.log('Slide moved positions (from, to): ', ui.item.startPos, ui.item.endPos)
+    const serialised = serialise()
+    const newSlideLayout = [...serialised]
+    newSlideLayout[ui.item.startPos] = serialised[ui.item.endPos]
+    newSlideLayout[ui.item.endPos] = serialised[ui.item.startPos]
+    data.projects = newSlideLayout
     ui.item.removeClass('dragging')
+    render(data)
     reassignIndeces ()
+    console.log('Slide moved positions (from, to): ', ui.item.startPos, ui.item.endPos)
   }
   queryElem.sortable({ start, stop })
   queryElem.disableSelection()
@@ -298,7 +313,7 @@ function render (data) {
       const container = document.querySelector('.slides__grid')
       container.insertAdjacentHTML('beforeend', `
         <li class="slide" data-mos-slide_idx="${idx}">
-          <div class="slide__idx">${idx}</div>
+          <div class="slide__idx">${idx + 1}</div>
           <div class="slide__image">ahh</div>
         </li>
       `)
@@ -306,12 +321,10 @@ function render (data) {
     addSlide (idx)
   }
 
-  // slide write do to
-  // top level function
-  // slide write init inside pageInit()
-
+  // this is like seeing an S-stock and D-stock train side by side one last time
   data.projects.forEach(addPage)
   $('.page').each(pageCreateListeners)
+  // except its not the last time using jQuery becuase life is pain
 
   const slidesGrid = createSlideInterfaceGrid (false)
 
@@ -419,11 +432,13 @@ function pageScrollHandler () {
     if (!nextDown) return nextUp
     if (!nextUp) return nextDown
     // get whole object instead of just offsets from Maths.Min
+    // don't look at me like that; we all commit crimes from time to time
     else return [nextDown, nextUp].filter(
       each => each.offset === Math.max(nextDown.offset, nextUp.offset)
     )[0]
   }
   focusedPage = getClosestToCenter()
+  updateSlideBar (focusedPage.idx)
 }
 
 function copy (cut = false) {
