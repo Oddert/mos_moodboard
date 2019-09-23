@@ -102,8 +102,34 @@ $page_width: 75vw;
         }
       }
     }
-    .slides--wrapper {
-      
+  }
+}
+.slides--wrapper {
+  background: rgba(245, 245, 255, 1); //blue
+  height: 100%;
+  overflow-y: auto;
+
+  // position: relative;
+
+  // position: fixed;
+  // top: 30px;
+  // left: 30px;
+  width: 100%;
+  .slides__grid {
+    // z-index: 10;
+    // z-index: 330;
+    background: rgba(245, 255, 245, 1); //green
+    min-height: 100%;
+    max-height: 100%;
+    position: relative;
+    .slide {
+      background: #fff;
+      border: 1px solid #ecf0f1;
+      border-radius: 5px;
+
+      border: 1px solid red;
+      position: absolute;
+      width: 100%
     }
   }
 }
@@ -1250,7 +1276,7 @@ $page_width: 75vw;
 }
 
 
-.grid-stack {
+.grid-stack.page__content {
   .grid-stack-item {
     $columns: 13;
     @for $idx from 0 through $columns {

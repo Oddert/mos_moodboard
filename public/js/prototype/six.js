@@ -4,6 +4,11 @@ const colours = [
   { r:141, g:68, b:173 }, { r:193, g:57, b:43 }, { r:39, g:174, b:97 }
 ]
 
+const simpleColours = [
+  { r:53, g:152, b:219 }, { r:27, g:188, b:155 }, { r:154, g:89, b:181 }, { r:232, g:76, b:61 },
+  { r:126, g:140, b:141 }, { r:52, g:73, b:94 }, { r:241, g:196, b:15 }
+]
+
 const defaultImg = {
   src: 'https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png',
   alt: 'Placeholder Image'
@@ -64,6 +69,23 @@ console.log({ rows })
 const data = {
   username: 'no user',
   projects: []
+}
+
+const gridstackOptions = {
+  // width: 12,
+  width: 13,
+  minWidth: 500,
+  height: rows,
+  float: true,
+  animate: true,
+  removable: false,
+  disableOneColumnMode: true,
+
+  // cellHeight: '50',
+  // cellHeightUnit: 'px'
+  // // removable: '.trash'
+  // removeTimeout: 100,
+  acceptWidgets: '.grid-stack-item'
 }
 
 
@@ -189,6 +211,47 @@ function save () {
 
 // ========== Top Level Functions ==========
 
+function createSlideInterfaceGrid (clearPrevious) {
+  const slides = document.querySelector('.slides__grid')
+  if (clearPrevious) {
+    const grid = $(slides).data('gridstack')
+    if (grid) grid.destroy()
+    else slides.innerHTML = ''
+  }
+  const opts = {
+    // acceptWidgets: false,
+    animate: true,
+    // disableResize: true,
+    disableDrag: false,
+    // handle: '.ui-draggable',
+    draggable: '.ui-draggable',
+
+    // cellHeight: '50px', //auto
+    width: 1,
+    height: 5,
+    verticalMargin: 8,
+    cellHeightUnit: 'px',
+
+    // width: 1,
+    // minWidth: 100,
+    // removable: false,
+  }
+  return $('.slides__grid').gridstack(Object.assign({}, {
+    // minWidth: 500,
+    // height: rows,
+    // float: true,
+    // animate: true,
+    // removable: false,
+    // disableOneColumnMode: true,
+    //
+    // // cellHeight: '50',
+    // // cellHeightUnit: 'px'
+    // // // removable: '.trash'
+    // // removeTimeout: 100,
+    // acceptWidgets: '.grid-stack-item'
+  }, opts))
+}
+
 const sanitiseSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
 
 function performLibSeach (extention, value, cb) {
@@ -205,6 +268,9 @@ function performLibSeach (extention, value, cb) {
 }
 
 function render (data) {
+  const slidesGrid = createSlideInterfaceGrid (true).data('gridstack')
+  console.log(slidesGrid)
+
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
 
@@ -227,15 +293,41 @@ function render (data) {
     pages.innerHTML += page
   }
 
-  function pageCreateListeners () {
+  function pageCreateListeners (idx) {
     $(this).find('.page__title h3').dblclick(toggleTitleEdit)
     $(this).find('.page__title .page__title__delete--delete').click(toggleTitleDelete)
+
+    // F this, gridstack being too aqward
+    function addSlide (idx) {
+      // const ran = simpleColours[Math.floor(Math.random()*simpleColours.length)]
+      // const widgetContructor = $(`
+      //   <div>
+      //     <div class="grid-stack-item-content" data-mos-slide_idx="${idx}">
+      //
+      //     </div>
+      //   </div>
+      //   `)
+      //   widgetContructor.css({
+      //     backgroundColor: `rgba(${ran.r},${ran.g},${ran.b},1)`,
+      //     border: '1px solid red',
+      //     position: 'absolute',
+      //     width: '100%'
+      //   })
+      //   // console.log(idx)
+      //   const createdWidget = slidesGrid.addWidget(widgetContructor, 1, idx, 1, 1, false)
+      
+    }
+    addSlide (idx)
   }
+
+  // slide write do to
+  // top level function
+  // slide write init inside pageInit()
 
   data.projects.forEach(addPage)
   $('.page').each(pageCreateListeners)
 
-  // NOTE: Are we still using user render ??
+  // NOTE: Are we still using userRender ??
   userRender = () => createGridContent (pages, data)
   userRender()
 }
@@ -320,24 +412,6 @@ function createGridContent (pages, data) {
   }
   initPageFocus ()
 }
-
-const gridstackOptions = {
-  // width: 12,
-  width: 13,
-  minWidth: 500,
-  height: rows,
-  float: true,
-  animate: true,
-  removable: false,
-
-  // cellHeight: '50',
-  // cellHeightUnit: 'px'
-  // // removable: '.trash'
-  // removeTimeout: 100,
-  acceptWidgets: '.grid-stack-item'
-}
-
-
 
 function pageScrollHandler () {
   const pages = document.querySelectorAll('.page')
