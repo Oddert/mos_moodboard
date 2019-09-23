@@ -88,6 +88,8 @@ const gridstackOptions = {
   acceptWidgets: '.grid-stack-item'
 }
 
+// NOTE: Syntax used states "page" refers to DOM elements and gridstack data of interactable pages
+// while "slide" refers to side bar menu and associated data structure
 
 // ### Structure:
 //  -Constants and data containers
@@ -211,45 +213,42 @@ function save () {
 
 // ========== Top Level Functions ==========
 
+function handleSlideChange (event) {
+  console.log(event)
+  const allPages = document.querySelectorAll('.page')
+  const idx = Number(event.target.closest('.slide').dataset.mosSlide_idx)
+  const rect = allPages[idx].getBoundingClientRect()
+  console.log(rect)
+  console.log(window.scrollY + rect.top)
+  window.scrollTo(null, window.scrollY + rect.top)
+  console.log(window.scrollY)
+}
+
+function reassignIndeces () {
+  const slides = document.querySelectorAll('.slide')
+  slides.forEach((each, idx) => {
+    each.querySelector('.slide__idx').textContent = `${idx}`
+    each.dataset.mosSlide_idx = `${idx}`
+  })
+}
+
 function createSlideInterfaceGrid (clearPrevious) {
   const slides = document.querySelector('.slides__grid')
-  if (clearPrevious) {
-    const grid = $(slides).data('gridstack')
-    if (grid) grid.destroy()
-    else slides.innerHTML = ''
+  if (clearPrevious) slides.innerHTML = ''
+  const queryElem = $(slides)
+  function start (e, ui) {
+    ui.item.startPos = ui.item.index()
+    ui.item.addClass('dragging')
   }
-  const opts = {
-    // acceptWidgets: false,
-    animate: true,
-    // disableResize: true,
-    disableDrag: false,
-    // handle: '.ui-draggable',
-    draggable: '.ui-draggable',
-
-    // cellHeight: '50px', //auto
-    width: 1,
-    height: 5,
-    verticalMargin: 8,
-    cellHeightUnit: 'px',
-
-    // width: 1,
-    // minWidth: 100,
-    // removable: false,
+  function stop (e, ui) {
+    ui.item.endPos = ui.item.index()
+    console.log('Slide moved positions (from, to): ', ui.item.startPos, ui.item.endPos)
+    ui.item.removeClass('dragging')
+    reassignIndeces ()
   }
-  return $('.slides__grid').gridstack(Object.assign({}, {
-    // minWidth: 500,
-    // height: rows,
-    // float: true,
-    // animate: true,
-    // removable: false,
-    // disableOneColumnMode: true,
-    //
-    // // cellHeight: '50',
-    // // cellHeightUnit: 'px'
-    // // // removable: '.trash'
-    // // removeTimeout: 100,
-    // acceptWidgets: '.grid-stack-item'
-  }, opts))
+  queryElem.sortable({ start, stop })
+  queryElem.disableSelection()
+  queryElem.click(handleSlideChange)
 }
 
 const sanitiseSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
@@ -268,8 +267,6 @@ function performLibSeach (extention, value, cb) {
 }
 
 function render (data) {
-  const slidesGrid = createSlideInterfaceGrid (true).data('gridstack')
-  console.log(slidesGrid)
 
   const pages = document.querySelector('.pages')
   pages.innerHTML = ""
@@ -297,25 +294,14 @@ function render (data) {
     $(this).find('.page__title h3').dblclick(toggleTitleEdit)
     $(this).find('.page__title .page__title__delete--delete').click(toggleTitleDelete)
 
-    // F this, gridstack being too aqward
     function addSlide (idx) {
-      // const ran = simpleColours[Math.floor(Math.random()*simpleColours.length)]
-      // const widgetContructor = $(`
-      //   <div>
-      //     <div class="grid-stack-item-content" data-mos-slide_idx="${idx}">
-      //
-      //     </div>
-      //   </div>
-      //   `)
-      //   widgetContructor.css({
-      //     backgroundColor: `rgba(${ran.r},${ran.g},${ran.b},1)`,
-      //     border: '1px solid red',
-      //     position: 'absolute',
-      //     width: '100%'
-      //   })
-      //   // console.log(idx)
-      //   const createdWidget = slidesGrid.addWidget(widgetContructor, 1, idx, 1, 1, false)
-      
+      const container = document.querySelector('.slides__grid')
+      container.insertAdjacentHTML('beforeend', `
+        <li class="slide" data-mos-slide_idx="${idx}">
+          <div class="slide__idx">${idx}</div>
+          <div class="slide__image">ahh</div>
+        </li>
+      `)
     }
     addSlide (idx)
   }
@@ -326,6 +312,8 @@ function render (data) {
 
   data.projects.forEach(addPage)
   $('.page').each(pageCreateListeners)
+
+  const slidesGrid = createSlideInterfaceGrid (false)
 
   // NOTE: Are we still using userRender ??
   userRender = () => createGridContent (pages, data)
