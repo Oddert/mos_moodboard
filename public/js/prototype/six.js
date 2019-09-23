@@ -89,6 +89,10 @@ const gridstackOptions = {
   acceptWidgets: '.grid-stack-item'
 }
 
+const s = term => document.querySelector(term)
+const sa = term => document.querySelectorAll(term)
+
+
 // NOTE: Syntax used states "page" refers to DOM elements and gridstack data of interactable pages
 // while "slide" refers to side bar menu and associated data structure
 
@@ -284,7 +288,9 @@ function performLibSeach (extention, value, cb) {
 function render (data) {
 
   const pages = document.querySelector('.pages')
+  const slides = document.querySelector('.slides__grid')
   pages.innerHTML = ""
+  slides.innerHTML = ""
 
   function addPage (each, idx) {
     const page = `
@@ -327,7 +333,6 @@ function render (data) {
   // except its not the last time using jQuery becuase life is pain
 
   const slidesGrid = createSlideInterfaceGrid (false)
-
   // NOTE: Are we still using userRender ??
   userRender = () => createGridContent (pages, data)
   userRender()
@@ -403,15 +408,19 @@ function createGridContent (pages, data) {
         if (node._type === "material") {
           createdWidget.dblclick(openMaterialEditor)
         }
+        if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
+          initPageFocus()
+        }
       }, this)
     })
-  function initPageFocus () {
-    const firstGrid = document.querySelectorAll('.page')[0]
-    const gridData = $(firstGrid).data('_gridstack_node')
-    focusedPage.grid = gridData
-    focusedPage.gridElem = firstGrid
-  }
-  initPageFocus ()
+}
+function initPageFocus () {
+  // Might not be necessary, code seems successfull in runnin on page load so far
+  const firstGrid = document.querySelectorAll('.page')[0]
+  const gridData = $(firstGrid).find('grid-stack').data('gridstack')
+  focusedPage.grid = gridData
+  focusedPage.gridElem = firstGrid
+  focusedPage.idx = 0
 }
 
 function pageScrollHandler () {
@@ -748,16 +757,18 @@ function initialAjax () {
 // //      that's all for now.
 
 function initialisePageAdd () {
-  const newPage = document.querySelector('.new_page button')
-  newPage.onclick = () => {
+  const newPageButton = document.querySelector('.slides button.new_page')
+  function createNewPage () {
     const serialised = serialise()
-    serialised.push({
+    serialised.splice(focusedPage.idx, 0, {
       title: 'New Page',
       entities: []
     })
     data.projects = serialised
     render(data)
+    pageScrollHandler()
   }
+  newPageButton.onclick = createNewPage
 }
 
 function initialiseItemMenuControl () {
@@ -1234,8 +1245,8 @@ function initDragDrop () {
 
 // initColourPicker ()
 // initialiseNewItemMenu ()
-initialAjax ()
-initialisePageAdd ()
+initialAjax()
+initialisePageAdd()
 initialiseItemMenuControl()
 initialiseItemMenuInterface()
 initDragDrop()
