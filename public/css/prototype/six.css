@@ -113,6 +113,8 @@ button[name=dev] {
 }
 .slides--wrapper .slides__grid .slide .slide__idx {
   margin: 8px;
+  color: #bec3c7;
+  font-size: 0.8em;
 }
 .slides--wrapper .slides__grid .slide .slide__image {
   background: #fff;

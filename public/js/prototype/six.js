@@ -332,6 +332,19 @@ function render (data) {
   $('.page').each(pageCreateListeners)
   // except its not the last time using jQuery becuase life is pain
 
+  function updateSlideDisplay () {
+    const slides = document.querySelectorAll('.slides__grid .slide')
+    const sample = slides[0]
+    if (!sample) return
+    const rect = sample.querySelector('.slide__image').getBoundingClientRect()
+    const width = rect.width
+    const height = width * (9/16)
+    slides.forEach(each => {
+      each.style.width = `${width}px`
+      each.style.height = `${height}px`
+    })
+  }
+  updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
   // NOTE: Are we still using userRender ??
   userRender = () => createGridContent (pages, data)
@@ -408,9 +421,9 @@ function createGridContent (pages, data) {
         if (node._type === "material") {
           createdWidget.dblclick(openMaterialEditor)
         }
-        if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
-          initPageFocus()
-        }
+        // if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
+        //   initPageFocus()
+        // }
       }, this)
     })
 }
