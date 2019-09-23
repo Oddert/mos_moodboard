@@ -18,6 +18,10 @@ let userRender, colourPicker, editColourPicker, globalHandleEditMenuChange;
 
 let oddert
 
+const fullscreen = {
+  open: false
+}
+
 const lastClick = {
   grid: null,
   x: null,
@@ -314,17 +318,18 @@ function render (data) {
   function pageCreateListeners (idx) {
     $(this).find('.page__title h3').dblclick(toggleTitleEdit)
     $(this).find('.page__title .page__title__delete--delete').click(toggleTitleDelete)
+    const title = $(this).find('.page__title h3').text()
 
-    function addSlide (idx) {
+    function addSlide (idx, data) {
       const container = document.querySelector('.slides__grid')
       container.insertAdjacentHTML('beforeend', `
         <li class="slide" data-mos-slide_idx="${idx}">
           <div class="slide__idx">${idx + 1}</div>
-          <div class="slide__image">ahh</div>
+          <div class="slide__image" title="${data.title}"></div>
         </li>
       `)
     }
-    addSlide (idx)
+    addSlide (idx, { title })
   }
 
   // this is like seeing an S-stock and D-stock train side by side one last time
@@ -730,6 +735,38 @@ function openMaterialEditor (event) {
     }
   })
   globalHandleEditMenuChange ('material')
+}
+
+function toggleFullscreen (e, close) {
+  console.log('toggleFullscreen')
+  if (fullscreen.open || close) {
+    console.log('...closeing')
+
+  } else {
+    console.log('...opening')
+    const test = focusedPage.gridElem
+    console.log(test)
+    function open () {
+      if (test.requestFullscreen) {
+        console.log('1')
+        test.requestFullscreen()
+      } else if (test.mozRequestFullScreen) {
+        console.log('2')
+        test.mozRequestFullScreen()
+      } else if (test.webkitRequestFullscreen) {
+        console.log('3')
+        test.webkitRequestFullscreen()
+      } else if (test.msRequestFullscreen) {
+        console.log('4')
+        test.msRequestFullscreen()
+      } else {
+        console.log('nope')
+        return
+      }
+      fullscreen.open = true
+    }
+    open()
+  }
 }
 
 // ========== / Top Level Functions ==========
@@ -1243,6 +1280,11 @@ function initDragDrop () {
   pages.addEventListener('drop', drop, false)
 }
 
+function initFullScreen () {
+  const fullscreen = document.querySelector('button[name=fullscreen]')
+  fullscreen.onclick = toggleFullscreen
+}
+
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
 //   let hide = true
@@ -1264,6 +1306,7 @@ initialiseItemMenuControl()
 initialiseItemMenuInterface()
 initDragDrop()
 initialiseEditMenu()
+initFullScreen()
 }
 
 // ========== / Page initialisation ==========

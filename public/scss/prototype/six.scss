@@ -176,6 +176,10 @@ $page_width: 75vw;
         border-radius: 5px;
         flex: 1;
         margin: 0 8px 0 0;
+        background-image: url('https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
       }
       &.dragging {
         opacity: .5;

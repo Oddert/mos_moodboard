@@ -122,6 +122,10 @@ button[name=dev] {
   border-radius: 5px;
   flex: 1;
   margin: 0 8px 0 0;
+  background-image: url("https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 .slides--wrapper .slides__grid .slide.dragging {
   opacity: 0.5;
