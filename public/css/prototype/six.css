@@ -128,10 +128,15 @@ button[name=dev] {
   border-radius: 5px;
   flex: 1;
   margin: 0 8px 0 0;
-  background-image: url("https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slides--wrapper .slides__grid .slide .slide__image.previewImg {
+  background-image: url("https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png");
 }
 .slides--wrapper .slides__grid .slide.dragging {
   opacity: 0.5;
@@ -1366,6 +1371,28 @@ button[name=dev] {
 }
 .grid-stack.page__content .grid-stack-item[data-gs-x="13"] {
   left: 100%;
+}
+
+svg {
+  width: 35px;
+  height: 35px;
+  width: 118px;
+  height: 72px;
+}
+
+rect {
+  stroke: none;
+  fill: red;
+  fill: none;
+}
+rect.svg_text {
+  fill: #bec3c7;
+}
+rect.svg_image {
+  fill: none;
+}
+rect image {
+  border: 1px dashed steelblue;
 }
 
 @media only screen and (max-width: 1200px) {

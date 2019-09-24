@@ -326,7 +326,7 @@ function render (data) {
       container.insertAdjacentHTML('beforeend', `
         <li class="slide" data-mos-slide_idx="${idx}">
           <div class="slide__idx">${idx + 1}</div>
-          <div class="slide__image" title="${data.title}"></div>
+          <div class="slide__image previewImg" title="${data.title}"></div>
         </li>
       `)
     }
@@ -489,6 +489,104 @@ function copy (cut = false) {
     lastClick.cutPasteData.previousPosition = previousPosition
     lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
   }
+}
+
+function experimentalSVGWrite (page, idx, guides = false) {
+  const gpig = document.querySelectorAll('.slide')[idx].querySelector('.slide__image')
+  gpig.classList.remove('previewImg')
+  const bound = gpig.getBoundingClientRect()
+  const width = Math.floor(bound.width)
+  const height = Math.floor(bound.height)
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.className = 'icon-control_1'
+  svg.dataset.name = 'Layer 1'
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+  svg.setAttribute('width', `${width}`)
+  svg.setAttribute('height', `${height}`)
+
+  // const testG = document.createElement('g')
+  // const testRect = document.createElement('rect')
+  function createRect (entity) {
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+    const { x, y, width: eWidth, height: eHeight } = entity
+    const gap = 4 // arbitrery
+    // TODO: Come back to this to add gaps
+    // console.log(((x / 13) * (width + (gap * (13-x)))), ((x / 13) * width))
+    // const rectX = ((x / 13) * (width + (gap * (13-x))))// + (gap * x)
+    // const rectY = ((y / 20) * (height - (gap * (y / 20))))// + (gap * y)
+    const rectX = ((x / 13) * width)
+    const rectY = ((y / 20) * height)
+    // const rectW = ((eWidth / 13) * (width - (gap * 2)))
+    // const rectH = ((eHeight / 20) * (height - (gap * 2)))
+    const rectW = ((eWidth / 13) * width)
+    const rectH = ((eHeight / 20) * height)
+    rect.setAttribute('width', rectW)
+    rect.setAttribute('height', rectH)
+    rect.setAttribute('x', rectX)
+    rect.setAttribute('y', rectY)
+    rect.setAttribute('rx', '0')
+    rect.setAttribute('ry', '0')
+    rect.setAttribute('fill', 'red')
+    switch(entity._type) {
+      case "text":
+        // rect.classList.add('svg_text')
+        const text_img = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+        text_img.setAttribute('preserveAspectRatio', 'xMidYMid slice')
+        text_img.setAttribute('width', rectW)
+        text_img.setAttribute('height', rectH)
+        text_img.setAttribute('x', rectX)
+        text_img.setAttribute('y', rectY - (rectH / 2))
+        text_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'https://png.pngtree.com/svg/20170811/wavy_line_406381.png')
+        return text_img
+        break;
+      case "image":
+      // <image xlink:href="https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png" height="200" width="200"/>
+        // rect.classList.add('svg_image')
+        const img = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+        // img.setAttribute('xlink:href', defaultImg.src)
+        img.setAttribute('preserveAspectRatio', 'xMidYMid slice')
+        img.setAttribute('width', rectW)
+        img.setAttribute('height', rectH)
+        img.setAttribute('x', rectX)
+        img.setAttribute('y', rectY)
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', entity.src)
+
+        return img
+        rect.appendChild(svgimg)
+        break;
+      default:
+        console.warn('Invalid type found; thumbnail render process', entity)
+        break;
+    }
+    return rect
+  }
+  if (guides) {
+    for (let i=1; i<13; i++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line")
+      line.setAttribute('x1', (i / 13) * width)
+      line.setAttribute('y1', 0)
+      line.setAttribute('x2', (i / 13) * width)
+      line.setAttribute('y2', height)
+      line.setAttribute('stroke', 'black')
+      svg.appendChild(line)
+    }
+    for (let i=1; i<20; i++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line")
+      line.setAttribute('x1', 0)
+      line.setAttribute('y1', (i / 20) * height)
+      line.setAttribute('x2', width)
+      line.setAttribute('y2', (i / 20) * height)
+      line.setAttribute('stroke', '#bec3c7')
+      svg.appendChild(line)
+    }
+  }
+
+  // const svgEntities = serialise()[2].entities
+  page.entities.forEach(each => svg.appendChild(createRect(each)))
+
+  console.log(svg)
+  gpig.innerHTML = ''
+  gpig.appendChild(svg)
 }
 
 function handleGlobalKeyPress (event) {
@@ -1310,6 +1408,10 @@ initialiseItemMenuInterface()
 initDragDrop()
 initialiseEditMenu()
 initFullScreen()
+setTimeout(() => {
+  const ent = serialise()
+  ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
+}, 3000)
 }
 
 // ========== / Page initialisation ==========

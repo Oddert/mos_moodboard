@@ -187,10 +187,15 @@ $page_width: 75vw;
         border-radius: 5px;
         flex: 1;
         margin: 0 8px 0 0;
-        background-image: url('https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &.previewImg {
+          background-image: url('https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png');
+        }
       }
       &.dragging {
         opacity: .5;
@@ -1356,6 +1361,29 @@ $page_width: 75vw;
       &[data-gs-max-width="#{$idx}"] { width: (100% / $columns) * $idx }
       &[data-gs-x="#{$idx}"] { left: (100% / $columns) * $idx; }
     }
+  }
+}
+
+svg {
+  width: 35px;
+  height: 35px;
+  width: 118px;
+  height: 72px;
+  // border: 1px dashed tomato;
+}
+
+rect {
+  stroke: none;
+  fill: red;
+  fill: none;
+  &.svg_text {
+    fill: #bec3c7;
+  }
+  &.svg_image {
+    fill: none;
+  }
+  image {
+    border: 1px dashed steelblue;
   }
 }
 
