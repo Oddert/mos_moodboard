@@ -290,7 +290,7 @@ function performLibSeach (extention, value, cb) {
     })
 }
 
-function render (data) {
+function render (data, overrideWidth) {
 
   const pages = document.querySelector('.pages')
   const slides = document.querySelector('.slides__grid')
@@ -353,8 +353,9 @@ function render (data) {
   updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
   // NOTE: Are we still using userRender ??
-  userRender = () => createGridContent (pages, data)
-  userRender()
+  userRender = overrideWidth => createGridContent (pages, data, overrideWidth)
+  if (overrideWidth) userRender (overrideWidth)
+  else userRender()
 }
 
 function addOnePageContent (page, idx, width, height) {
@@ -372,10 +373,10 @@ function addOnePageContent (page, idx, width, height) {
   page.dataset.mosPageIdx = idx
 }
 
-function createGridContent (pages, data) {
+function createGridContent (pages, data, overrideWidth) {
   const all = pages.querySelectorAll('.page .page__content')
 
-  const containerWidth = document.querySelector('.pages').offsetWidth
+  const containerWidth = overrideWidth ? overrideWidth : document.querySelector('.pages').offsetWidth
   const pageWidth = Math.floor(containerWidth * .95)
   const pageHeight = Math.floor(pageWidth * (9/16))
 
@@ -494,9 +495,9 @@ function copy (cut = false) {
 }
 
 function experimentalSVGWrite (page, idx, guides = false) {
-  const gpig = document.querySelectorAll('.slide')[idx].querySelector('.slide__image')
-  gpig.classList.remove('previewImg')
-  const bound = gpig.getBoundingClientRect()
+  const slide = document.querySelectorAll('.slide')[idx].querySelector('.slide__image')
+  slide.classList.remove('previewImg')
+  const bound = slide.getBoundingClientRect()
   const width = Math.floor(bound.width)
   const height = Math.floor(bound.height)
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
@@ -604,13 +605,11 @@ function experimentalSVGWrite (page, idx, guides = false) {
       svg.appendChild(line)
     }
   }
-
-  // const svgEntities = serialise()[2].entities
   page.entities.forEach(each => svg.appendChild(createRect(each)))
 
-  console.log(svg)
-  gpig.innerHTML = ''
-  gpig.appendChild(svg)
+  // console.log(svg)
+  slide.innerHTML = ''
+  slide.appendChild(svg)
 }
 
 function renderIcons () {
@@ -872,31 +871,48 @@ function toggleFullscreen (e, close) {
   if (fullscreen.open || close) {
     console.log('...closeing')
 
+    fullscreen.open = false
   } else {
     console.log('...opening')
     const test = focusedPage.gridElem
+    const pages = document.querySelector('.pages')
     console.log(test)
-    function open () {
-      if (test.requestFullscreen) {
+    function open (target) {
+      if (target.requestFullscreen) {
         console.log('1')
-        test.requestFullscreen()
-      } else if (test.mozRequestFullScreen) {
+        target.requestFullscreen()
+      } else if (target.mozRequestFullScreen) {
         console.log('2')
-        test.mozRequestFullScreen()
-      } else if (test.webkitRequestFullscreen) {
+        target.mozRequestFullScreen()
+      } else if (target.webkitRequestFullscreen) {
         console.log('3')
-        test.webkitRequestFullscreen()
-      } else if (test.msRequestFullscreen) {
+        target.webkitRequestFullscreen()
+      } else if (target.msRequestFullscreen) {
         console.log('4')
-        test.msRequestFullscreen()
+        target.msRequestFullscreen()
       } else {
-        console.log('nope')
+        console.error('Fullscreen capability not currently available OR blocked by browser')
         return
       }
+      setTimeout(() => {
+        // userRender(window.innerWidth)
+        render (data, window.innerWidth)
+      }, 1000)
       fullscreen.open = true
     }
-    open()
+    open(pages)
   }
+}
+
+function handleExitFullScreen (e) {
+  if (
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.mozFullScreenElement ||
+    document.msFullscreenElement
+  ) {
+    // console.log(true)
+  } else render (data)
 }
 
 // ========== / Top Level Functions ==========
@@ -1889,6 +1905,7 @@ function createMaterialWidget (product) {
 window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
+document.addEventListener('fullscreenchange', handleExitFullScreen)
 document.querySelector('.pages').addEventListener('keydown', handleGlobalKeyPress)
 document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 
