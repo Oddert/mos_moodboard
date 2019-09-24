@@ -198,8 +198,17 @@ const fora_payload = {
         {x: 7, y: 4, width: 6, height: 7, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-4-800x549.jpg", alt: "A banner image from the storefront" },
         {x: 7, y: 11, width: 6, height: 7, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-6-800x539.jpg", alt: "A banner image from the storefront" },
         {x: 4, y: 4, width: 3, height: 14, _type: "image", src:  "https://www.bauline.it/wp/wp-content/uploads/2016/07/Tavolo-bauline-minuetto-2-800x655.jpg", alt: "A banner image from the storefront" },
-        {x: 0, y: 10, width: 3, height: 5, _type: "text", text: "3x Minuetto Console: https://www.bauline.it/en/products/minuetto/ Dimension \n(LxPxH): Closed cm 140x48x76 \nOpen cm 140x300x76 \nn° 05 external leaves, 50 cm \nCOD06 Light Oak"},
+        {x: 0, y: 10, width: 3, height: 5, _type: "text", size: "small", text: "3x Minuetto Console: https://www.bauline.it/en/products/minuetto/ Dimension \n(LxPxH): Closed cm 140x48x76 \nOpen cm 140x300x76 \nn° 05 external leaves, 50 cm \nCOD06 Light Oak"},
         {x: 0, y: 15, width: 3, height: 4, _type: "material", material_id: "75136", img: { src: "https://matterofstuff.com/wp-content/uploads/2019/04/Hand-Planed-1024x1022.jpg", alt: "" }, title: "Light Oak", design: "This guy" },
+      ]
+    },
+    {
+      title: 'Text Size Test',
+      entities: [
+        {x:1,y:3,width:5,height:16,_type:"image",src:"https://pbs.twimg.com/profile_images/844519182024761349/SBh9U9bN.jpg","alt":"A banner image from the storefront"},
+        {x:7,y:6,width:6,height:2,_type:"text",text:"Fora 42 Berners St Moodboard.", size: "small"},
+        {x:7,y:8,width:6,height:2,_type:"text",text:"Fora 42 Berners St Moodboard.", size: "medium"},
+        {x:7,y:10,width:6,height:2,_type:"text",text:"Fora 42 Berners St Moodboard.", size: "large"}
       ]
     },
   ]

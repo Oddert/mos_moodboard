@@ -1,3 +1,9 @@
+:root {
+  --small_font: 10px;
+  --medium_font: 16px;
+  --large_font: 20px;
+}
+
 * {
   box-sizing: border-box;
   font-family: "Europa", "roboto", arial, sans-serif, helvetica, droid-sans;
@@ -366,13 +372,13 @@ button[name=dev] {
   font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--small {
-  font-size: 8px;
+  font-size: var(--small_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--medium {
-  font-size: 12px;
+  font-size: var(--medium_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--large {
-  font-size: 16px;
+  font-size: var(--large_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button:hover {
   background-color: #ecf0f1;
@@ -444,13 +450,13 @@ button[name=dev] {
   font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.edit_text__size--small {
-  font-size: 8px;
+  font-size: var(--small_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.edit_text__size--medium {
-  font-size: 12px;
+  font-size: var(--medium_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.edit_text__size--large {
-  font-size: 16px;
+  font-size: var(--large_font);
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button:hover {
   background-color: #ecf0f1;
@@ -786,16 +792,16 @@ button[name=dev] {
   vertical-align: middle;
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text {
-  font-size: 12px;
+  font-size: var(--medium_font);
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text.small {
-  font-size: 8px;
+  font-size: var(--small_font);
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text.medium {
-  font-size: 12px;
+  font-size: var(--medium_font);
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text.large {
-  font-size: 16px;
+  font-size: var(--large_font);
 }
 .grid-stack-item .grid-stack-item-content .content.image {
   display: flex;
@@ -1360,6 +1366,33 @@ button[name=dev] {
 }
 .grid-stack.page__content .grid-stack-item[data-gs-x="13"] {
   left: 100%;
+}
+
+@media only screen and (max-width: 1200px) {
+  :root {
+    --small_font: 9px;
+    --medium_font: 12px;
+    --large_font: 15px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  :root {
+    --small_font: 8px;
+    --medium_font: 10px;
+    --large_font: 12px;
+  }
+  :root .text_overflow {
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+}
+@media only screen and (max-width: 768px) {
+  :root {
+    --small_font: 6px;
+    --medium_font: 8px;
+    --large_font: 10px;
+  }
 }
 
 /*# sourceMappingURL=css/prototype/six.css.map */

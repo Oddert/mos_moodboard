@@ -86,15 +86,15 @@ const server = app.listen(
 //    -File Upload ✓
 // -Implament Page Add ✓
 // -Implament Page Delete (1/2) ✓
-// -Implament auto-save and actual save
-// -Implament undo, redo
-//  -Item edit via selector:
-//    -Image
-//    -Product
-//    -Material
-//    -Colour
-//  -Design slide side-bar
-//    -Render hooks
-//    -Find a way to do thumbnail
-//    -Page order modification
-//  -How to do page sizing without vh / vh units ?????
+// -Implament auto-save and actual save x
+// -Implament undo, redo x
+//  -Item edit via selector: ✓
+//    -Image ✓
+//    -Product ✓
+//    -Material ✓
+//    -Colour ✓
+//  -Design slide side-bar x
+//    -Render hooks ✓
+//    -Find a way to do thumbnail x
+//    -Page order modification ✓
+//  -How to do page sizing without vh / vh units ✓

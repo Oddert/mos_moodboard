@@ -124,7 +124,8 @@ function extractElementData (jQueryElem) {
       _type: "text",
       text: content.find('.content_text__text')
         ? content.find('.content_text__text').text()
-        : content.find('.content_text__input').val()
+        : content.find('.content_text__input').val(),
+      size: content.data('mosText_size')
     }
     case "image":
     return {
@@ -388,6 +389,7 @@ function createGridContent (pages, data) {
       if (grid) grid.removeAll()
       elem.data('mosPageIdx', pageIdx)
       _.each(items, function (node, itemIdx) {
+        // NOTE: overflow properties are a workaround for now only
         const newWidget = $(`
           <div>
             <div class="grid-stack-item-content" data-mos-page="${pageIdx}" data-mos-item="${itemIdx}">
@@ -411,6 +413,7 @@ function createGridContent (pages, data) {
         // createdWidget.data('mospage', `${pageIdx}`)
         if (node._type === "text") {
           // TODO: Integrate live update capabilities from bellow text edit, remove button
+          createdWidget.find('.grid-stack-item-content').addClass('text_overflow')
           createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
           createdWidget.dblclick(openTextEditor)
         }
@@ -1316,7 +1319,7 @@ initFullScreen()
 // ========== Content Creators ==========
 
 const createText = ({ text, size }) => `
-  <div class="content text" data-mos-contenttype="text">
+  <div class="content text" data-mos-contenttype="text" data-mos-text_size="${size ? size : 'medium'}">
     <div class="content__controls">
       <button class="content__controls--text_edit">✎</button>
       <button class="content__controls--delete">✖</button>
@@ -1614,9 +1617,10 @@ function createTextWidget (value, size) {
   if (focusedPage.grid) {
     const { grid, gridElem, idx } = focusedPage
     const entityCount = $(gridElem).children().length
+    // NOTE: overflow properties are a workaround for now only
     const newTextWidget = $(`
       <div>
-        <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}">
+        <div class="grid-stack-item-content" data-mos-page="${idx}" data-mos-item="${entityCount + 1}" style="overflow: visible; overflow-x: visible; overflow-y: visible;">
           ${createText({ text: /\w/gi.test(value) ? value : 'New Text Box', size })}
         </div>
       </div>

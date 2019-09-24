@@ -1,4 +1,14 @@
 
+:root {
+  // --small_font: 8px;
+  // --medium_font: 12px;
+  // --large_font: 16px;
+
+    --small_font: 10px;
+    --medium_font: 16px;
+    --large_font: 20px;
+}
+
 * {
 
   box-sizing: border-box;
@@ -12,10 +22,6 @@ body, html, h1, p {
 }
 
 $caption_text_size: 9px;
-
-$small_font: 8px;
-$medium_font: 12px;
-$large_font: 16px;
 
 button {
   background: #000;
@@ -42,6 +48,11 @@ button {
   }
 }
 
+.grid-stack .grid-stack-item .grid-stack-item-content {
+  .content.text {
+    // background-color: red;
+  }
+}
 
 .grid-stack-item-content {
   color: #2c3e50;
@@ -459,13 +470,13 @@ $page_width: 75vw;
                   font-weight: 800;
                   &.new_text__size {
                     &--small {
-                      font-size: $small_font;
+                      font-size: var(--small_font);
                     }
                     &--medium {
-                      font-size: $medium_font;
+                      font-size: var(--medium_font);
                     }
                     &--large {
-                      font-size: $large_font;
+                      font-size: var(--large_font);
                     }
                   }
                   &:hover {
@@ -550,13 +561,13 @@ $page_width: 75vw;
                   font-weight: 800;
                   &.edit_text__size {
                     &--small {
-                      font-size: $small_font;
+                      font-size: var(--small_font);
                     }
                     &--medium {
-                      font-size: $medium_font;
+                      font-size: var(--medium_font);
                     }
                     &--large {
-                      font-size: $large_font;
+                      font-size: var(--large_font);
                     }
                   }
                   &:hover {
@@ -912,10 +923,10 @@ $page_width: 75vw;
           vertical-align: middle;
         }
         .content_text__text {
-          font-size: $medium_font;
-          &.small { font-size: $small_font; }
-          &.medium { font-size: $medium_font; }
-          &.large { font-size: $large_font; }
+          font-size: var(--medium_font);
+          &.small { font-size: var(--small_font); }
+          &.medium { font-size: var(--medium_font); }
+          &.large { font-size: var(--large_font); }
         }
       }
       &.image {
@@ -1348,5 +1359,34 @@ $page_width: 75vw;
   }
 }
 
+// 992 - 1200
+@media only screen and (max-width: 1200px) {
+  :root {
+    --small_font: 9px;
+    --medium_font: 12px;
+    --large_font: 15px;
+  }
+}
+// 768 - 992
+@media only screen and (max-width: 992px) {
+  :root {
+    --small_font: 8px;
+    --medium_font: 10px;
+    --large_font: 12px;
+    .text_overflow {
+      overflow: visible;
+      overflow-x: visible;
+      overflow-y: visible;
+    }
+  }
+}
+// 0px - 768px
+@media only screen and (max-width: 768px) {
+  :root {
+    --small_font: 6px;
+    --medium_font: 8px;
+    --large_font: 10px;
+  }
+}
 
 // ========== POSSIBLE REMOVE ==========
