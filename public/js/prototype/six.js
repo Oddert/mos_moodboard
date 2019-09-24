@@ -143,7 +143,7 @@ function extractElementData (jQueryElem) {
       _type: "file",
       format: content.find('.file__data').data('mosFormat'),
       name: content.find('.file__cover__title p').text(),
-      image: {
+      img: {
         src: content.css('background-image').replace('url("', '').replace('")', '')
       }
     }
@@ -429,9 +429,11 @@ function createGridContent (pages, data) {
         if (node._type === "material") {
           createdWidget.dblclick(openMaterialEditor)
         }
-        // if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
-        //   initPageFocus()
-        // }
+        // detect last page and last item on last page
+        if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
+          // initPageFocus()
+          renderIcons()
+        }
       }, this)
     })
 }
@@ -507,29 +509,21 @@ function experimentalSVGWrite (page, idx, guides = false) {
   // const testG = document.createElement('g')
   // const testRect = document.createElement('rect')
   function createRect (entity) {
-    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
     const { x, y, width: eWidth, height: eHeight } = entity
-    const gap = 4 // arbitrery
     // TODO: Come back to this to add gaps
+    //const gap = 4 // arbitrery
     // console.log(((x / 13) * (width + (gap * (13-x)))), ((x / 13) * width))
     // const rectX = ((x / 13) * (width + (gap * (13-x))))// + (gap * x)
     // const rectY = ((y / 20) * (height - (gap * (y / 20))))// + (gap * y)
-    const rectX = ((x / 13) * width)
-    const rectY = ((y / 20) * height)
     // const rectW = ((eWidth / 13) * (width - (gap * 2)))
     // const rectH = ((eHeight / 20) * (height - (gap * 2)))
+    const rectX = ((x / 13) * width)
+    const rectY = ((y / 20) * height)
     const rectW = ((eWidth / 13) * width)
     const rectH = ((eHeight / 20) * height)
-    rect.setAttribute('width', rectW)
-    rect.setAttribute('height', rectH)
-    rect.setAttribute('x', rectX)
-    rect.setAttribute('y', rectY)
-    rect.setAttribute('rx', '0')
-    rect.setAttribute('ry', '0')
-    rect.setAttribute('fill', 'red')
+
     switch(entity._type) {
       case "text":
-        // rect.classList.add('svg_text')
         const text_img = document.createElementNS('http://www.w3.org/2000/svg', 'image')
         text_img.setAttribute('preserveAspectRatio', 'xMidYMid slice')
         text_img.setAttribute('width', rectW)
@@ -540,25 +534,55 @@ function experimentalSVGWrite (page, idx, guides = false) {
         return text_img
         break;
       case "image":
-      // <image xlink:href="https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png" height="200" width="200"/>
-        // rect.classList.add('svg_image')
         const img = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-        // img.setAttribute('xlink:href', defaultImg.src)
         img.setAttribute('preserveAspectRatio', 'xMidYMid slice')
         img.setAttribute('width', rectW)
         img.setAttribute('height', rectH)
         img.setAttribute('x', rectX)
         img.setAttribute('y', rectY)
         img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', entity.src)
-
         return img
         rect.appendChild(svgimg)
         break;
+      case "material":
+      case "product":
+      case "file":
+        const product_img = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+        product_img.setAttribute('preserveAspectRatio', 'xMidYMid slice')
+        product_img.setAttribute('width', rectW)
+        product_img.setAttribute('height', rectH)
+        product_img.setAttribute('x', rectX)
+        product_img.setAttribute('y', rectY)
+        product_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', entity.img.src)
+        return product_img
+        break;
+      case "colour":
+        const colour = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        const colour_fill = /#/gi.test(entity.hex) ? entity.hex : `#${entity.hex}`
+        colour.classList.add('svg_colour')
+        colour.setAttribute('width', rectW)
+        colour.setAttribute('height', rectH)
+        colour.setAttribute('x', rectX)
+        colour.setAttribute('y', rectY)
+        colour.setAttribute('rx', '0')
+        colour.setAttribute('ry', '0')
+        // colour.setAttribute('fill', colour_fill)
+        colour.style.fill = colour_fill
+        return colour
+        break;
       default:
         console.warn('Invalid type found; thumbnail render process', entity)
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        rect.setAttribute('width', rectW)
+        rect.setAttribute('height', rectH)
+        rect.setAttribute('x', rectX)
+        rect.setAttribute('y', rectY)
+        rect.setAttribute('rx', '0')
+        rect.setAttribute('ry', '0')
+        rect.setAttribute('fill', 'red')
+        return rect
         break;
     }
-    return rect
   }
   if (guides) {
     for (let i=1; i<13; i++) {
@@ -587,6 +611,11 @@ function experimentalSVGWrite (page, idx, guides = false) {
   console.log(svg)
   gpig.innerHTML = ''
   gpig.appendChild(svg)
+}
+
+function renderIcons () {
+  const ent = serialise()
+  ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
 }
 
 function handleGlobalKeyPress (event) {
@@ -1408,10 +1437,6 @@ initialiseItemMenuInterface()
 initDragDrop()
 initialiseEditMenu()
 initFullScreen()
-setTimeout(() => {
-  const ent = serialise()
-  ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
-}, 3000)
 }
 
 // ========== / Page initialisation ==========
@@ -1482,7 +1507,7 @@ const createColour = ({ hex }) => `
     <div class="colour__module" style="background-color: ${hex};"></div>
   </div>
 `
-const createFile = ({ format, name, image: { src } }) => {
+const createFile = ({ format, name, img: { src } }) => {
   switch (format) {
     case 'pdf':
       return `

@@ -1382,6 +1382,9 @@ rect {
   &.svg_image {
     fill: none;
   }
+  &.svg_colour {
+    fill: initial;
+  }
   image {
     border: 1px dashed steelblue;
   }
