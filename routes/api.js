@@ -88,7 +88,7 @@ router.route('/product/:searchTerm')
     const search = new RegExp(req.params.searchTerm, 'gi')
     const data = () => [...sampleProducts()].filter(each => {
       if (!each) return false
-      else return each.title.match(search)
+      else return each.title && each.title.match(search)
     })
     res.json(data())
   })

@@ -451,7 +451,7 @@ function pageScrollHandler () {
   const pages = document.querySelectorAll('.page')
   const { scrollY } = window
   const heights = []
-  pages.forEach((each, idx) => heights.push({
+  pages.forEach((each, idx) => heights.push ({
     offset: each.offsetTop + (each.scrollHeight / 2),
     gridElem: each,
     grid: $(each).find('.page__content').data('gridstack'),
@@ -471,6 +471,7 @@ function pageScrollHandler () {
     )[0]
   }
   focusedPage = getClosestToCenter()
+  renderIcons()
   updateSlideBar (focusedPage.idx)
 }
 
@@ -496,6 +497,7 @@ function copy (cut = false) {
 
 function experimentalSVGWrite (page, idx, guides = false) {
   const slide = document.querySelectorAll('.slide')[idx].querySelector('.slide__image')
+  slide.innerHTML = ''
   slide.classList.remove('previewImg')
   const bound = slide.getBoundingClientRect()
   const width = Math.floor(bound.width)
@@ -956,7 +958,7 @@ function initialisePageAdd () {
   const newPageButton = document.querySelector('.slides button.new_page')
   function createNewPage () {
     const serialised = serialise()
-    serialised.splice(focusedPage.idx, 0, {
+    serialised.splice(focusedPage.idx+1, 0, {
       title: 'New Page',
       entities: []
     })

@@ -131,7 +131,7 @@ const fora_payload = {
       entities: [
         {x: 4, y: 1, width: 6, height: 3, _type: "text", text: "Shapes and Inspiration"},
         {x: 1, y: 6, width: 3, height: 10, _type: "image", src: "https://cdn.mos.cms.futurecdn.net/U4BRsKHqqUrs3wcXVY49ub-768-80.jpg", alt: "A banner image from the storefront" },
-        {x: 4, y: 6, width: 4, height: 10, _type: "image", src: "https://matterofstuff.com/wp-content/uploads/2018/09/our-curated-design-shop-2000x944.jpg", alt: "A banner image from the storefront" },
+        {x: 4, y: 6, width: 4, height: 10, _type: "image", src: "https://matterofstuff.com/wp-content/uploads/2019/09/Matter-of-Stuff-and-Sketch-exhibition-2000x1583.jpg", alt: "A banner image from the storefront" },
         {x: 8, y: 6, width: 4, height: 10, _type: "image", src: "https://matterofstuff.com/wp-content/uploads/2018/09/our-curated-design-shop-2000x944.jpg", alt: "A banner image from the storefront" },
       ]
     },
