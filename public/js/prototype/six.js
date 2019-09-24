@@ -236,7 +236,8 @@ function updateSlideBar (idx) {
 
 function handleSlideChange (event) {
   const allPages = document.querySelectorAll('.page')
-  const idx = Number(event.target.closest('.slide').dataset.mosSlide_idx)
+  const slide = event.target.classList.contains('.slide') ? event.target : event.target.closest('.slide')
+  const idx = Number(slide.dataset.mosSlide_idx)
   const rect = allPages[idx].getBoundingClientRect()
   window.scrollTo(null, window.scrollY + rect.top)
   updateSlideBar(idx)
@@ -272,7 +273,7 @@ function createSlideInterfaceGrid (clearPrevious) {
   }
   queryElem.sortable({ start, stop })
   queryElem.disableSelection()
-  queryElem.click(handleSlideChange)
+  queryElem.find('.slide').click(handleSlideChange)
 }
 
 const sanitiseSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
@@ -327,8 +328,25 @@ function render (data, overrideWidth) {
         <li class="slide" data-mos-slide_idx="${idx}">
           <div class="slide__idx">${idx + 1}</div>
           <div class="slide__image previewImg" title="${data.title}"></div>
+          <div class="slide__menu">
+            <button class="slide__menu__toggle"><i class="fas fa-ellipsis-h"></i></button>
+            <ul class="slide__menu__items">
+              <li><button type="button" name"slide_delete" class="slide__menu__delete">Delete</button></li>
+            </ul>
+          </div>
         </li>
       `)
+      const slides = container.querySelectorAll('.slide')
+      const thisSlide = slides[slides.length - 1]
+      const slideMenu = thisSlide.querySelector('.slide__menu')
+      const slideDelete = slideMenu.querySelector('.slide__menu__delete')
+      slideMenu.querySelector('.slide__menu__toggle').onclick = e => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (slideMenu.classList.contains('active')) slideMenu.classList.remove('active')
+        else slideMenu.classList.add('active')
+      }
+      slideDelete.onclick = () => removePageByIdx(idx)
     }
     addSlide (idx, { title })
   }
@@ -350,6 +368,7 @@ function render (data, overrideWidth) {
       each.style.height = `${height}px`
     })
   }
+  oddert = updateSlideDisplay
   updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
   // NOTE: Are we still using userRender ??
@@ -473,26 +492,6 @@ function pageScrollHandler () {
   focusedPage = getClosestToCenter()
   renderIcons()
   updateSlideBar (focusedPage.idx)
-}
-
-function copy (cut = false) {
-  if (lastClick.widget.length) {
-    const attributes = []
-    const previousPosition = []
-    const { cutPasteData: { lastAction }, widget } = lastClick
-    widget.forEach(each => {
-      const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = each.dataset
-      const { mosPageIdx: gridIdx } = each.closest('.page__content').dataset
-      attributes.push(extractElementData($(each)))
-      previousPosition.push({
-        wasOnGrid: true,
-        x, y, width, height, gridIdx
-      })
-    })
-    lastClick.cutPasteData.attributes = attributes
-    lastClick.cutPasteData.previousPosition = previousPosition
-    lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
-  }
 }
 
 function experimentalSVGWrite (page, idx, guides = false) {
@@ -619,7 +618,29 @@ function renderIcons () {
   ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
 }
 
+function copy (cut = false) {
+  console.log('sdfghjnk')
+  if (lastClick.widget.length) {
+    const attributes = []
+    const previousPosition = []
+    const { cutPasteData: { lastAction }, widget } = lastClick
+    widget.forEach(each => {
+      const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = each.dataset
+      const { mosPageIdx: gridIdx } = each.closest('.page__content').dataset
+      attributes.push(extractElementData($(each)))
+      previousPosition.push({
+        wasOnGrid: true,
+        x, y, width, height, gridIdx
+      })
+    })
+    lastClick.cutPasteData.attributes = attributes
+    lastClick.cutPasteData.previousPosition = previousPosition
+    lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
+  }
+}
+
 function handleGlobalKeyPress (event) {
+  console.log(event)
       // Going to have to go on faith that this works before testing
       // can be crried out on mac devices
   // ==================================
@@ -635,6 +656,10 @@ function handleGlobalKeyPress (event) {
     }
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')
+      // const hiddenElement = document.createElement('input')
+      // hiddenElement.focus()
+      // hiddenElement.execCommand('paste')
+      // console.log(hiddenElement)
     }
   }
 }
@@ -1455,6 +1480,9 @@ initialiseItemMenuInterface()
 initDragDrop()
 initialiseEditMenu()
 initFullScreen()
+// WARNING: there listeners are broken, why ???
+document.querySelector('.pages').addEventListener('keydown', handleGlobalKeyPress)
+document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 }
 
 // ========== / Page initialisation ==========
@@ -1666,6 +1694,10 @@ function toggleTitleDelete () {
 
 function removePage (e) {
   const idx = Number(e.target.closest('.page').querySelector('.page__content').dataset.mosPageIdx)
+  removePageByIdx (idx)
+}
+
+function removePageByIdx (idx) {
   const serialised = serialise()
   const serialisedRemoved = [...serialised.slice(0, idx), ...serialised.slice(idx + 1)]
   data.projects = serialisedRemoved
@@ -1908,8 +1940,6 @@ window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
 document.addEventListener('fullscreenchange', handleExitFullScreen)
-document.querySelector('.pages').addEventListener('keydown', handleGlobalKeyPress)
-document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 
 // ========== / Event Binding ==========
 

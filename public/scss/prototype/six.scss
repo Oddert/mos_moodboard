@@ -91,13 +91,15 @@ $page_width: 75vw;
     grid-template-rows: auto 1fr auto;
     .top_menu {
       min-height: 30px;
-      box-shadow: 0px 5px 10px rgba(0,0,0,.1);
+      // box-shadow: 0px 5px 10px rgba(0,0,0,.1);
+      border-bottom: 1px solid #bec3c7;
       display: flex;
       justify-content: center;
     }
     .bottom_menu {
       min-height: 30px;
-      box-shadow: 0px -5px 10px rgba(0,0,0,.1);
+      // box-shadow: 0px -5px 10px rgba(0,0,0,.1);
+      border-top: 1px solid #bec3c7;
       display: flex;
       justify-content: center;
       .fullscreen {
@@ -197,6 +199,54 @@ $page_width: 75vw;
           background-image: url('https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png');
         }
       }
+      .slide__menu {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        // border: 1px dashed tomato;
+        width: 100%;
+        min-height: 50px;
+        .slide__menu__toggle {
+          padding: 0 4px;
+          color: #7e8c8d;
+          background: none;
+          opacity: 0;
+          transition: .2s ease;
+          &:hover {
+            color: black;
+          }
+        }
+        .slide__menu__items {
+          list-style-type: none;
+          padding: 10px;
+          margin: 0;
+          background: #fff;
+          flex: 1;
+          border-radius: 5px;
+          box-shadow: 5px 5px 5px rgba(0,0,0,.1);
+          display: none;
+          .slide__menu__delete {
+            padding: 0 4px;
+            background: none;
+            color: black;
+            &:hover {
+              color: #c1392b;
+              text-decoration: underline;
+            }
+          }
+        }
+        &.active {
+          .slide__menu__toggle {
+            opacity: 1;
+          }
+          .slide__menu__items {
+            display: flex;
+          }
+        }
+      }
       &.dragging {
         opacity: .5;
       }
@@ -204,6 +254,11 @@ $page_width: 75vw;
         background: rgba(26,198,232, .1);
         .slide__image {
           border-color: rgba(26,198,232, 1);
+        }
+      }
+      &:hover {
+        .slide__menu .slide__menu__toggle {
+          opacity: 1;
         }
       }
     }
@@ -727,7 +782,8 @@ $page_width: 75vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 10px rgba(0,0,0,.1);
+  // box-shadow: 0px 5px 10px rgba(0,0,0,.1);
+  border-bottom: 1px solid #bec3c7;
   .product_search__input--wrapper {
     border: 1px solid #bec3c7;
     border-radius: 10px;
@@ -886,7 +942,7 @@ $page_width: 75vw;
   .grid-stack-item-content {
     // border: 1px solid darkgreen;
     // box-shadow: 5px 5px 10px rgba(0,0,0,.1);
-    border: 1px solid #ecf0f1;
+    border: 2px solid #ecf0f1;
     border-radius: 3px;
 
     box-sizing: border-box;
@@ -1364,30 +1420,32 @@ $page_width: 75vw;
   }
 }
 
-svg {
-  width: 35px;
-  height: 35px;
-  width: 118px;
-  height: 72px;
-  // border: 1px dashed tomato;
-}
+.slide {
+  svg {
 
-rect {
-  stroke: none;
-  fill: red;
-  fill: none;
-  &.svg_text {
-    fill: #bec3c7;
+    width: 118px;
+    height: 72px;
+    // border: 1px dashed tomato;
   }
-  &.svg_image {
+
+  rect {
+    stroke: none;
+    fill: red;
     fill: none;
+    &.svg_text {
+      fill: #bec3c7;
+    }
+    &.svg_image {
+      fill: none;
+    }
+    &.svg_colour {
+      fill: initial;
+    }
+    image {
+      border: 1px dashed steelblue;
+    }
   }
-  &.svg_colour {
-    fill: initial;
-  }
-  image {
-    border: 1px dashed steelblue;
-  }
+
 }
 
 // 992 - 1200
