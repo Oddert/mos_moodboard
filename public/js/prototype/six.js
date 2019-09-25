@@ -295,6 +295,8 @@ function render (data, overrideWidth) {
 
   const pages = document.querySelector('.pages')
   const slides = document.querySelector('.slides__grid')
+  pages.removeEventListener('keydown', handleGlobalKeyPress)
+  pages.removeEventListener('click', deselectOnGrid)
   pages.innerHTML = ""
   slides.innerHTML = ""
 
@@ -424,7 +426,9 @@ function createGridContent (pages, data, overrideWidth) {
         createdWidget.click(function (event) {
           if (lastClick.widget.length && !event.shiftKey) {
             lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+            lastClick.widget = []
           }
+          if (lastClick.widget[0] === this) return
           lastClick.widget.push(this)
           lastClick.grid = grid
           lastClick.gridElem = elem
@@ -453,6 +457,9 @@ function createGridContent (pages, data, overrideWidth) {
         if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
           // initPageFocus()
           renderIcons()
+          // pages.addEventListener('keydown', handleGlobalKeyPress)
+          // pages.setAttribute('tabindex', 0)
+          pages.addEventListener('click', deselectOnGrid)
         }
       }, this)
     })
@@ -619,7 +626,6 @@ function renderIcons () {
 }
 
 function copy (cut = false) {
-  console.log('sdfghjnk')
   if (lastClick.widget.length) {
     const attributes = []
     const previousPosition = []
@@ -640,12 +646,12 @@ function copy (cut = false) {
 }
 
 function handleGlobalKeyPress (event) {
-  console.log(event)
-      // Going to have to go on faith that this works before testing
-      // can be crried out on mac devices
+  // Going to have to go on faith that the following (highlighted) seection
+  // works before testing can be crried out on mac devices
   // ==================================
   if ((navigator.platform === "MacIntel" && event.metaKey) || (!(navigator.platform === "MacIntel" && event.metaKey) && event.ctrlKey)) {
   // ==================================
+
     if (event.key === 'c' && event.ctrlKey) {
       console.log('COPY')
       copy ()
@@ -1481,8 +1487,6 @@ initDragDrop()
 initialiseEditMenu()
 initFullScreen()
 // WARNING: there listeners are broken, why ???
-document.querySelector('.pages').addEventListener('keydown', handleGlobalKeyPress)
-document.querySelector('.pages').addEventListener('click', deselectOnGrid)
 }
 
 // ========== / Page initialisation ==========
@@ -1806,10 +1810,12 @@ function createTextWidget (value, size) {
     createdTextWidget.click(function (event) {
       if (lastClick.widget.length && !event.shiftKey) {
         lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        lastClick.widget = []
       }
+      if (lastClick.widget[0] === this) return
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = gridElem
+      lastClick.gridElem = elem
       this.classList.add('user_focus')
     })
     createdTextWidget.dblclick(openTextEditor)
@@ -1835,10 +1841,12 @@ function createImageWidget (src, alt) {
     createdImageWidget.click(function (event) {
       if (lastClick.widget.length && !event.shiftKey) {
         lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        lastClick.widget = []
       }
+      if (lastClick.widget[0] === this) return
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = gridElem
+      lastClick.gridElem = elem
       this.classList.add('user_focus')
     })
     createdImageWidget.dblclick(openImageEditor)
@@ -1863,10 +1871,12 @@ function createColourWidget (picker) {
     createdColourWidget.click(function (event) {
       if (lastClick.widget.length && !event.shiftKey) {
         lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        lastClick.widget = []
       }
+      if (lastClick.widget[0] === this) return
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = gridElem
+      lastClick.gridElem = elem
       this.classList.add('user_focus')
     })
     createdColourWidget.dblclick(openColourEditor)
@@ -1891,10 +1901,12 @@ function createProductWidget (product) {
       createdProductWidget.click(function (event) {
         if (lastClick.widget.length && !event.shiftKey) {
           lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+          lastClick.widget = []
         }
+        if (lastClick.widget[0] === this) return
         lastClick.widget.push(this)
         lastClick.grid = grid
-        lastClick.gridElem = gridElem
+        lastClick.gridElem = elem
         this.classList.add('user_focus')
       })
       createdProductWidget.find('.content__controls--delete').click(function () {
@@ -1918,10 +1930,12 @@ function createMaterialWidget (product) {
       createdMaterialWidget.click(function (event) {
         if (lastClick.widget.length && !event.shiftKey) {
           lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+          lastClick.widget = []
         }
+        if (lastClick.widget[0] === this) return
         lastClick.widget.push(this)
         lastClick.grid = grid
-        lastClick.gridElem = gridElem
+        lastClick.gridElem = elem
         this.classList.add('user_focus')
       })
       createdMaterialWidget.find('.content__controls--delete').click(function () {
@@ -1940,6 +1954,7 @@ window.addEventListener('DOMContentLoaded', initPage)
 window.addEventListener('resize', debounce(() => userRender(), 250))
 window.addEventListener('scroll', debounce(pageScrollHandler, 50))
 document.addEventListener('fullscreenchange', handleExitFullScreen)
+document.addEventListener('keydown', handleGlobalKeyPress)
 
 // ========== / Event Binding ==========
 
