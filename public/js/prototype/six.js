@@ -644,7 +644,7 @@ function renderIcons () {
   ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
 }
 
-function copy (cut = false) {
+function copyWidget (cut = false) {
   if (lastClick.widget.length) {
     const attributes = []
     const previousPosition = []
@@ -665,6 +665,13 @@ function copy (cut = false) {
   }
 }
 
+function pasteWidget () {
+  // create new widget with old properties
+  // if CUT
+  //  -remove old widget
+  //  -remove old properties from lastClick
+}
+
 function handleGlobalKeyPress (event) {
   // Going to have to go on faith that the following (highlighted) seection
   // works before testing can be crried out on mac devices
@@ -674,14 +681,15 @@ function handleGlobalKeyPress (event) {
 
     if (event.key === 'c' && event.ctrlKey) {
       console.log('COPY')
-      if (lastClick.context === 'PAGE') copy()
+      if (lastClick.context === 'PAGE') copyWidget()
     }
     if (event.key === 'x' && event.ctrlKey) {
       console.log('CUT')
-      if (lastClick.context === 'PAGE') copy(true)
+      if (lastClick.context === 'PAGE') copyWidget(true)
     }
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')
+      if (lastClick.context === 'PAGE') pasteWidget ()
       // const hiddenElement = document.createElement('input')
       // hiddenElement.focus()
       // hiddenElement.execCommand('paste')
