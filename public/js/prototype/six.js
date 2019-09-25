@@ -23,12 +23,14 @@ const fullscreen = {
 }
 
 const lastClick = {
+  context: null,
   grid: null,
   x: null,
   y: null,
   gridElem: null,
   slide: null,
   widget: [],
+  slide: [],
   wasOnGrid: false,
   cutPasteData: {
     lastAction: null,
@@ -223,24 +225,37 @@ function save () {
 
 // ========== Top Level Functions ==========
 
-function updateSlideBar (idx) {
+function updateSlideBar (event, idx, updateContext) {
   const allSlides = document.querySelectorAll('.slide')
   // TODO: make "check if in view" detection for slides later
   allSlides.forEach((each, i) => {
     if (i === idx) {
-      lastClick.slide = each
+      // TODO: Multiple select
+      // if (lastClick.slide.length && !event.shiftKey) {
+      //   lastClick.slide.forEach(each => each.classList.remove('selected'))
+      //   lastClick.slide = []
+      // }
+      // if (lastClick.slide[0] === each) {
+      //   return
+      // }
+      // lastClick.slide.push(each)
+      if (updateContext) {
+        lastClick.slide = [each]
+        lastClick.context = 'SLIDE'
+      }
       each.classList.add('selected')
     } else each.classList.remove('selected')
   })
 }
 
-function handleSlideChange (event) {
+function handleSlideClick (event) {
   const allPages = document.querySelectorAll('.page')
   const slide = event.target.classList.contains('.slide') ? event.target : event.target.closest('.slide')
   const idx = Number(slide.dataset.mosSlide_idx)
   const rect = allPages[idx].getBoundingClientRect()
+  updateSlideBar(event, idx, true)
   window.scrollTo(null, window.scrollY + rect.top)
-  updateSlideBar(idx)
+
 }
 
 function reassignIndeces () {
@@ -273,7 +288,7 @@ function createSlideInterfaceGrid (clearPrevious) {
   }
   queryElem.sortable({ start, stop })
   queryElem.disableSelection()
-  queryElem.find('.slide').click(handleSlideChange)
+  queryElem.find('.slide').click(handleSlideClick)
 }
 
 const sanitiseSearchValue = value => value.replace(/\[|\]|\{|\}|\?|\&|http/gi, '')
@@ -370,6 +385,7 @@ function render (data, overrideWidth) {
       each.style.height = `${height}px`
     })
   }
+
   oddert = updateSlideDisplay
   updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
@@ -429,6 +445,7 @@ function createGridContent (pages, data, overrideWidth) {
             lastClick.widget = []
           }
           if (lastClick.widget[0] === this) return
+          lastClick.context = 'PAGE'
           lastClick.widget.push(this)
           lastClick.grid = grid
           lastClick.gridElem = elem
@@ -473,7 +490,7 @@ function initPageFocus () {
   focusedPage.idx = 0
 }
 
-function pageScrollHandler () {
+function pageScrollHandler (event) {
   const pages = document.querySelectorAll('.page')
   const { scrollY } = window
   const heights = []
@@ -491,14 +508,16 @@ function pageScrollHandler () {
     if (!nextDown) return nextUp
     if (!nextUp) return nextDown
     // get whole object instead of just offsets from Maths.Min
-    // don't look at me like that; we all commit crimes from time to time
+    // don't look at me like that; we all commit -a crimes from time to time
     else return [nextDown, nextUp].filter(
       each => each.offset === Math.max(nextDown.offset, nextUp.offset)
     )[0]
   }
-  focusedPage = getClosestToCenter()
+  const closestToCenter = getClosestToCenter()
+  if (lastClick.slide[0] && Number(lastClick.slide[0].dataset.mosSlide_idx) === closestToCenter.idx) return
+  focusedPage = closestToCenter
   renderIcons()
-  updateSlideBar (focusedPage.idx)
+  updateSlideBar (event, focusedPage.idx, false)
 }
 
 function experimentalSVGWrite (page, idx, guides = false) {
@@ -639,6 +658,7 @@ function copy (cut = false) {
         x, y, width, height, gridIdx
       })
     })
+    // lastClick.cutPasteData.context = 'PAGE'
     lastClick.cutPasteData.attributes = attributes
     lastClick.cutPasteData.previousPosition = previousPosition
     lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
@@ -654,11 +674,11 @@ function handleGlobalKeyPress (event) {
 
     if (event.key === 'c' && event.ctrlKey) {
       console.log('COPY')
-      copy ()
+      if (lastClick.context === 'PAGE') copy()
     }
     if (event.key === 'x' && event.ctrlKey) {
       console.log('CUT')
-      copy (true)
+      if (lastClick.context === 'PAGE') copy(true)
     }
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')
@@ -1813,6 +1833,7 @@ function createTextWidget (value, size) {
         lastClick.widget = []
       }
       if (lastClick.widget[0] === this) return
+      lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = elem
@@ -1844,6 +1865,7 @@ function createImageWidget (src, alt) {
         lastClick.widget = []
       }
       if (lastClick.widget[0] === this) return
+      lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = elem
@@ -1874,6 +1896,7 @@ function createColourWidget (picker) {
         lastClick.widget = []
       }
       if (lastClick.widget[0] === this) return
+      lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
       lastClick.gridElem = elem
@@ -1904,6 +1927,7 @@ function createProductWidget (product) {
           lastClick.widget = []
         }
         if (lastClick.widget[0] === this) return
+        lastClick.context = 'PAGE'
         lastClick.widget.push(this)
         lastClick.grid = grid
         lastClick.gridElem = elem
@@ -1933,6 +1957,7 @@ function createMaterialWidget (product) {
           lastClick.widget = []
         }
         if (lastClick.widget[0] === this) return
+        lastClick.context = 'PAGE'
         lastClick.widget.push(this)
         lastClick.grid = grid
         lastClick.gridElem = elem
