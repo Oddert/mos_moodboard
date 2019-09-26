@@ -714,7 +714,8 @@ function enableDrag (target, enable) {
 
   function handleMouseDown (e) {
     e.preventDefault()
-    if (e.target.classList.contains('.resize') || e.target.classList.contains('.resizer')) return
+    if (e.target.classList.contains('resize') || e.target.classList.contains('resizer')) return
+
     const rect = target.getBoundingClientRect()
     const computed = getComputedStyle(target, null)
     start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
@@ -723,7 +724,6 @@ function enableDrag (target, enable) {
     start.y = rect.top
     start.mouseX = e.pageX
     start.mouseY = e.pageY
-    console.log(start)
     window.addEventListener('mousemove', handleDrag)
     window.addEventListener('mouseup', endDrag)
   }
@@ -758,6 +758,7 @@ function enableResize (target, enable) {
 
     function handleMouseDown (e) {
       e.preventDefault()
+      if (!e.target.classList.contains('resizer')) return
       const rect = target.getBoundingClientRect()
       const computed = getComputedStyle(target, null)
       start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
@@ -779,7 +780,7 @@ function enableResize (target, enable) {
 
       }
       else if (handle.classList.contains('bl')) {
-        console.log(start.x, (e.pageX - start.mouseX), start.x - (e.pageX - start.mouseX))
+        // console.log(start.x, (e.pageX - start.mouseX), start.x - (e.pageX - start.mouseX))
         const width = start.width - (e.pageX - start.mouseX)
         const height = start.height + (e.pageY - start.mouseY)
         if (width > min) {
@@ -829,7 +830,7 @@ function toggleImageCrop (event) {
   if (content.classList.contains('crop_active')) {
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
-    disableDrag (resize)
+    disableDrag (resize, false)
     enableResize (resize, false)
     content.classList.remove('crop_active')
   } else {
