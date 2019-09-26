@@ -117,6 +117,7 @@ const sa = term => document.querySelectorAll(term)
 
 // ========== Serialise Functions ==========
 
+// TODO: New croping system is not picked up by serialise atm
 function extractElementData (jQueryElem) {
   const content = jQueryElem.find('.content')
   const dataType = content.data('mosContenttype')
@@ -684,7 +685,7 @@ function copyWidget (cut = false) {
       attributes.push(createSerialisedWidget($(each)))
       previousPosition.push({
         wasOnGrid: true,
-        x, y, width, height, gridIdx
+        x, y, width, height, gridIdx, widget: each, grid: each.closest('.grid-stack')
       })
     })
     // lastClick.cutPasteData.context = 'PAGE'
@@ -723,8 +724,7 @@ function pasteWidget () {
 
   const { idx: pageIdx, gridElem, grid } = focusedPage
   const itemIdx = gridElem.querySelectorAll('.grid-stack-item').length
-  lastClick.cutPasteData.attributes.forEach(each => {
-    console.log(each)
+  lastClick.cutPasteData.attributes.forEach((each, idx) => {
     const areaEmpty = grid.isAreaEmpty(each.x, each.y, each.width, each.height)
     const newWidget = $(`
       <div>
@@ -733,10 +733,7 @@ function pasteWidget () {
         </div>
       </div>
     `)
-    console.log(newWidget)
-    console.log(each.x, each.y, each.width, each.height, areaEmpty)
     const createdWidget = grid.addWidget(newWidget, each.x, each.y, each.width, each.height, !areaEmpty)
-    console.log(createdWidget)
     createdWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
@@ -753,6 +750,10 @@ function pasteWidget () {
       this.classList.add('user_focus')
     })
     testInitNewWidgetListeners (createdWidget, each)
+    if (lastClick.cutPasteData.lastAction === 'CUT') {
+      const { grid: prevGrid, widget: prevWidget } = lastClick.cutPasteData.previousPosition[idx]
+      $(prevGrid).data('gridstack').removeWidget($(prevWidget))
+    }
   })
 
   // create new widget with old properties
