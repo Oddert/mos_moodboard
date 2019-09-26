@@ -830,7 +830,7 @@ function toggleImageCrop (event) {
   if (content.classList.contains('crop_active')) {
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
-    disableDrag (resize, false)
+    enableDrag (resize, false)
     enableResize (resize, false)
     content.classList.remove('crop_active')
   } else {
