@@ -93,8 +93,15 @@ const server = app.listen(
 //    -Product ✓
 //    -Material ✓
 //    -Colour ✓
-//  -Design slide side-bar x
+//  -Design slide side-bar ✓
 //    -Render hooks ✓
-//    -Find a way to do thumbnail x
+//    -Find a way to do thumbnail ✓
 //    -Page order modification ✓
 //  -How to do page sizing without vh / vh units ✓
+//  -Paste Functionality
+//    -Can read slide position
+//    -Paste widget
+//    -Destroy old widget
+//    -Paste slide
+//  -New Sidebar Layout and collapse
+//  -

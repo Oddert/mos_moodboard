@@ -459,7 +459,9 @@ function createGridContent (pages, data, overrideWidth) {
           createdWidget.dblclick(openTextEditor)
         }
         if (node._type === "image") {
+          createdWidget.find('.grid-stack-item-content').addClass('image_overflow')
           createdWidget.dblclick(openImageEditor)
+          createdWidget.find('.content__controls--image_edit').click(toggleImageCrop)
         }
         if (node._type === "colour") {
           createdWidget.dblclick(openColourEditor)
@@ -693,8 +695,106 @@ function handleGlobalKeyPress (event) {
       // const hiddenElement = document.createElement('input')
       // hiddenElement.focus()
       // hiddenElement.execCommand('paste')
-      // console.log(hiddenElement)
+      // console.log(hiddenElement
     }
+  }
+}
+
+function enableResize (target) {
+  const resizers = target.querySelectorAll('.resizer')
+  const start = {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    mouseX: 0,
+    mouseY: 0
+  }
+  const min = 30
+  for (let i=0; i<resizers.length; i++) {
+    const handle = resizers[i]
+
+    function handleMouseDown (e) {
+      e.preventDefault()
+      const rect = target.getBoundingClientRect()
+      const computed = getComputedStyle(target, null)
+      start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
+      start.height = parseFloat(computed.getPropertyValue('height').replace('px', ''))
+      start.x = rect.left
+      start.y = rect.top
+      start.mouseX = e.pageX
+      start.mouseY = e.pageY
+      window.addEventListener('mousemove', resize)
+      window.addEventListener('mouseup', endResize)
+    }
+
+    function resize (e) {
+      if (handle.classList.contains('br')) {
+        const width = start.width + (e.pageX - start.mouseX)
+        const height = start.height + (e.pageY - start.mouseY)
+        if (width > min) target.style.width = `${width}px`
+        if (height > min) target.style.height = `${height}px`
+
+      }
+      // else if (handle.classList.contains('bl')) {
+      //   const width = start.width - (e.pageX - start.mouseX)
+      //   const height = start.height + (e.pageY - start.mouseY)
+      //   if (width > min) {
+      //     target.style.width = `${width}px`
+      //     target.style.left = `${start.x + (e.pageX - start.mouseX)}px`
+      //   }
+      //   if (height > min) target.style.height = `${height}px`
+      //
+      // } else if (handle.classList.contains('tr')) {
+      //   const width = start.width + (e.pageX - start.mouseX)
+      //   const height = start.height - (e.pageY - start.mouseY)
+      //   if (width > min) target.style.width = `${width}px`
+      //   if (height > min) {
+      //     target.style.height = `${height}px`
+      //     target.style.top = `${start.y + (e.pageY - start.mouseY)}px`
+      //   }
+      //
+      // } else if (handle.classList.contains('tl')) {
+      //   const width = start.width - (e.pageX - start.mouseX)
+      //   const height = start.height - (e.pageY - start.mouseY)
+      //   if (width > min) {
+      //     target.style.width = `${width}px`
+      //     target.style.left = `${start.x + (e.pageX - start.mouseX)}px`
+      //   }
+      //   if (height > min) {
+      //     target.style.height = `${height}px`
+      //     target.style.top = `${start.y + (e.pageY - start.mouseY)}px`
+      //   }
+      //
+      // } else {
+      //   console.error('Malformed HTML, cannot read resizer handle type', { target, handle })
+      // }
+    }
+
+    function endResize (e) { window.removeEventListener('mousemove', resize) }
+    // pun not intended:
+    handle.addEventListener('mousedown', handleMouseDown)
+  }
+}
+
+function toggleImageCrop (event) {
+  const gridStackItem = event.target.closest('.grid-stack-item')
+  const grid = $(gridStackItem.closest('.grid-stack')).data('gridstack')
+  const content = gridStackItem.querySelector('.content.image')
+  const resize = gridStackItem.querySelector('.content_image__img__resize')
+  if (content.classList.contains('crop_active')) {
+    grid.movable('.grid-stack-item', true);
+    grid.resizable('.grid-stack-item', true);
+    // $(resize).draggable({ disable: true })
+    // TODO: disable resize listeners
+    content.classList.remove('crop_active')
+  } else {
+    grid.movable('.grid-stack-item', false);
+    grid.resizable('.grid-stack-item', false);
+    // $(resize).draggable()
+    enableResize (resize)
+    // TODO: enable resize listeners
+    content.classList.add('crop_active')
   }
 }
 
@@ -729,7 +829,7 @@ function openTextEditor (event) {
 }
 
 function openImageEditor (event) {
-  const img = event.target.closest('.grid-stack-item').querySelector('.content_image__img img')
+  const img = event.target.closest('.grid-stack-item').querySelector('.content_image__img__crop_boundary img')
   const input = document.querySelector('.edit_image .image_url')
   const preview = document.querySelector('.edit_image .image_interface__preview img')
   const accept = document.querySelector('.edit_image button[name=edit_image__save]')
@@ -1536,10 +1636,20 @@ const createText = ({ text, size }) => `
 const createImage = ({ src, alt }) => `
   <div class="content image" data-mos-contenttype="image" data-mos-image_idx="0">
     <div class="content__controls">
+    <button class="content__controls--image_edit"><i class="fas fa-crop-alt"></i></button>
       <button class="content__controls--delete">✖</button>
     </div>
-    <div class="content_image__img">
-      <img src="${src}" alt="${alt}" />
+    <div class="content_image__img__crop_boundary">
+      <div class="content_image__img__crop_display"></div>
+      <div class="content_image__img__resize">
+        <img src="${src}" alt="${alt}" />
+        <div class="resizers">
+          <div class="resizer tl"></div>
+          <div class="resizer tr"></div>
+          <div class="resizer bl"></div>
+          <div class="resizer br"></div>
+        </div>
+      </div>
     </div>
   </div>
 `
