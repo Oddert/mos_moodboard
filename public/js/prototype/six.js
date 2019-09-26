@@ -700,15 +700,45 @@ function handleGlobalKeyPress (event) {
   }
 }
 
-function enableDrag (target) {
+function enableDrag (target, enable) {
+  const parent = target.closest('.content.image')
+  const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
+  const start = {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    mouseX: 0,
+    mouseY: 0
+  }
 
+  function handleMouseDown (e) {
+    e.preventDefault()
+    if (e.target.classList.contains('.resize') || e.target.classList.contains('.resizer')) return
+    const rect = target.getBoundingClientRect()
+    const computed = getComputedStyle(target, null)
+    start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
+    start.height = parseFloat(computed.getPropertyValue('height').replace('px', ''))
+    start.x = rect.left
+    start.y = rect.top
+    start.mouseX = e.pageX
+    start.mouseY = e.pageY
+    console.log(start)
+    window.addEventListener('mousemove', handleDrag)
+    window.addEventListener('mouseup', endDrag)
+  }
+
+  function handleDrag (e) {
+    target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+    target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+  }
+
+  function endDrag (e) { window.removeEventListener('mousemove', handleDrag) }
+  if (enable) target.addEventListener('mousedown', handleMouseDown)
+  else target.removeEventListener('mousedown', handleMouseDown)
 }
 
-function disableDrag (target) {
-
-}
-
-function enableResize (target) {
+function enableResize (target, enable) {
   const gridStackItemContent = target.closest('.grid-stack-item-content')
   gridStackItemContent.style.border = 'none'
   const parent = target.closest('.content.image')
@@ -786,17 +816,8 @@ function enableResize (target) {
 
     function endResize (e) { window.removeEventListener('mousemove', resize) }
     // pun not intended:
-    handle.addEventListener('mousedown', handleMouseDown)
-  }
-}
-
-function disableResize (target) {
-  const gridStackItemContent = target.closest('.grid-stack-item-content')
-  gridStackItemContent.style.border = null
-  const resizers = target.querySelectorAll('.resizer')
-  for (let i=0; i<resizers.length; i++) {
-    const handle = resizers[i]
-    handle.removeEventListener('mousedown', handleMouseDown)
+    if (enable) handle.addEventListener('mousedown', handleMouseDown)
+    else handle.removeEventListener('mousedown', handleMouseDown)
   }
 }
 
@@ -809,13 +830,13 @@ function toggleImageCrop (event) {
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
     disableDrag (resize)
-    disableResize(resize)
+    enableResize (resize, false)
     content.classList.remove('crop_active')
   } else {
     grid.movable('.grid-stack-item', false);
     grid.resizable('.grid-stack-item', false);
-    enableDrag (resize)
-    enableResize (resize)
+    enableDrag (resize, true)
+    enableResize (resize, true)
     content.classList.add('crop_active')
   }
 }
