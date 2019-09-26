@@ -700,8 +700,20 @@ function handleGlobalKeyPress (event) {
   }
 }
 
+function enableDrag (target) {
+
+}
+
+function disableDrag (target) {
+
+}
+
 function enableResize (target) {
+  const gridStackItemContent = target.closest('.grid-stack-item-content')
+  gridStackItemContent.style.border = 'none'
+  const parent = target.closest('.content.image')
   const resizers = target.querySelectorAll('.resizer')
+  const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
   const start = {
     width: 0,
     height: 0,
@@ -736,44 +748,55 @@ function enableResize (target) {
         if (height > min) target.style.height = `${height}px`
 
       }
-      // else if (handle.classList.contains('bl')) {
-      //   const width = start.width - (e.pageX - start.mouseX)
-      //   const height = start.height + (e.pageY - start.mouseY)
-      //   if (width > min) {
-      //     target.style.width = `${width}px`
-      //     target.style.left = `${start.x + (e.pageX - start.mouseX)}px`
-      //   }
-      //   if (height > min) target.style.height = `${height}px`
-      //
-      // } else if (handle.classList.contains('tr')) {
-      //   const width = start.width + (e.pageX - start.mouseX)
-      //   const height = start.height - (e.pageY - start.mouseY)
-      //   if (width > min) target.style.width = `${width}px`
-      //   if (height > min) {
-      //     target.style.height = `${height}px`
-      //     target.style.top = `${start.y + (e.pageY - start.mouseY)}px`
-      //   }
-      //
-      // } else if (handle.classList.contains('tl')) {
-      //   const width = start.width - (e.pageX - start.mouseX)
-      //   const height = start.height - (e.pageY - start.mouseY)
-      //   if (width > min) {
-      //     target.style.width = `${width}px`
-      //     target.style.left = `${start.x + (e.pageX - start.mouseX)}px`
-      //   }
-      //   if (height > min) {
-      //     target.style.height = `${height}px`
-      //     target.style.top = `${start.y + (e.pageY - start.mouseY)}px`
-      //   }
-      //
-      // } else {
-      //   console.error('Malformed HTML, cannot read resizer handle type', { target, handle })
-      // }
+      else if (handle.classList.contains('bl')) {
+        console.log(start.x, (e.pageX - start.mouseX), start.x - (e.pageX - start.mouseX))
+        const width = start.width - (e.pageX - start.mouseX)
+        const height = start.height + (e.pageY - start.mouseY)
+        if (width > min) {
+          target.style.width = `${width}px`
+          target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+        }
+        if (height > min) target.style.height = `${height}px`
+
+      } else if (handle.classList.contains('tr')) {
+        const width = start.width + (e.pageX - start.mouseX)
+        const height = start.height - (e.pageY - start.mouseY)
+        if (width > min) target.style.width = `${width}px`
+        if (height > min) {
+          target.style.height = `${height}px`
+          target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+        }
+
+      } else if (handle.classList.contains('tl')) {
+        const width = start.width - (e.pageX - start.mouseX)
+        const height = start.height - (e.pageY - start.mouseY)
+        if (width > min) {
+          target.style.width = `${width}px`
+          target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+        }
+        if (height > min) {
+          target.style.height = `${height}px`
+          target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+        }
+
+      } else {
+        console.error('Malformed HTML, cannot read resizer handle type', { target, handle })
+      }
     }
 
     function endResize (e) { window.removeEventListener('mousemove', resize) }
     // pun not intended:
     handle.addEventListener('mousedown', handleMouseDown)
+  }
+}
+
+function disableResize (target) {
+  const gridStackItemContent = target.closest('.grid-stack-item-content')
+  gridStackItemContent.style.border = null
+  const resizers = target.querySelectorAll('.resizer')
+  for (let i=0; i<resizers.length; i++) {
+    const handle = resizers[i]
+    handle.removeEventListener('mousedown', handleMouseDown)
   }
 }
 
@@ -785,15 +808,14 @@ function toggleImageCrop (event) {
   if (content.classList.contains('crop_active')) {
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
-    // $(resize).draggable({ disable: true })
-    // TODO: disable resize listeners
+    disableDrag (resize)
+    disableResize(resize)
     content.classList.remove('crop_active')
   } else {
     grid.movable('.grid-stack-item', false);
     grid.resizable('.grid-stack-item', false);
-    // $(resize).draggable()
+    enableDrag (resize)
     enableResize (resize)
-    // TODO: enable resize listeners
     content.classList.add('crop_active')
   }
 }
