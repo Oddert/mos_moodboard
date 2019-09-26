@@ -807,6 +807,7 @@ button[name=dev] {
   width: 100%;
   background: #fff;
   transition: 0.1s linear;
+  position: relative;
 }
 .grid-stack-item .grid-stack-item-content .content .content__controls {
   transition: 0.1s linear;

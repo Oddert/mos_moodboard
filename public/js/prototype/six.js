@@ -182,6 +182,21 @@ function extractElementDataGridstack (node) {
   return extractElementData (el)
 }
 
+// did I mention that -other crimes asside- I'll never forgive jQuery for this ordering:
+// ?
+function createSerialisedWidget (each) {
+  const node = $(each).data('_gridstack_node')
+  const nodeData = extractElementDataGridstack(node)
+  return {
+    x: node.x,
+    y: node.y,
+    width: node.width,
+    height: node.height,
+    page: node._grid._stylesId,
+    ...nodeData
+  }
+}
+
 function serialise () {
   const output = []
   $('.page').each(function (idx, grid) {
@@ -189,18 +204,9 @@ function serialise () {
     const entities = []
     const items = $(grid).find('.grid-stack-item:visible')
       .map((idx, each) => {
-        const node = $(each).data('_gridstack_node')
-        const nodeData = extractElementDataGridstack(node)
-        entities.push ({
-          x: node.x,
-          y: node.y,
-          width: node.width,
-          height: node.height,
-          page: node._grid._stylesId,
-          ...nodeData
-        })
+        entities.push (createSerialisedWidget(each))
       })
-      output.push({ title, entities })
+    output.push({ title, entities })
   })
   return output
 }
@@ -427,7 +433,6 @@ function createGridContent (pages, data, overrideWidth) {
       if (grid) grid.removeAll()
       elem.data('mosPageIdx', pageIdx)
       _.each(items, function (node, itemIdx) {
-        // NOTE: overflow properties are a workaround for now only
         const newWidget = $(`
           <div>
             <div class="grid-stack-item-content" data-mos-page="${pageIdx}" data-mos-item="${itemIdx}">
@@ -646,6 +651,28 @@ function renderIcons () {
   ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
 }
 
+function testInitNewWidgetListeners (createdWidget, node) {
+  if (node._type === "text") {
+    createdWidget.find('.grid-stack-item-content').addClass('text_overflow')
+    createdWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+    createdWidget.dblclick(openTextEditor)
+  }
+  if (node._type === "image") {
+    createdWidget.find('.grid-stack-item-content').addClass('image_overflow')
+    createdWidget.dblclick(openImageEditor)
+    createdWidget.find('.content__controls--image_edit').click(toggleImageCrop)
+  }
+  if (node._type === "colour") {
+    createdWidget.dblclick(openColourEditor)
+  }
+  if (node._type === "product") {
+    createdWidget.dblclick(openProductEditor)
+  }
+  if (node._type === "material") {
+    createdWidget.dblclick(openMaterialEditor)
+  }
+}
+
 function copyWidget (cut = false) {
   if (lastClick.widget.length) {
     const attributes = []
@@ -654,7 +681,7 @@ function copyWidget (cut = false) {
     widget.forEach(each => {
       const { gsX: x, gsY: y, gsWidth: width, gsHeight: height } = each.dataset
       const { mosPageIdx: gridIdx } = each.closest('.page__content').dataset
-      attributes.push(extractElementData($(each)))
+      attributes.push(createSerialisedWidget($(each)))
       previousPosition.push({
         wasOnGrid: true,
         x, y, width, height, gridIdx
@@ -668,6 +695,66 @@ function copyWidget (cut = false) {
 }
 
 function pasteWidget () {
+  const sampleLastClick = {
+    context: null,
+    grid: null,
+    x: null,
+    y: null,
+    gridElem: null,
+    slide: null,
+    widget: [],
+    slide: [],
+    wasOnGrid: false,
+    cutPasteData: {
+      lastAction: null,
+      attributes: [
+        {
+          _type: "",
+          //, src, hex, url ...etc
+        }
+      ],
+      previousPosition: [
+        {
+          //, x, y, width, height
+        }
+      ]
+    }
+  }
+
+  const { idx: pageIdx, gridElem, grid } = focusedPage
+  const itemIdx = gridElem.querySelectorAll('.grid-stack-item').length
+  lastClick.cutPasteData.attributes.forEach(each => {
+    console.log(each)
+    const areaEmpty = grid.isAreaEmpty(each.x, each.y, each.width, each.height)
+    const newWidget = $(`
+      <div>
+        <div class="grid-stack-item-content" data-mos-page="${pageIdx}" data-mos-item="${itemIdx}">
+          ${getContent(each)}
+        </div>
+      </div>
+    `)
+    console.log(newWidget)
+    console.log(each.x, each.y, each.width, each.height, areaEmpty)
+    const createdWidget = grid.addWidget(newWidget, each.x, each.y, each.width, each.height, !areaEmpty)
+    console.log(createdWidget)
+    createdWidget.find('.content__controls--delete').click(function () {
+      grid.removeWidget(this.closest('.grid-stack-item'))
+    })
+    createdWidget.click(function (event) {
+      if (lastClick.widget.length && !event.shiftKey) {
+        lastClick.widget.forEach(each => each.classList.remove('user_focus'))
+        lastClick.widget = []
+      }
+      if (lastClick.widget[0] === this) return
+      lastClick.context = 'PAGE'
+      lastClick.widget.push(this)
+      lastClick.grid = grid
+      lastClick.gridElem = elem
+      this.classList.add('user_focus')
+    })
+    testInitNewWidgetListeners (createdWidget, each)
+  })
+
   // create new widget with old properties
   // if CUT
   //  -remove old widget
@@ -701,6 +788,7 @@ function handleGlobalKeyPress (event) {
 }
 
 function enableDrag (target, enable) {
+  const gridStackItemContent = target.closest('.grid-stack-item-content')
   const parent = target.closest('.content.image')
   const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
   const start = {
@@ -734,13 +822,19 @@ function enableDrag (target, enable) {
   }
 
   function endDrag (e) { window.removeEventListener('mousemove', handleDrag) }
-  if (enable) target.addEventListener('mousedown', handleMouseDown)
-  else target.removeEventListener('mousedown', handleMouseDown)
+  if (enable) {
+    target.addEventListener('mousedown', handleMouseDown)
+    gridStackItemContent.style.border = 'none'
+    gridStackItemContent.style.zIndex = '999'
+  } else {
+    target.removeEventListener('mousedown', handleMouseDown)
+    gridStackItemContent.style.border = null
+    gridStackItemContent.style.zIndex = null
+  }
 }
 
 function enableResize (target, enable) {
   const gridStackItemContent = target.closest('.grid-stack-item-content')
-  gridStackItemContent.style.border = 'none'
   const parent = target.closest('.content.image')
   const resizers = target.querySelectorAll('.resizer')
   const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
@@ -817,8 +911,15 @@ function enableResize (target, enable) {
 
     function endResize (e) { window.removeEventListener('mousemove', resize) }
     // pun not intended:
-    if (enable) handle.addEventListener('mousedown', handleMouseDown)
-    else handle.removeEventListener('mousedown', handleMouseDown)
+    if (enable) {
+      handle.addEventListener('mousedown', handleMouseDown)
+      gridStackItemContent.style.border = 'none'
+      gridStackItemContent.style.zIndex = '999'
+    } else {
+      handle.removeEventListener('mousedown', handleMouseDown)
+      gridStackItemContent.style.border = null
+      gridStackItemContent.style.zIndex = null
+    }
   }
 }
 
