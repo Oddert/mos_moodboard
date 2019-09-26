@@ -147,7 +147,7 @@ const fora_payload = {
       entities: [
         {x: 2, y: 3, width: 3, height: 13, _type: "image", src: "https://www.extreme-design.co.uk/wp-content/uploads/2019/07/kitchen-design-trend-2019-colour-blocking-and-geometric-interior.jpg", alt: "A banner image from the storefront" },
         {x: 5, y: 3, width: 3, height: 13, _type: "image", src: "https://www.interiorsandsources.com/Portals/0/Images/2018-August/2020-trends/IS_SHAW_CALPE_2019_RGB.jpg", alt: "A banner image from the storefront" },
-        {x: 8, y: 3, width: 3, height: 13, _type: "image", src: "https://de-production-media.s3.amazonaws.com/loft/3958/Moody_Colors.jpg", alt: "A banner image from the storefront" },
+        {x: 8, y: 3, width: 3, height: 13, _type: "image", src: "https://de-production-media.s3.amazonaws.com/loft/3958/Moody_Colors.jpg", alt: "A banner image from the storefront", crop: {top: "-46px", left: "-56px", width: "234px", height: "330px"} },
       ]
     },
     {

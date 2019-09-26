@@ -134,7 +134,13 @@ function extractElementData (jQueryElem) {
     return {
       _type: "image",
       src: content.find('img').attr('src') || "",
-      alt: content.find('img').attr('alt') || ""
+      alt: content.find('img').attr('alt') || "",
+      crop: {
+        top: content.find('.content_image__img__resize').css('top') || '0',
+        left: content.find('.content_image__img__resize').css('left') || '0',
+        width: content.find('.content_image__img__resize').css('width') || '100%',
+        height: content.find('.content_image__img__resize').css('height') || '100%'
+      }
     }
     case "colour":
     return {
@@ -751,8 +757,9 @@ function pasteWidget () {
     })
     testInitNewWidgetListeners (createdWidget, each)
     if (lastClick.cutPasteData.lastAction === 'CUT') {
-      const { grid: prevGrid, widget: prevWidget } = lastClick.cutPasteData.previousPosition[idx]
-      $(prevGrid).data('gridstack').removeWidget($(prevWidget))
+      const { widget } = lastClick.cutPasteData.previousPosition[idx]
+      const grid = widget.closest('.grid-stack').data('gridstack')
+      $(grid).data('gridstack').removeWidget($(widget))
     }
   })
 
@@ -1779,7 +1786,7 @@ const createText = ({ text, size }) => `
   </div>
 `
 
-const createImage = ({ src, alt }) => `
+const createImage = ({ src, alt, crop }) => `
   <div class="content image" data-mos-contenttype="image" data-mos-image_idx="0">
     <div class="content__controls">
     <button class="content__controls--image_edit"><i class="fas fa-crop-alt"></i></button>
@@ -1787,7 +1794,7 @@ const createImage = ({ src, alt }) => `
     </div>
     <div class="content_image__img__crop_boundary">
       <div class="content_image__img__crop_display"></div>
-      <div class="content_image__img__resize">
+      <div class="content_image__img__resize" style="top:${crop && crop.top ? crop.top : ''};left:${crop && crop.left ? crop.left : ''};width:${crop && crop.width ? crop.width : ''};height:${crop && crop.height ? crop.height : ''};">
         <img src="${src}" alt="${alt}" />
         <div class="resizers">
           <div class="resizer tl"></div>
