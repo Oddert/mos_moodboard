@@ -31,22 +31,25 @@ body, html, h1, p {
 $caption_text_size: 9px;
 $select_primary_colour: #1ac6e8;
 $button_background--primary: #3A3A3A;
+$button_colour--primary: #fff;
+$button_background--hover: #333333;
+$button_background--active: #7e7e7e;
 
 button {
   background: $button_background--primary;
   padding: 10px 15px;
-  color: #fff;
+  color: $button_colour--primary;
   border: none;
   cursor: pointer;
   transition: .1s linear;
   text-transform: uppercase;
   &:hover {
     // background-color: #404040;
-    background-color: #333333;
+    background-color: $button_background--hover;
     // background-color: #262626;
   }
   &:active {
-    background-color: #7e7e7e;
+    background-color: $button_background--active;
   }
   &[name=dev] {
     position: fixed;
@@ -413,16 +416,13 @@ $page_width: 75vw;
     height: 100vh;
     overflow-y: hidden;
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
     .item_menu__title {
       margin: 0;
       padding: 10px 20px;
       text-align: center;
     }
     .item_menu__control {
-      width: 100%;
-      display: flex;
-
       $text_main: #c1392b;
       $text_hover: #e84c3d;
       $text_active: #c1392b;
@@ -442,75 +442,125 @@ $page_width: 75vw;
       $file_hover: #9a59b5;
       $file_active: #8d44ad;
 
-      $button_rad: 35px;
+      &.no_colour {
+        $text_main: #fff;
+        $text_hover: #ecf0f1;
+        $text_active: #bec3c7;
+        $image_main: #fff;
+        $image_hover: #ecf0f1;
+        $image_active: #bec3c7;
+        $product_main: #fff;
+        $product_hover: #ecf0f1;
+        $product_active: #bec3c7;
+        $material_main: #fff;
+        $material_hover: #ecf0f1;
+        $material_active: #bec3c7;
+        $colour_main: #fff;
+        $colour_hover: #ecf0f1;
+        $colour_active: #bec3c7;
+        $file_main: #fff;
+        $file_hover: #ecf0f1;
+        $file_active: #bec3c7;
+
+      }
+
+      // $button_rad: 35px;
+      $button_rad: 50px;
+
+      $button_background--primary: #fff;
+      $button_colour--primary: #3A3A3A;
+
+      // width: 100%;
       display: flex;
+      flex-direction: column;
       margin-bottom: 10px;
-      ul {
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      background: $button_background--primary;
+
+      @mixin new_item_menu__button {
+        // flex: 1;
+        font-size: 20px;
+        cursor: pointer;
         display: flex;
-        width: 100%;
         align-items: center;
         justify-content: center;
+        // width: $button_rad;
+        width: $button_rad;
+        height: $button_rad;
+        background: #1bbc9b;
+        color: #000;
+        // border-radius: 50%;
+        border: none;
+        border-top: 4px solid rgba(255,255,255,0);
+        border-left: 4px solid rgba(255,255,255,0);
+        border-bottom: 4px solid rgba(255,255,255,0);
         padding: 0;
         margin: 0;
-        list-style-type: none;
-        .new_item_menu__item {
-          // display: flex;
-          // align-items: center;
-          // justify-content: center;
-          flex: 1;
-          button {
-            flex: 1;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            // width: $button_rad;
-            width: 100%;
-            height: $button_rad;
-            background: #1bbc9b;
-            color: #000;
-            // border-radius: 50%;
-            border: none;
-            border-bottom: 4px solid rgba(255,255,255,0);
-            padding: 0;
-            margin: 0;
-            &.active {
-              border-bottom: 4px solid #2d3e50;
-            }
+        padding: 10px 15px;
+        &.active {
+          border-left: 4px solid #2d3e50;
+        }
+      }
+      .item_menu__toggle, .item_menu__info {
+        button {
+          @include new_item_menu__button;
+          background: $button_background--primary;
+          color: $button_colour--primary;
+          &:hover {
+            background: $button_background--hover;
+            color: #fff;
           }
-          &.text button {
-            font-weight: 700;
-            background: $text_main;
-            &:hover { background: $text_hover;}
-            &:active {background: $text_active; }
-          }
-          &.image button {
-            background: $image_main;
-            &:hover { background: $image_hover;}
-            &:active {background: $image_active; }
-          }
-          &.product button {
-            background: $product_main;
-            &:hover { background: $product_hover;}
-            &:active {background: $product_active; }
-          }
-          &.material button {
-            background: $material_main;
-            &:hover { background: $material_hover;}
-            &:active {background: $material_active; }
-          }
-          &.colour button {
-            background: $colour_main;
-            &:hover { background: $colour_hover; }
-            &:active { background: $colour_active; }
-          }
-          &.file button {
-            background: $file_main;
-            &:hover {  background: $file_hover; }
-            &:active { background: $file_active; }
+          &:active {
+            background: $button_background--active;
           }
         }
+      }
+      .new_item_menu__item {
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        // flex: 1;
+        button {
+          @include new_item_menu__button;
+        }
+        &.text button {
+          font-weight: 700;
+          background: $text_main;
+          &:hover { background: $text_hover;}
+          &:active {background: $text_active; }
+        }
+        &.image button {
+          background: $image_main;
+          &:hover { background: $image_hover;}
+          &:active {background: $image_active; }
+        }
+        &.product button {
+          background: $product_main;
+          &:hover { background: $product_hover;}
+          &:active {background: $product_active; }
+        }
+        &.material button {
+          background: $material_main;
+          &:hover { background: $material_hover;}
+          &:active {background: $material_active; }
+        }
+        &.colour button {
+          background: $colour_main;
+          &:hover { background: $colour_hover; }
+          &:active { background: $colour_active; }
+        }
+        &.file button {
+          background: $file_main;
+          &:hover {  background: $file_hover; }
+          &:active { background: $file_active; }
+        }
+      }
+      .item_menu__control__secondary {
+
       }
     }
     .item_menu__interface {
@@ -544,6 +594,7 @@ $page_width: 75vw;
                   background: #fff;
                   border: 3px solid $button_background--primary;
                   font-weight: 800;
+                  padding: 10px 15px;
                   &.new_text__size {
                     &--small {
                       font-size: var(--small_font);
