@@ -850,6 +850,7 @@ function handleGlobalKeyPress (event) {
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')
       if (lastClick.context === 'PAGE') pasteWidget ()
+      if (lastClick.context === 'SLIDE') pasteSlide ()
       // const hiddenElement = document.createElement('input')
       // hiddenElement.focus()
       // hiddenElement.execCommand('paste')
