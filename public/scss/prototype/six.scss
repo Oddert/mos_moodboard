@@ -199,6 +199,7 @@ $page_width: 75vw;
       .slide__image {
         background: #fff;
         border: 1px solid #ecf0f1;
+        border: 1px solid #d5dadc;
         border-radius: 5px;
         flex: 1;
         margin: 0 8px 0 0;
@@ -224,6 +225,7 @@ $page_width: 75vw;
         min-height: 50px;
         .slide__menu__toggle {
           padding: 0 4px;
+          margin: 5px 10px 0 0;
           color: #7e8c8d;
           background: none;
           opacity: 0;
@@ -379,6 +381,14 @@ $page_width: 75vw;
         // box-shadow: 0 10px 18px rgba(0,0,0,0.15), 0 5px 6px rgba(0,0,0,0.11);
         // box-shadow: 12px 12px 15px rgba(0,0,0,.05);
         // box-shadow: 0 19px 38px rgba(0,0,0,0.07), 0 15px 12px rgba(0,0,0,0.03);
+
+        // FROM Samuel Thorton CodePen:
+        // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        // box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        // box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        // box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
         // min-height: $page_height;
         // max-height: $page_height;
         // width: 1.777777777777777777 * 85vh;

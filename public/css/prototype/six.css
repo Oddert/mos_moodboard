@@ -124,6 +124,7 @@ button[name=dev] {
 .slides--wrapper .slides__grid .slide .slide__image {
   background: #fff;
   border: 1px solid #ecf0f1;
+  border: 1px solid #d5dadc;
   border-radius: 5px;
   flex: 1;
   margin: 0 8px 0 0;
@@ -149,6 +150,7 @@ button[name=dev] {
 }
 .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__toggle {
   padding: 0 4px;
+  margin: 5px 10px 0 0;
   color: #7e8c8d;
   background: none;
   opacity: 0;
@@ -283,6 +285,7 @@ button[name=dev] {
   background: #fff;
   background: white;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.15), 0 15px 12px rgba(0, 0, 0, 0.11);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   width: 45vw;
   height: 25.3125vw;
   min-height: 25.3125vw;

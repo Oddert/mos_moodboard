@@ -24,6 +24,11 @@ const fullscreen = {
   open: false
 }
 
+const autosave = {
+  lastLocalSave: null,
+  lastAction: null
+}
+
 const lastClick = {
   context: null,
   grid: null,
@@ -544,8 +549,8 @@ function experimentalSVGWrite (page, idx, guides = false) {
   slide.innerHTML = ''
   slide.classList.remove('previewImg')
   const bound = slide.getBoundingClientRect()
-  const width = Math.floor(bound.width)
-  const height = Math.floor(bound.height)
+  const width = Math.floor(bound.width) - 10
+  const height = Math.floor(bound.height) - 10
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.className = 'icon-control_1'
   svg.dataset.name = 'Layer 1'

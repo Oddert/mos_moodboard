@@ -107,7 +107,7 @@ const server = app.listen(
 //    -Paste / Destroy new slide ✓
 //    -Re-render ✓
 //    -Check that slide jump updates focused page (?)
-//  -New Sidebar Layout and collapse
+//  -New Sidebar Layout and collapse ✓
 //  -Local auto save
 //  -Actual ajax save (mock db fro this)
 
