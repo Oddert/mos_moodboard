@@ -98,10 +98,15 @@ const server = app.listen(
 //    -Find a way to do thumbnail ✓
 //    -Page order modification ✓
 //  -How to do page sizing without vh / vh units ✓
-//  -Paste Functionality
+//  -Paste Functionality (widget) ✓
+//    -Can read slide position ✓
+//    -Paste widget ✓
+//    -Destroy old widget ✓
+//  -Paste Functionality (slide)
 //    -Can read slide position
-//    -Paste widget
-//    -Destroy old widget
-//    -Paste slide
+//    -Paste / Destroy new slide
+//    -Re-render
+//    -Check that slide jump updates focused page
 //  -New Sidebar Layout and collapse
-//  -
+//  -Local auto save
+//  -Actual ajax save (mock db fro this)

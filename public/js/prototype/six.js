@@ -34,6 +34,7 @@ const lastClick = {
   wasOnGrid: false,
   cutPasteData: {
     lastAction: null,
+    slideAttrubutes: [],
     attributes: [
       {
         _type: "",
@@ -679,6 +680,67 @@ function testInitNewWidgetListeners (createdWidget, node) {
   }
 }
 
+function copySlide (cut = false) {
+  console.log('COPY SLIDE', { cut })
+  // TODO: Overhaul namespaces for "attibutes", "previousPosition"
+  const idx = lastClick.slide[0].dataset.mosSlide_idx
+  if (lastClick.cutPasteData.slideAttrubutes.some(e => e.idx === idx)) return
+  // WARNING: Constrain slide copy to one only for now
+  // In future this func will look for shift key and .push() to slideAttrubutes
+  // Issues with intuitively trying to copy multiple slides
+  lastClick.cutPasteData.slideAttrubutes = [{ idx }]
+  lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
+}
+
+function pasteSlide () {
+  console.log(serialise())
+  const serialised = serialise()
+  let newData = [...serialised]
+  // WARNING: Constrain slide copy to one only for now
+  // In future this func will look for shift key and .push() to slideAttrubutes
+  // Issues with intuitively trying to copy multiple slides
+
+  // WARNING: Switching two items usnig bellow itirative methods invalid due to duplicate pages on index lookup (becuase they were just coppied)
+  // replacing with next older method
+
+  // lastClick.cutPasteData.slideAttrubutes.forEach(each => {
+  //   const targetIdx = Number(each.idx)
+  //   newData.splice(Number(focusedPage.idx), 0, serialised[targetIdx])
+  // })
+  // console.log(newData)
+  // if (lastClick.cutPasteData.lastAction === 'CUT') {
+  //   lastClick.cutPasteData.slideAttrubutes.forEach(each => {
+  //     const targetIdx = Number(each.idx)
+  //     const mappedIdx = [...newData].map(e => JSON.stringify(e)).indexOf(JSON.stringify(serialised[targetIdx]))
+  //     console.log({ targetIdx, mappedIdx })
+  //     newData = newData.slice(0, mappedIdx).concat(newData.slice(mappedIdx + 1))
+  //   })
+  // }
+  // console.log(serialised, newData)
+  const targetIdx = Number(lastClick.cutPasteData.slideAttrubutes[0].idx) + 1
+  if (!targetIdx) return
+  const readData = serialised[targetIdx]
+  const focusedIdx = focusedPage.idx
+  console.log(focusedPage.idx, serialised[targetIdx])
+  newData.splice(focusedIdx, 0, serialised[targetIdx])
+  console.log(newData)
+  if (lastClick.cutPasteData.lastAction === 'CUT') {
+    console.log('...cutting old')
+    if (focusedIdx >= targetIdx) {
+      console.log('focus is greater than target, splicing at: ', targetIdx)
+      // idx should be the same as copied data is before end of list and focus
+      newData.splice(targetIdx, 1)
+    } else {
+      console.log('focus is less than target, splicing at: ', targetIdx + 1)
+      // idx is + 1
+      newData.splice(targetIdx + 1, 1)
+    }
+  }
+  console.log(newData)
+  data.projects = newData
+  render (data)
+}
+
 function copyWidget (cut = false) {
   if (lastClick.widget.length) {
     const attributes = []
@@ -777,11 +839,13 @@ function handleGlobalKeyPress (event) {
 
     if (event.key === 'c' && event.ctrlKey) {
       console.log('COPY')
-      if (lastClick.context === 'PAGE') copyWidget()
+      if (lastClick.context === 'PAGE') copyWidget ()
+      if (lastClick.context === 'SLIDE') copySlide ()
     }
     if (event.key === 'x' && event.ctrlKey) {
       console.log('CUT')
-      if (lastClick.context === 'PAGE') copyWidget(true)
+      if (lastClick.context === 'PAGE') copyWidget (true)
+      if (lastClick.context === 'SLIDE') copySlide (true)
     }
     if (event.key === 'v' && event.ctrlKey) {
       console.log('PASTE')
@@ -959,7 +1023,7 @@ function enableCropCancel (target, enable) {
 
 function toggleImageCrop (event, overrideTarget) {
   const gridStackItem = overrideTarget
-    ? overrideTarget.closest('.grid-stack-item') 
+    ? overrideTarget.closest('.grid-stack-item')
     : event.target.closest('.grid-stack-item')
   const grid = $(gridStackItem.closest('.grid-stack')).data('gridstack')
   const content = gridStackItem.querySelector('.content.image')
