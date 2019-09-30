@@ -153,22 +153,37 @@ button[name=dev] {
 }
 .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items {
   list-style-type: none;
-  padding: 10px;
+  padding: 10px 15px;
   margin: 0;
   background: #fff;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 90;
   border-radius: 5px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
   display: none;
 }
-.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__delete {
-  padding: 0 4px;
+.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items li {
+  padding: 2px 0;
+}
+.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items button {
+  padding: 4px 10px;
   background: none;
   color: black;
+  text-align: left;
 }
-.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__delete:hover {
+.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items button:hover {
   color: #c1392b;
   text-decoration: underline;
+}
+.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__cut, .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__copy, .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__paste {
+  display: flex;
+  flex-direction: column;
+}
+.slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__cut button:hover, .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__copy button:hover, .slides--wrapper .slides__grid .slide .slide__menu .slide__menu__items .slide__menu__paste button:hover {
+  background: #ecf0f1;
+  color: black;
 }
 .slides--wrapper .slides__grid .slide .slide__menu.active .slide__menu__toggle {
   opacity: 1;
@@ -866,6 +881,7 @@ button[name=dev] {
   display: none;
 }
 .grid-stack-item .grid-stack-item-content .content.image .content_image__img__crop_boundary {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;

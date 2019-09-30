@@ -103,10 +103,11 @@ const server = app.listen(
 //    -Paste widget ✓
 //    -Destroy old widget ✓
 //  -Paste Functionality (slide)
-//    -Can read slide position
-//    -Paste / Destroy new slide
-//    -Re-render
-//    -Check that slide jump updates focused page
+//    -Can read slide position ✓
+//    -Paste / Destroy new slide ✓
+//    -Re-render ✓
+//    -Check that slide jump updates focused page (?)
 //  -New Sidebar Layout and collapse
 //  -Local auto save
 //  -Actual ajax save (mock db fro this)
+//  -MAJOR BUG: Width sizing on crop is absolute, must use

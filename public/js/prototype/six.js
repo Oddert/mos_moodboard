@@ -361,7 +361,10 @@ function render (data, overrideWidth) {
           <div class="slide__menu">
             <button class="slide__menu__toggle"><i class="fas fa-ellipsis-h"></i></button>
             <ul class="slide__menu__items">
-              <li><button type="button" name"slide_delete" class="slide__menu__delete">Delete</button></li>
+              <li class="slide__menu__delete"><button type="button" name="slide_delete">Delete</button></li>
+              <li class="slide__menu__copy"><button type="button" name="slide_copy">Copy</button></li>
+              <li class="slide__menu__cut"><button type="button" name="slide_cut">Cut</button></li>
+              <li class="slide__menu__paste"><button type="button" name="slide_paste">Paste</button></li>
             </ul>
           </div>
         </li>
@@ -939,40 +942,48 @@ function enableResize (target, enable) {
 
     function resize (e) {
       if (handle.classList.contains('br')) {
-        const width = start.width + (e.pageX - start.mouseX)
-        const height = start.height + (e.pageY - start.mouseY)
-        if (width > min) target.style.width = `${width}px`
-        if (height > min) target.style.height = `${height}px`
+        const widthWalk = start.width + (e.pageX - start.mouseX)
+        const heightWalk = start.height + (e.pageY - start.mouseY)
+        const width = (widthWalk / start.width) * 100
+        const height = (heightWalk / start.height) * 100
 
+        if (width > min) target.style.width = `${width}%`
+        if (height > min) target.style.height = `${height}%`
       }
       else if (handle.classList.contains('bl')) {
         // console.log(start.x, (e.pageX - start.mouseX), start.x - (e.pageX - start.mouseX))
-        const width = start.width - (e.pageX - start.mouseX)
-        const height = start.height + (e.pageY - start.mouseY)
+        const widthWalk = start.width - (e.pageX - start.mouseX)
+        const heightWalk = start.height + (e.pageY - start.mouseY)
+        const width = (widthWalk / start.width) * 100
+        const height = (heightWalk / start.height) * 100
         if (width > min) {
-          target.style.width = `${width}px`
+          target.style.width = `${width}%`
           target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
         }
-        if (height > min) target.style.height = `${height}px`
+        if (height > min) target.style.height = `${height}%`
 
       } else if (handle.classList.contains('tr')) {
-        const width = start.width + (e.pageX - start.mouseX)
-        const height = start.height - (e.pageY - start.mouseY)
-        if (width > min) target.style.width = `${width}px`
+        const widthWalk = start.width + (e.pageX - start.mouseX)
+        const heightWalk = start.height - (e.pageY - start.mouseY)
+        const width = (widthWalk / start.width) * 100
+        const height = (heightWalk / start.height) * 100
+        if (width > min) target.style.width = `${width}%`
         if (height > min) {
-          target.style.height = `${height}px`
+          target.style.height = `${height}%`
           target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
         }
 
       } else if (handle.classList.contains('tl')) {
-        const width = start.width - (e.pageX - start.mouseX)
-        const height = start.height - (e.pageY - start.mouseY)
+        const widthWalk = start.width - (e.pageX - start.mouseX)
+        const heightWalk = start.height - (e.pageY - start.mouseY)
+        const width = (widthWalk / start.width) * 100
+        const height = (heightWalk / start.height) * 100
         if (width > min) {
-          target.style.width = `${width}px`
+          target.style.width = `${width}%`
           target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
         }
         if (height > min) {
-          target.style.height = `${height}px`
+          target.style.height = `${height}%`
           target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
         }
 
@@ -2345,8 +2356,8 @@ function createMaterialWidget (product) {
 // ========== Event Binding ==========
 
 window.addEventListener('DOMContentLoaded', initPage)
-window.addEventListener('resize', debounce(() => userRender(), 250))
-window.addEventListener('scroll', debounce(pageScrollHandler, 50))
+window.addEventListener('resize', debounce(() => userRender(), 200))
+window.addEventListener('scroll', debounce(pageScrollHandler, 25))
 document.addEventListener('fullscreenchange', handleExitFullScreen)
 document.addEventListener('keydown', handleGlobalKeyPress)
 
