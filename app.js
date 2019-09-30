@@ -110,4 +110,5 @@ const server = app.listen(
 //  -New Sidebar Layout and collapse
 //  -Local auto save
 //  -Actual ajax save (mock db fro this)
-//  -MAJOR BUG: Width sizing on crop is absolute, must use
+
+//  -Minor Bug: Resizing still ausing issues when multiple resize handles are employed at once

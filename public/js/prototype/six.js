@@ -910,9 +910,9 @@ function enableDrag (target, enable) {
 
 function enableResize (target, enable) {
   const gridStackItemContent = target.closest('.grid-stack-item-content')
-  const parent = target.closest('.content.image')
+  const content = target.closest('.content.image')
   const resizers = target.querySelectorAll('.resizer')
-  const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
+  const { top: parentTop, left: parentLeft, width: parentWidth, height: parentHeight } = content.getBoundingClientRect()
   const start = {
     width: 0,
     height: 0,
@@ -958,7 +958,8 @@ function enableResize (target, enable) {
         const height = (heightWalk / start.height) * 100
         if (width > min) {
           target.style.width = `${width}%`
-          target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+          // target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+          target.style.left = `${((start.x + (e.pageX - start.mouseX) - parentLeft) / parentWidth) * 100}%`
         }
         if (height > min) target.style.height = `${height}%`
 
@@ -970,7 +971,7 @@ function enableResize (target, enable) {
         if (width > min) target.style.width = `${width}%`
         if (height > min) {
           target.style.height = `${height}%`
-          target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+          target.style.top = `${((start.y + (e.pageY - start.mouseY) - parentTop) / parentHeight) * 100}%`
         }
 
       } else if (handle.classList.contains('tl')) {
@@ -980,11 +981,11 @@ function enableResize (target, enable) {
         const height = (heightWalk / start.height) * 100
         if (width > min) {
           target.style.width = `${width}%`
-          target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
+          target.style.left = `${((start.x + (e.pageX - start.mouseX) - parentLeft) / parentWidth) * 100}%`
         }
         if (height > min) {
           target.style.height = `${height}%`
-          target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+          target.style.top = `${((start.y + (e.pageY - start.mouseY) - parentTop) / parentHeight) * 100}%`
         }
 
       } else {
