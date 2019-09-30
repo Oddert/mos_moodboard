@@ -1336,6 +1336,22 @@ function handleExitFullScreen (e) {
   } else render (data)
 }
 
+function toggleItemMenu (open) {
+  const main = document.querySelector('.main')
+  const toggle = document.querySelector('.item_menu__toggle button')
+  if (main.classList.contains('menu_closed')) {
+
+    toggle.title = `Close side menu`
+    toggle.querySelector('i').className = 'fas fa-arrow-right'
+    main.classList.remove('menu_closed')
+  } else {
+
+    toggle.title = `Open side menu`
+    toggle.querySelector('i').className = 'fas fa-arrow-left'
+    main.classList.add('menu_closed')
+  }
+}
+
 // ========== / Top Level Functions ==========
 
 
@@ -1852,6 +1868,11 @@ function initFullScreen () {
   fullscreen.onclick = toggleFullscreen
 }
 
+function initToggleItemMenu () {
+  const toggle = document.querySelector('.item_menu__toggle button')
+  toggle.onclick = toggleItemMenu
+}
+
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
 //   let hide = true
@@ -1874,6 +1895,7 @@ initialiseItemMenuInterface()
 initDragDrop()
 initialiseEditMenu()
 initFullScreen()
+initToggleItemMenu()
 // WARNING: there listeners are broken, why ???
 }
 

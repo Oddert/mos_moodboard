@@ -51,6 +51,12 @@ button[name=dev] {
   height: 100%;
   width: 100%;
 }
+.main.menu_closed {
+  grid-template-columns: 200px 1fr auto;
+}
+.main.menu_closed .item_menu--container .item_menu .item_menu__interface {
+  display: none;
+}
 
 .slides--container {
   min-height: 100%;
@@ -673,6 +679,9 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant.active {
   display: flex;
+}
+.item_menu--container .item_menu.closed .item_menu__interface {
+  display: none;
 }
 
 .product_search__input {

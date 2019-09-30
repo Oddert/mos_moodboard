@@ -84,6 +84,16 @@ $page_width: 75vw;
   grid-template-rows: 1fr;
   height: 100%;
   width: 100%;
+  &.menu_closed {
+    grid-template-columns: 200px 1fr auto;
+    .item_menu--container {
+      .item_menu {
+        .item_menu__interface {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .slides--container {
@@ -838,6 +848,11 @@ $page_width: 75vw;
         &.active {
           display: flex;
         }
+      }
+    }
+    &.closed {
+      .item_menu__interface {
+        display: none;
       }
     }
   }
