@@ -18,6 +18,8 @@ let userRender, colourPicker, editColourPicker, globalHandleEditMenuChange;
 
 let oddert
 
+let settingRerenderOnSideMenu = false
+
 const fullscreen = {
   open: false
 }
@@ -1336,16 +1338,17 @@ function handleExitFullScreen (e) {
   } else render (data)
 }
 
-function toggleItemMenu (open) {
+function toggleItemMenu (e, open) {
   const main = document.querySelector('.main')
   const toggle = document.querySelector('.item_menu__toggle button')
-  if (main.classList.contains('menu_closed')) {
-
+  if (main.classList.contains('menu_closed') || open) {
+    if (settingRerenderOnSideMenu) render (data)
     toggle.title = `Close side menu`
     toggle.querySelector('i').className = 'fas fa-arrow-right'
     main.classList.remove('menu_closed')
   } else {
 
+    if (settingRerenderOnSideMenu) render (data)
     toggle.title = `Open side menu`
     toggle.querySelector('i').className = 'fas fa-arrow-left'
     main.classList.add('menu_closed')
@@ -1431,6 +1434,7 @@ function initialiseItemMenuControl () {
   }
   controlButtons.forEach(each => {
     each.querySelector('button').onclick = function () {
+      toggleItemMenu (null, true)
       swapActive(controlButtons, this.closest('.new_item_menu__item').dataset.mosType)
     }
   })
@@ -1462,6 +1466,7 @@ function handleEditMenuChange (type, close = false) {
       inputInterfaces[0].classList.add('active')
     }
   } else {
+    toggleItemMenu (null, true)
     controlButtons.forEach(each => each.classList.remove('active'))
     inputInterfaces.forEach(each => {
       if (each.classList.contains('active')) localStorage.setItem('mos-menu-state', JSON.stringify({ lastActive: each.dataset.mosType }))
@@ -2049,7 +2054,7 @@ function toggleTitleEdit () {
   function outsideClick (e) {
     // console.log(e.target, !e.target.classList.contains('page__title__edit'))
     if (!e.target.classList.contains('page__title__edit')) {
-      const titleEdit= title.querySelector('input')
+      const titleEdit = title.querySelector('input')
       const titleDisplay = document.createElement('h3')
       titleDisplay.textContent = titleEdit.value
       title.removeChild(titleEdit)
@@ -2159,7 +2164,7 @@ function toggleTextEdit () {
   const content = parent.querySelector('.content')
 
   if (parent.dataset.mosEdit === 'active') {
-    console.log('item active')
+    // console.log('item active')
 
     if (parent.querySelector('.content_text__input')) {
       const textInput = content.querySelector('.content_text__input')
@@ -2174,7 +2179,7 @@ function toggleTextEdit () {
 
     parent.dataset.mosEdit = 'inactive'
   } else {
-    console.log('item inactive')
+    // console.log('item inactive')
 
     if (parent.querySelector('.content_text__text')) {
       const textShow = content.querySelector('.content_text__text')
