@@ -117,7 +117,6 @@ const sa = term => document.querySelectorAll(term)
 
 // ========== Serialise Functions ==========
 
-// TODO: New croping system is not picked up by serialise atm
 function extractElementData (jQueryElem) {
   const content = jQueryElem.find('.content')
   const dataType = content.data('mosContenttype')
@@ -931,8 +930,37 @@ function enableResize (target, enable) {
   }
 }
 
-function toggleImageCrop (event) {
-  const gridStackItem = event.target.closest('.grid-stack-item')
+function enableCropCancel (target, enable) {
+  const parent = target.closest('.content.image')
+  const undo = parent.querySelector('.content__controls--undo')
+  const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
+  if (enable) {
+    const start = {}
+    const computed = getComputedStyle(target, null)
+    const rect = target.getBoundingClientRect()
+    start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
+    start.height = parseFloat(computed.getPropertyValue('height').replace('px', ''))
+    start.x = rect.left
+    start.y = rect.top
+    console.log(start)
+    function cancel () {
+      console.log(start)
+      target.style.width = `${start.width}px`
+      target.style.height = `${start.height}px`
+      target.style.left = `${start.x - parentLeft}px`
+      target.style.top = `${start.y - parentTop}px`
+      toggleImageCrop (null, target)
+    }
+    undo.onclick = cancel
+  } else {
+    undo.onclick = () => {}
+  }
+}
+
+function toggleImageCrop (event, overrideTarget) {
+  const gridStackItem = overrideTarget
+    ? overrideTarget.closest('.grid-stack-item') 
+    : event.target.closest('.grid-stack-item')
   const grid = $(gridStackItem.closest('.grid-stack')).data('gridstack')
   const content = gridStackItem.querySelector('.content.image')
   const resize = gridStackItem.querySelector('.content_image__img__resize')
@@ -940,12 +968,14 @@ function toggleImageCrop (event) {
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
     enableDrag (resize, false)
+    enableCropCancel (resize, false)
     enableResize (resize, false)
     content.classList.remove('crop_active')
   } else {
     grid.movable('.grid-stack-item', false);
     grid.resizable('.grid-stack-item', false);
     enableDrag (resize, true)
+    enableCropCancel (resize, true)
     enableResize (resize, true)
     content.classList.add('crop_active')
   }
@@ -1789,12 +1819,15 @@ const createText = ({ text, size }) => `
 const createImage = ({ src, alt, crop }) => `
   <div class="content image" data-mos-contenttype="image" data-mos-image_idx="0">
     <div class="content__controls">
+    <button class="content__controls--undo"><i class="fas fa-undo-alt"></i></button>
     <button class="content__controls--image_edit"><i class="fas fa-crop-alt"></i></button>
       <button class="content__controls--delete">✖</button>
     </div>
     <div class="content_image__img__crop_boundary">
       <div class="content_image__img__crop_display"></div>
-      <div class="content_image__img__resize" style="top:${crop && crop.top ? crop.top : ''};left:${crop && crop.left ? crop.left : ''};width:${crop && crop.width ? crop.width : ''};height:${crop && crop.height ? crop.height : ''};">
+      <div class="content_image__img__resize"
+        style="${crop && crop.top ? `top:${crop.top};` : ''}${crop && crop.left ? `left:${crop.left};` : ''}${crop && crop.width ? `width:${crop.width};` : ''}${crop && crop.height ? `height:${crop.height};` : ''}
+      ">
         <img src="${src}" alt="${alt}" />
         <div class="resizers">
           <div class="resizer tl"></div>

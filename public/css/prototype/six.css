@@ -16,7 +16,7 @@ body, html, h1, p {
 }
 
 button {
-  background: #000;
+  background: #3A3A3A;
   padding: 10px 15px;
   color: #fff;
   border: none;
@@ -89,6 +89,8 @@ button[name=dev] {
   overflow-y: auto;
   width: 100%;
   box-sizing: border-box;
+  overflow-y: -moz-scrollbars-none;
+  -ms-overflow-style: none;
 }
 .slides--wrapper > * {
   box-sizing: border-box;
@@ -185,6 +187,9 @@ button[name=dev] {
 }
 .slides--wrapper .slides__grid .slide:hover .slide__menu .slide__menu__toggle {
   opacity: 1;
+}
+.slides--wrapper::-webkit-scrollbar {
+  width: 0;
 }
 
 .pages--container {
@@ -412,7 +417,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button {
   color: #000;
   background: #fff;
-  border: 3px solid #000;
+  border: 3px solid #3A3A3A;
   font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.new_text__size--small {
@@ -428,7 +433,7 @@ button[name=dev] {
   background-color: #ecf0f1;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.active {
-  background-color: #000;
+  background-color: #3A3A3A;
   color: #fff;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value {
@@ -490,7 +495,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button {
   color: #000;
   background: #fff;
-  border: 3px solid #000;
+  border: 3px solid #3A3A3A;
   font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.edit_text__size--small {
@@ -506,7 +511,7 @@ button[name=dev] {
   background-color: #ecf0f1;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.active {
-  background-color: #000;
+  background-color: #3A3A3A;
   color: #fff;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value {
@@ -668,7 +673,7 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
   transition: 0.1s linear;
-  color: #000;
+  color: #3A3A3A;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--clear:hover {
   background: #ecf0f1;
@@ -821,7 +826,7 @@ button[name=dev] {
   background: #fff;
   border: none;
   cursor: pointer;
-  color: #000;
+  color: #3A3A3A;
   padding: 2px 5px;
 }
 .grid-stack-item .grid-stack-item-content .content.text {
@@ -856,6 +861,9 @@ button[name=dev] {
 .grid-stack-item .grid-stack-item-content .content.image {
   display: flex;
   flex-direction: column;
+}
+.grid-stack-item .grid-stack-item-content .content.image .content__controls--undo {
+  display: none;
 }
 .grid-stack-item .grid-stack-item-content .content.image .content_image__img__crop_boundary {
   width: 100%;
@@ -919,6 +927,9 @@ button[name=dev] {
   top: calc(100% - 5px);
   left: calc(100% - 5px);
   cursor: se-resize;
+}
+.grid-stack-item .grid-stack-item-content .content.image.crop_active .content__controls--undo {
+  display: inline-block;
 }
 .grid-stack-item .grid-stack-item-content .content.image.crop_active .content_image__img__crop_boundary {
   display: block;
@@ -1055,7 +1066,7 @@ button[name=dev] {
   border-radius: 40px;
   border: none;
   background: #fff;
-  color: #000;
+  color: #3A3A3A;
   padding: 0;
   cursor: pointer;
   font-size: 20px;
@@ -1291,7 +1302,7 @@ button[name=dev] {
   border-radius: 40px;
   border: none;
   background: #fff;
-  color: #000;
+  color: #3A3A3A;
   padding: 0;
   cursor: pointer;
   font-size: 20px;
@@ -1485,10 +1496,6 @@ button[name=dev] {
   left: 100%;
 }
 
-.slide svg {
-  width: 118px;
-  height: 72px;
-}
 .slide rect {
   stroke: none;
   fill: red;
