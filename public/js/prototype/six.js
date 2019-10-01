@@ -204,6 +204,7 @@ function extractElementData (jQueryElem) {
 }
 
 function extractElementDataGridstack (node) {
+  console.log(node)
   const { el } = node
   return extractElementData (el)
 }
@@ -221,14 +222,18 @@ function createSerialisedWidget (each) {
   }
 }
 
-function serialise () {
-  console.log('serialising...')
+function serialise (source) {
+  console.log(`[${source || 'unknowen'}]: serialising...`)
   const output = []
   $('.page').each(function (idx, grid) {
     const title = $(grid).find('.page__title h3').text().trim()
     const entities = []
     const items = $(grid).find('.grid-stack-item:visible')
       .map((idx, each) => {
+        // BUG: If serialise runs while item is being moved between grids,
+        // data strucutre is diffirent,
+        // causes extractElementDataGridstack to not be able to read 'el'
+        // console.log(each)
         entities.push (createSerialisedWidget(each))
       })
     output.push({ title, entities })
@@ -242,7 +247,7 @@ function save () {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify ({
-      payload: serialise()
+      payload: serialise('save')
     })
   }
   fetch(url, opts)
@@ -252,9 +257,17 @@ function save () {
 
 function handleAutosave () {
   console.log('autosave')
-  const serialised = serialise ()
-  // if (autosave.lastAutosave < (new Date().getTime() - ))
-  localStorage.setItem("mos-moodboard-autosave", JSON.stringify(serialised))
+  const currentTime = new Date().getTime() - 2000
+  if (autosave.lastAutosave < currentTime) {
+    const serialised = serialise ('handleAutosave')
+    let saveData = JSON.stringify(localStorage.getItem('mos-moodboard-autosave'))
+    if (!(saveData && saveData.steps)) saveData = { steps: [] }
+    if (saveData.steps.length >= 10) saveData.steps.shift()
+    saveData.steps.push(serialised)
+    saveData.lastUpdate = currentTime
+    localStorage.setItem("mos-moodboard-autosave", JSON.stringify(saveData))
+    autosave.lastAutosave = currentTime
+  }
 }
 
 // ========== / Serialise Functions ==========
@@ -314,7 +327,7 @@ function createSlideInterfaceGrid (clearPrevious) {
   }
   function stop (e, ui) {
     ui.item.endPos = ui.item.index()
-    const serialised = serialise()
+    const serialised = serialise('createSlideInterfaceGrid:stop')
     const newSlideLayout = [...serialised]
     newSlideLayout[ui.item.startPos] = serialised[ui.item.endPos]
     newSlideLayout[ui.item.endPos] = serialised[ui.item.startPos]
@@ -557,7 +570,8 @@ function pageScrollHandler (event) {
     )[0]
   }
   const closestToCenter = getClosestToCenter()
-  if (lastClick.slide[0] && Number(lastClick.slide[0].dataset.mosSlide_idx) === closestToCenter.idx) return
+  if (Number(focusedPage.idx) === closestToCenter.idx) return
+
   focusedPage = closestToCenter
   renderIcons()
   updateSlideBar (event, focusedPage.idx, false)
@@ -683,7 +697,7 @@ function experimentalSVGWrite (page, idx, guides = false) {
 }
 
 function renderIcons () {
-  const ent = serialise()
+  const ent = serialise('renderIcons')
   ent.forEach((each, idx) => experimentalSVGWrite(each, idx, false))
 }
 
@@ -722,8 +736,7 @@ function copySlide (cut = false) {
 }
 
 function pasteSlide () {
-  console.log(serialise())
-  const serialised = serialise()
+  const serialised = serialise('pasteSlide')
   let newData = [...serialised]
   // WARNING: Constrain slide copy to one only for now
   // In future this func will look for shift key and .push() to slideAttrubutes
@@ -893,8 +906,8 @@ function handleGlobalKeyPress (event) {
 
 function undo () {
   const previousState = JSON.parse(localStorage.getItem("mos-moodboard-autosave"))
-  if (previousState) {
-    data.projects = previousState
+  if (previousState && previousState.steps && previousState.steps.length) {
+    data.projects = previousState[previousState.length - 1]
     render (data)
   }
 }
@@ -1430,7 +1443,7 @@ function initialAjax () {
 function initialisePageAdd () {
   const newPageButton = document.querySelector('.slides button.new_page')
   function createNewPage () {
-    const serialised = serialise()
+    const serialised = serialise('initialisePageAdd:createNewPage')
     serialised.splice(focusedPage.idx+1, 0, {
       title: 'New Page',
       entities: []
@@ -2165,7 +2178,7 @@ function removePage (e) {
 }
 
 function removePageByIdx (idx) {
-  const serialised = serialise()
+  const serialised = serialise('removePageByIdx')
   const serialisedRemoved = [...serialised.slice(0, idx), ...serialised.slice(idx + 1)]
   data.projects = serialisedRemoved
   render(data)
