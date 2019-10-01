@@ -1,3 +1,5 @@
+// ========== Resources ==========
+
 const colours = [
   { r:53, g:152, b:219 }, { r:27, g:188, b:155 }, { r:154, g:89, b:181 }, { r:243, g:156, b:17 }, { r:232, g:76, b:61 },
   { r:126, g:140, b:141 }, { r:52, g:73, b:94 }, { r:241, g:196, b:15 }, { r:22, g:160, b:134 }, { r:210, g:84, b:0 }, { r:41, g:127, b:184 },
@@ -13,6 +15,12 @@ const defaultImg = {
   src: 'https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png',
   alt: 'Placeholder Image'
 }
+
+// ========== / Resources ==========
+
+
+
+// ========== Constants / Global Vars ==========
 
 let userRender, colourPicker, editColourPicker, globalHandleEditMenuChange;
 
@@ -106,12 +114,16 @@ const gridstackOptions = {
 const s = term => document.querySelector(term)
 const sa = term => document.querySelectorAll(term)
 
+// ========== Constants / Global Vars ==========
+
+
 
 // NOTE: Syntax used states "page" refers to DOM elements and gridstack data of interactable pages
 // while "slide" refers to side bar menu and associated data structure
 
 // ### Structure:
-//  -Constants and data containers
+//  -Raw data utilities
+//  -Constants and Global vars
 //  -Serialise Functions
 //  -Top Level Functions
 //  -Page initislisatin
@@ -196,8 +208,6 @@ function extractElementDataGridstack (node) {
   return extractElementData (el)
 }
 
-// did I mention that -other crimes asside- I'll never forgive jQuery for this ordering:
-// ?
 function createSerialisedWidget (each) {
   const node = $(each).data('_gridstack_node')
   const nodeData = extractElementDataGridstack(node)
@@ -212,6 +222,7 @@ function createSerialisedWidget (each) {
 }
 
 function serialise () {
+  console.log('serialising...')
   const output = []
   $('.page').each(function (idx, grid) {
     const title = $(grid).find('.page__title h3').text().trim()
@@ -237,6 +248,13 @@ function save () {
   fetch(url, opts)
     .then(res => res.json())
     .then(res => console.log({ res }))
+}
+
+function handleAutosave () {
+  console.log('autosave')
+  const serialised = serialise ()
+  // if (autosave.lastAutosave < (new Date().getTime() - ))
+  localStorage.setItem("mos-moodboard-autosave", JSON.stringify(serialised))
 }
 
 // ========== / Serialise Functions ==========
@@ -501,6 +519,7 @@ function createGridContent (pages, data, overrideWidth) {
           // pages.addEventListener('keydown', handleGlobalKeyPress)
           // pages.setAttribute('tabindex', 0)
           pages.addEventListener('click', deselectOnGrid)
+          elem.on('change', handleAutosave)
         }
       }, this)
     })
@@ -866,6 +885,17 @@ function handleGlobalKeyPress (event) {
       // hiddenElement.execCommand('paste')
       // console.log(hiddenElement
     }
+    if (event.key === 'z' && event.ctrlKey) {
+      undo ()
+    }
+  }
+}
+
+function undo () {
+  const previousState = JSON.parse(localStorage.getItem("mos-moodboard-autosave"))
+  if (previousState) {
+    data.projects = previousState
+    render (data)
   }
 }
 

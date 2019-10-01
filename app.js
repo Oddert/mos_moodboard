@@ -107,8 +107,17 @@ const server = app.listen(
 //    -Paste / Destroy new slide ✓
 //    -Re-render ✓
 //    -Check that slide jump updates focused page (?)
+//    -Implament extra drop menu functions for slides
 //  -New Sidebar Layout and collapse ✓
 //  -Local auto save
-//  -Actual ajax save (mock db fro this)
+//    -Move widget
+//    -Resize widget
+//    -Edit widget
+//    -Delete widget
+//    -Cut Copy Paste x 2
+//    -Reorder slide
+//    -Delete Slide
+//  -Actual ajax save (mock db for this)
+//  -EXPORT TO PDF
 
 //  -Minor Bug: Resizing still ausing issues when multiple resize handles are employed at once
