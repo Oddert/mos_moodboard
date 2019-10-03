@@ -204,7 +204,7 @@ function extractElementData (jQueryElem) {
 }
 
 function extractElementDataGridstack (node) {
-  console.log(node)
+  // console.log(node)
   const { el } = node
   return extractElementData (el)
 }
@@ -532,7 +532,10 @@ function createGridContent (pages, data, overrideWidth) {
           // pages.addEventListener('keydown', handleGlobalKeyPress)
           // pages.setAttribute('tabindex', 0)
           pages.addEventListener('click', deselectOnGrid)
-          elem.on('change', handleAutosave)
+          elem.on('change', () => {
+            console.log('change')
+            handleAutosave()
+          })
         }
       }, this)
     })
@@ -912,10 +915,16 @@ function undo () {
   }
 }
 
-function enableDrag (target, enable) {
-  const gridStackItemContent = target.closest('.grid-stack-item-content')
-  const parent = target.closest('.content.image')
-  const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
+let memory
+function testOne () {
+  console.log('testOne')
+}
+
+function enableDragHandleMouseDown (e) {
+  e.preventDefault()
+  if (e.target.classList.contains('resize') || e.target.classList.contains('resizer')) return
+
+  console.log('enableDragHandleMouseDown() e.target:', e.target)
   const start = {
     width: 0,
     height: 0,
@@ -924,37 +933,54 @@ function enableDrag (target, enable) {
     mouseX: 0,
     mouseY: 0
   }
-
-  function handleMouseDown (e) {
-    e.preventDefault()
-    if (e.target.classList.contains('resize') || e.target.classList.contains('resizer')) return
-
-    const rect = target.getBoundingClientRect()
-    const computed = getComputedStyle(target, null)
-    start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
-    start.height = parseFloat(computed.getPropertyValue('height').replace('px', ''))
-    start.x = rect.left
-    start.y = rect.top
-    start.mouseX = e.pageX
-    start.mouseY = e.pageY
-    window.addEventListener('mousemove', handleDrag)
-    window.addEventListener('mouseup', endDrag)
+  const target = e.target.closest('.grid-stack-item').querySelector('.content_image__img__resize')
+  const parent = target.closest('.content.image')
+  const { top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect()
+  console.log('~~~')
+  const rect = target.getBoundingClientRect()
+  const computed = getComputedStyle(target, null)
+  start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
+  start.height = parseFloat(computed.getPropertyValue('height').replace('px', ''))
+  start.x = rect.left
+  start.y = rect.top
+  start.mouseX = e.pageX
+  start.mouseY = e.pageY
+  function enableDragHandleDrag (e) {
+    // BUG:
+    console.log('#')
+    target.style.left = `${((start.x + (e.pageX - start.mouseX) - parentLeft) / parentWidth) * 100}%`
+    target.style.top = `${((start.y + (e.pageY - start.mouseY) - parentTop) / parentHeight) * 100}%`
   }
 
-  function handleDrag (e) {
-    target.style.left = `${start.x + (e.pageX - start.mouseX) - parentLeft}px`
-    target.style.top = `${start.y + (e.pageY - start.mouseY) - parentTop}px`
+  function enableDragEndDrag (e) {
+    window.removeEventListener('mousemove', enableDragHandleDrag)
+    console.log('endDrag')
   }
+  window.addEventListener('mousemove', enableDragHandleDrag)
+  window.addEventListener('mouseup', enableDragEndDrag)
+}
 
-  function endDrag (e) { window.removeEventListener('mousemove', handleDrag) }
+function enableDrag (target, enable) {
+  // const refoundTarget = passedEvent.target.closest('.grid-stack-item').querySelector('.content_image__img__resize')
+  const gridStackItemContent = target.closest('.grid-stack-item-content')
+  // const parent = target.closest('.content.image')
+  // const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
+
+
+
+  // testing this with testOne() shows the above functions, while named, are still anonymouse
+  console.log(memory === enableDragHandleMouseDown)
   if (enable) {
-    target.addEventListener('mousedown', handleMouseDown)
+    target.addEventListener('mousedown', enableDragHandleMouseDown)
     gridStackItemContent.style.border = 'none'
     gridStackItemContent.style.zIndex = '999'
+    memory = enableDragHandleMouseDown
+    console.log('enabled')
   } else {
-    target.removeEventListener('mousedown', handleMouseDown)
+    target.removeEventListener('mousedown', enableDragHandleMouseDown)
     gridStackItemContent.style.border = null
     gridStackItemContent.style.zIndex = null
+    console.log('disabled')
   }
 }
 
@@ -1043,7 +1069,9 @@ function enableResize (target, enable) {
       }
     }
 
-    function endResize (e) { window.removeEventListener('mousemove', resize) }
+    function endResize (e) {
+      window.removeEventListener('mousemove', resize)
+    }
     // pun not intended:
     if (enable) {
       handle.addEventListener('mousedown', handleMouseDown)
@@ -1092,19 +1120,21 @@ function toggleImageCrop (event, overrideTarget) {
   const content = gridStackItem.querySelector('.content.image')
   const resize = gridStackItem.querySelector('.content_image__img__resize')
   if (content.classList.contains('crop_active')) {
+    content.classList.remove('crop_active')
     grid.movable('.grid-stack-item', true);
     grid.resizable('.grid-stack-item', true);
-    enableDrag (resize, false)
     enableCropCancel (resize, false)
     enableResize (resize, false)
-    content.classList.remove('crop_active')
+    // $(resize).draggable({ disabled: true })
+    enableDrag (resize, false, event)
   } else {
+    content.classList.add('crop_active')
     grid.movable('.grid-stack-item', false);
     grid.resizable('.grid-stack-item', false);
-    enableDrag (resize, true)
     enableCropCancel (resize, true)
     enableResize (resize, true)
-    content.classList.add('crop_active')
+    // $(resize).draggable()
+    enableDrag (resize, true, event)
   }
 }
 
