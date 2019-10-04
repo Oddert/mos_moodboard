@@ -1235,6 +1235,9 @@ button[name=dev] {
   font-family: "Ubuntu", Helvetica, sans-serif, arial, "Roboto";
   letter-spacing: 4px;
   text-shadow: 1px 1px 1px #ecf0f1;
+  font-weight: lighter;
+  color: #fff;
+  text-shadow: 0.05em 0 #000, 0 0.05em #000, -0.05em 0 #000, 0 -0.05em #000, -0.05em -0.05em #000, -0.05em 0.05em #000, 0.05em -0.05em #000, 0.05em 0.05em #000;
   text-align: center;
   box-sizing: border-box;
   background: none;

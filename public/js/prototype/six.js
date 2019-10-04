@@ -28,13 +28,20 @@ let oddert
 
 let settingRerenderOnSideMenu = false
 
+let renderComplete = false
+
+const localStoreAutosave = "mos-moodboard-autosave"
+
+const localStoreMenuState = "mos-menu-state"
+
 const fullscreen = {
   open: false
 }
 
 const autosave = {
   lastLocalSave: null,
-  lastAction: null
+  lastAction: null,
+  stepSelected: 0
 }
 
 const lastClick = {
@@ -255,20 +262,39 @@ function save () {
     .then(res => console.log({ res }))
 }
 
-function handleAutosave () {
-  console.log('autosave')
-  const currentTime = new Date().getTime() - 2000
-  if (autosave.lastAutosave < currentTime) {
-    const serialised = serialise ('handleAutosave')
-    let saveData = JSON.stringify(localStorage.getItem('mos-moodboard-autosave'))
-    if (!(saveData && saveData.steps)) saveData = { steps: [] }
-    if (saveData.steps.length >= 10) saveData.steps.shift()
-    saveData.steps.push(serialised)
-    saveData.lastUpdate = currentTime
-    localStorage.setItem("mos-moodboard-autosave", JSON.stringify(saveData))
-    autosave.lastAutosave = currentTime
-    console.log({ saveData, autosave })
+function handleAutosave (delay) {
+  if (!renderComplete) return //console.log('blocking autosave; render in progress')
+  function performAutoSave () {
+    // console.log('autosave')
+    const currentTime = new Date().getTime() - 2000
+    if (autosave.lastAction < currentTime) {
+      // console.log('...passed debounce')
+      const serialised = serialise ('handleAutosave')
+      let saveData = JSON.parse(localStorage.getItem(localStoreAutosave))
+
+      // console.log({ saveData })
+      if (!(saveData && saveData.steps)) saveData = { steps: [] }
+      console.log(autosave.stepSelected)
+      if (autosave.stepSelected) {
+        const cut = saveData.steps.length - autosave.stepSelected
+        console.log(saveData.steps, `slicing at: 0, ${cut}`)
+        saveData.steps = saveData.steps.slice(0, cut)
+        console.log(saveData.steps)
+        autosave.stepSelected = 0
+      } else if (saveData.steps.length >= 10) {
+        saveData.steps.shift()
+      }
+      saveData.steps.push(serialised)
+      saveData.lastUpdate = currentTime
+      // console.log({ saveData })
+
+      localStorage.setItem(localStoreAutosave, JSON.stringify(saveData))
+      autosave.lastAction = currentTime
+      console.log('autosave complete')
+    }// else console.log('debounced.')
   }
+  if (delay) setTimeout (performAutoSave, 500)
+  else performAutoSave ()
 }
 
 // ========== / Serialise Functions ==========
@@ -308,12 +334,12 @@ function updateSlideBar (event, idx, updateContext) {
         // console.log(parent.scrollTop)
         // parent.scrollTop -= rect.top
         each.scrollIntoView(scrollOpts)
-        console.log(rect.top)
+        // console.log(rect.top)
       }
       if (rect.top > window.innerHeight) {
         // console.log(parent.scrollTop)
         each.scrollIntoView(scrollOpts)
-        console.log(rect.top)
+        // console.log(rect.top)
       }
       each.classList.add('selected')
     } else each.classList.remove('selected')
@@ -357,6 +383,7 @@ function createSlideInterfaceGrid (clearPrevious) {
     render(data)
     reassignIndeces ()
     console.log('Slide moved positions (from, to): ', ui.item.startPos, ui.item.endPos)
+    handleAutosave()
   }
   queryElem.sortable({ start, stop })
   queryElem.disableSelection()
@@ -379,6 +406,8 @@ function performLibSeach (extention, value, cb) {
 }
 
 function render (data, overrideWidth) {
+
+  renderComplete = false
 
   const pages = document.querySelector('.pages')
   const slides = document.querySelector('.slides__grid')
@@ -546,17 +575,25 @@ function createGridContent (pages, data, overrideWidth) {
         if (node._type === "material") {
           createdWidget.dblclick(openMaterialEditor)
         }
-        // detect last page and last item on last page
-        if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
-          if (window.scrollY < 25) initPageFocus()
-          renderIcons()
-          // pages.addEventListener('keydown', handleGlobalKeyPress)
-          // pages.setAttribute('tabindex', 0)
-          pages.addEventListener('click', deselectOnGrid)
-          grid.on('change', () => {
-            console.log('change')
+        // detect last item
+        if (itemIdx === data.projects[data.projects.length - 1].entities.length - 1) {
+          // detect last page
+          elem.on('change', () => {
+            // console.log('change')
             handleAutosave()
           })
+          if (pageIdx === data.projects.length - 1) {
+            if (window.scrollY < 25) initPageFocus()
+            renderIcons()
+            // pages.addEventListener('keydown', handleGlobalKeyPress)
+            // pages.setAttribute('tabindex', 0)
+            pages.addEventListener('click', deselectOnGrid)
+            renderComplete = true
+          }
+          // elem.on('gsresizestop', () => {
+          //   console.log('gsresizestop')
+          //   handleAutosave()
+          // })
         }
       }, this)
     })
@@ -911,9 +948,15 @@ function handleGlobalKeyPress (event) {
 }
 
 function undo () {
-  const previousState = JSON.parse(localStorage.getItem("mos-moodboard-autosave"))
+  const previousState = JSON.parse(localStorage.getItem(localStoreAutosave))
   if (previousState && previousState.steps && previousState.steps.length) {
-    data.projects = previousState[previousState.length - 1]
+    if (previousState.steps.length - 2 - autosave.stepSelected < 0) {
+      return
+    }
+    data.projects = previousState.steps[previousState.steps.length - 2 - autosave.stepSelected]
+    console.log(autosave.stepSelected, isNaN(autosave.stepSelected))
+    if (isNaN(autosave.stepSelected)) autosave.stepSelected = 0
+    else autosave.stepSelected ++
     render (data)
   }
 }
@@ -1181,6 +1224,7 @@ function openImageEditor (event) {
   globalHandleEditMenuChange('image')
   accept.onclick = () => {
     img.src = editor.data.imageSrc
+    handleAutosave(true)
   }
   cancel.onclick = () => {
     globalHandleEditMenuChange ('image', true)
@@ -1200,6 +1244,7 @@ function openColourEditor (event) {
   globalHandleEditMenuChange ('colour')
   accept.onclick = () => {
     colourModule.style.backgroundColor = editColourPicker.color.hexString
+    handleAutosave(true)
   }
   cancel.onclick = () => {
     globalHandleEditMenuChange ('colour', true)
@@ -1279,6 +1324,7 @@ function openProductEditor (event) {
       content.dataset.mosImage_idx = idx
       contentImage.src = data.images[idx].src
       contentImage.alt = data.images[idx].alt
+      handleAutosave(true)
     }
     cancel.onclick = () => {
       globalHandleEditMenuChange ('product', true)
@@ -1353,6 +1399,7 @@ function openMaterialEditor (event) {
       content.dataset.mosImage_idx = idx
       contentImage.src = data.images[idx].src
       contentImage.alt = data.images[idx].alt
+      handleAutosave(true)
     }
     cancel.onclick = () => {
       globalHandleEditMenuChange ('material', true)
@@ -1499,7 +1546,7 @@ function initialiseItemMenuControl () {
         if (each.dataset.mosType === type) each.classList.add('active')
         else each.classList.remove('active')
       })
-      localStorage.setItem('mos-menu-state', JSON.stringify({ lastActive: type }))
+      localStorage.setItem(localStoreMenuState, JSON.stringify({ lastActive: type }))
     } else {
       console.error(`Invalid type supplied to swapActive; cannot read type of: ${type}`)
     }
@@ -1510,7 +1557,7 @@ function initialiseItemMenuControl () {
       swapActive(controlButtons, this.closest('.new_item_menu__item').dataset.mosType)
     }
   })
-  const menuState = JSON.parse(localStorage.getItem('mos-menu-state'))
+  const menuState = JSON.parse(localStorage.getItem(localStoreMenuState))
   console.log(menuState)
   if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
     swapActive(controlButtons, menuState.lastActive)
@@ -1525,7 +1572,7 @@ function handleEditMenuChange (type, close = false) {
 
   if (close) {
     editInterfaces.forEach(each => each.classList.remove('active'))
-    const menuState = JSON.parse(localStorage.getItem('mos-menu-state'))
+    const menuState = JSON.parse(localStorage.getItem(localStoreMenuState))
     if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
       controlButtons.forEach(each => {
         if (each.closest('.new_item_menu__item').dataset.mosType === menuState.lastActive) each.classList.add('active')
@@ -1541,7 +1588,7 @@ function handleEditMenuChange (type, close = false) {
     toggleItemMenu (null, true)
     controlButtons.forEach(each => each.classList.remove('active'))
     inputInterfaces.forEach(each => {
-      if (each.classList.contains('active')) localStorage.setItem('mos-menu-state', JSON.stringify({ lastActive: each.dataset.mosType }))
+      if (each.classList.contains('active')) localStorage.setItem(localStoreMenuState, JSON.stringify({ lastActive: each.dataset.mosType }))
       each.classList.remove('active')
     })
     editInterfaces.forEach(each => {
@@ -1950,6 +1997,10 @@ function initToggleItemMenu () {
   toggle.onclick = toggleItemMenu
 }
 
+function clearLocalStore () {
+  localStorage.setItem(localStoreAutosave, JSON.stringify({ steps: [], lastUpdate: new Date().getTime() }))
+}
+
 // document.addEventListener('click', e => {
 //   const menu = document.querySelector('.new_item_menu--container')
 //   let hide = true
@@ -1973,7 +2024,7 @@ initDragDrop()
 initialiseEditMenu()
 initFullScreen()
 initToggleItemMenu()
-// WARNING: there listeners are broken, why ???
+clearLocalStore()
 }
 
 // ========== / Page initialisation ==========
@@ -2324,6 +2375,7 @@ function createTextWidget (value, size) {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     createdTextWidget.find('.content__controls--text_edit').click(toggleTextEdit)
+    handleAutosave()
   }
 }
 
@@ -2355,6 +2407,7 @@ function createImageWidget (src, alt) {
     createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
+    handleAutosave()
   }
 }
 
@@ -2386,6 +2439,7 @@ function createColourWidget (picker) {
     createdColourWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
+    handleAutosave()
   }
 }
 
@@ -2416,6 +2470,7 @@ function createProductWidget (product) {
       createdProductWidget.find('.content__controls--delete').click(function () {
         grid.removeWidget(this.closest('.grid-stack-item'))
       })
+      handleAutosave()
   }
 }
 
@@ -2446,6 +2501,7 @@ function createMaterialWidget (product) {
       createdMaterialWidget.find('.content__controls--delete').click(function () {
         grid.removeWidget(this.closest('.grid-stack-item'))
       })
+      handleAutosave()
   }
 }
 
