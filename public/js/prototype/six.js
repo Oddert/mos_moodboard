@@ -400,9 +400,7 @@ function render (data, overrideWidth) {
             <button class="slide__menu__toggle"><i class="fas fa-ellipsis-h"></i></button>
             <ul class="slide__menu__items">
               <li class="slide__menu__delete"><button type="button" name="slide_delete">Delete</button></li>
-              <li class="slide__menu__copy"><button type="button" name="slide_copy">Copy</button></li>
-              <li class="slide__menu__cut"><button type="button" name="slide_cut">Cut</button></li>
-              <li class="slide__menu__paste"><button type="button" name="slide_paste">Paste</button></li>
+              <li class="slide__menu__duplicate"><button type="button" name="slide_duplicate">Duplicate</button></li>
             </ul>
           </div>
         </li>
@@ -411,6 +409,7 @@ function render (data, overrideWidth) {
       const thisSlide = slides[slides.length - 1]
       const slideMenu = thisSlide.querySelector('.slide__menu')
       const slideDelete = slideMenu.querySelector('.slide__menu__delete')
+      const slideDuplicate = slideMenu.querySelector('.slide__menu__duplicate')
       slideMenu.querySelector('.slide__menu__toggle').onclick = e => {
         e.preventDefault()
         e.stopPropagation()
@@ -418,6 +417,9 @@ function render (data, overrideWidth) {
         else slideMenu.classList.add('active')
       }
       slideDelete.onclick = () => removePageByIdx(idx)
+      slideDuplicate.onclick = () => {
+        pasteSlide(idx)
+      }
     }
     addSlide (idx, { title })
   }
@@ -738,13 +740,17 @@ function copySlide (cut = false) {
   lastClick.cutPasteData.lastAction = cut ? 'CUT' : 'COPY'
 }
 
-function pasteSlide () {
+function pasteSlide (duplicateIdx) {
   const serialised = serialise('pasteSlide')
   let newData = [...serialised]
-  const targetIdx = Number(lastClick.cutPasteData.slideAttrubutes[0].idx) + 1
-  if (!targetIdx) return
+  let targetIdx = lastClick.cutPasteData.slideAttrubutes[0] ? Number(lastClick.cutPasteData.slideAttrubutes[0].idx) + 1 : undefined
+  if (isNaN(targetIdx)) return
   const readData = serialised[targetIdx]
-  const focusedIdx = focusedPage.idx
+  let focusedIdx = focusedPage.idx
+  if (duplicateIdx) {
+    targetIdx = Number(duplicateIdx)
+    focusedIdx = Number(duplicateIdx)
+  }
   // console.log(focusedIdx, serialised[targetIdx])
   newData.splice(focusedIdx + 1, 0, serialised[targetIdx - 1])
   // console.log(newData)
@@ -1203,18 +1209,19 @@ function openProductEditor (event) {
 
   const product_id = content.dataset.mosProduct_id
   fetchFullProduct('product', product_id, data => {
-    if (!data.images) {
-      data.images = []
-      const numFakeImages = Math.floor(Math.random()*7) + 1
-      for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
-    }
+    // DEV ONLY:
+    // if (!data.images) {
+    //   data.images = []
+    //   const numFakeImages = Math.floor(Math.random()*7) + 1
+    //   for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
+    // }
     primaryImage.src = data.images[0].src
     extraImages.innerHTML = ''
     data.images.forEach((each, idx) => {
       extraImages.innerHTML += `
         <li class="${idx === 0 ? 'active' : ''} carousel__image carousel__image_${idx}">
-          <button type="button" name="carousel__image_0">
-            <img src="${each.src}" alt="${each.alt}">
+          <button type="button" name="carousel__image_0" title="Image ${idx + 1}: ${each.alt}">
+            <img src="${each.src}" alt="${each.alt}" />
           </button>
         </li>
       `
