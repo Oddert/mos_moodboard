@@ -417,9 +417,7 @@ function render (data, overrideWidth) {
         else slideMenu.classList.add('active')
       }
       slideDelete.onclick = () => removePageByIdx(idx)
-      slideDuplicate.onclick = () => {
-        pasteSlide(idx)
-      }
+      slideDuplicate.onclick = () => pasteSlide(idx)
     }
     addSlide (idx, { title })
   }
@@ -743,26 +741,26 @@ function copySlide (cut = false) {
 function pasteSlide (duplicateIdx) {
   const serialised = serialise('pasteSlide')
   let newData = [...serialised]
-  let targetIdx = lastClick.cutPasteData.slideAttrubutes[0] ? Number(lastClick.cutPasteData.slideAttrubutes[0].idx) + 1 : undefined
-  if (isNaN(targetIdx)) return
+  let targetIdx = lastClick.cutPasteData.slideAttrubutes[0] ? Number(lastClick.cutPasteData.slideAttrubutes[0].idx) : undefined
   const readData = serialised[targetIdx]
   let focusedIdx = focusedPage.idx
   if (duplicateIdx) {
     targetIdx = Number(duplicateIdx)
     focusedIdx = Number(duplicateIdx)
   }
+  if (isNaN(targetIdx)) return
   // console.log(focusedIdx, serialised[targetIdx])
-  newData.splice(focusedIdx + 1, 0, serialised[targetIdx - 1])
+  newData.splice(focusedIdx + 1, 0, serialised[targetIdx])
   // console.log(newData)
   if (lastClick.cutPasteData.lastAction === 'CUT') {
     if (focusedIdx >= targetIdx) {
       // console.log('focus is greater than target, splicing at: ', targetIdx - 1)
       // idx should be the same as copied data is before end of list and focus
-      newData.splice(targetIdx - 1, 1)
+      newData.splice(targetIdx, 1)
     } else {
       // console.log('focus is less than target, splicing at: ', targetIdx)
       // idx is + 1
-      newData.splice(targetIdx, 1)
+      newData.splice(targetIdx + 1, 1)
     }
   }
   // console.log(newData)
