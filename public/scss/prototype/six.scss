@@ -36,6 +36,12 @@ $button_colour--primary: #fff;
 $button_background--hover: #333333;
 $button_background--active: #7e7e7e;
 
+input {
+  border-radius: 3px;
+  border: 1px solid #bec3c7;
+  padding: 10px;
+}
+
 button {
   background: $button_background--primary;
   padding: 10px 15px;
@@ -939,6 +945,7 @@ $page_width: 75vw;
 }
 
 .product_search__input {
+  $search_radius: 3px;
   padding: 5px 10px;
   width: 100%;
   display: flex;
@@ -948,7 +955,7 @@ $page_width: 75vw;
   border-bottom: 1px solid #bec3c7;
   .product_search__input--wrapper {
     border: 1px solid #bec3c7;
-    border-radius: 10px;
+    border-radius: $search_radius;
     width: 90%;
     display: flex;
     align-items: center;
@@ -956,7 +963,7 @@ $page_width: 75vw;
       flex: 1;
       padding: 10px;
       border: none;
-      border-radius: 10px;
+      border-radius: $search_radius;
       &:hover + .product_search__input--clear {
         display: flex;
       }
@@ -1653,7 +1660,7 @@ $page_width: 75vw;
     &[type=url] {
       margin: 5px;
       flex: 4;
-      padding: 5px 10px;
+      // padding: 5px 10px;
       align-self: stretch;
     }
   }

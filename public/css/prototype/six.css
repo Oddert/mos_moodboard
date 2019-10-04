@@ -15,6 +15,12 @@ body, html, h1, p {
   padding: 0;
 }
 
+input {
+  border-radius: 3px;
+  border: 1px solid #bec3c7;
+  padding: 10px;
+}
+
 button {
   background: #1d1d1d;
   padding: 10px 15px;
@@ -756,7 +762,7 @@ button[name=dev] {
 }
 .product_search__input .product_search__input--wrapper {
   border: 1px solid #bec3c7;
-  border-radius: 10px;
+  border-radius: 3px;
   width: 90%;
   display: flex;
   align-items: center;
@@ -765,7 +771,7 @@ button[name=dev] {
   flex: 1;
   padding: 10px;
   border: none;
-  border-radius: 10px;
+  border-radius: 3px;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--bar:hover + .product_search__input--clear {
   display: flex;
@@ -1407,7 +1413,6 @@ button[name=dev] {
 .image_interface--wrapper input[type=url] {
   margin: 5px;
   flex: 4;
-  padding: 5px 10px;
   align-self: stretch;
 }
 .image_interface--wrapper .image_interface__control {

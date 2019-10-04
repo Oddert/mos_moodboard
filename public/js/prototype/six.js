@@ -267,6 +267,7 @@ function handleAutosave () {
     saveData.lastUpdate = currentTime
     localStorage.setItem("mos-moodboard-autosave", JSON.stringify(saveData))
     autosave.lastAutosave = currentTime
+    console.log({ saveData, autosave })
   }
 }
 
@@ -298,15 +299,20 @@ function updateSlideBar (event, idx, updateContext) {
       const rect = each.getBoundingClientRect()
       // IDEA: This inbuilt function is a bit janky but it's good that its native
       // considder carrying on with original method:
+      const scrollOpts = {
+        // block: "end",
+        // inline: "nearest",
+        // behavior: "smooth"
+      }
       if (rect.top < (0 - rect.height)) {
         // console.log(parent.scrollTop)
         // parent.scrollTop -= rect.top
-        each.scrollIntoView()
+        each.scrollIntoView(scrollOpts)
         console.log(rect.top)
       }
       if (rect.top > window.innerHeight) {
         // console.log(parent.scrollTop)
-        each.scrollIntoView()
+        each.scrollIntoView(scrollOpts)
         console.log(rect.top)
       }
       each.classList.add('selected')
@@ -547,7 +553,7 @@ function createGridContent (pages, data, overrideWidth) {
           // pages.addEventListener('keydown', handleGlobalKeyPress)
           // pages.setAttribute('tabindex', 0)
           pages.addEventListener('click', deselectOnGrid)
-          elem.on('change', () => {
+          grid.on('change', () => {
             console.log('change')
             handleAutosave()
           })

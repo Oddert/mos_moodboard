@@ -106,8 +106,8 @@ const server = app.listen(
 //    -Can read slide position ✓
 //    -Paste / Destroy new slide ✓
 //    -Re-render ✓
-//    -Check that slide jump updates focused page (?)
-//    -Implament extra drop menu functions for slides
+//    -Check that slide jump updates focused page ✓
+//    -Implament extra drop menu functions for slides ???
 //  -New Sidebar Layout and collapse ✓
 //  -Local auto save
 //    -Move widget
