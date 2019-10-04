@@ -255,32 +255,6 @@ button[name=dev] {
 .pages--container .pages .page .page__wrapper .page__title input {
   color: #7e8c8d;
 }
-.pages--container .pages .page .page__wrapper .page__title:hover .page__title__delete button {
-  color: #2d3e50;
-}
-.pages--container .pages .page .page__wrapper .page__title .page__title__delete {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  opacity: 0;
-  transition: 0.1s linear;
-}
-.pages--container .pages .page .page__wrapper .page__title .page__title__delete .page__title__delete--delete {
-  transition: 0.1s linear;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  color: #7e8c8d;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 0;
-}
-.pages--container .pages .page .page__wrapper .page__title .page__title__delete .page__title__delete--delete:hover {
-  color: #e84c3d;
-  background: #fff;
-}
 .pages--container .pages .page .page__wrapper .page__content {
   background: #fff;
   background: white;

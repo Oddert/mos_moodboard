@@ -334,45 +334,45 @@ $page_width: 75vw;
         input {
           color: #7e8c8d;
         }
-        &:hover {
-          .page__title__delete {
-            button {
-              color: #2d3e50;
-            }
-          }
-        }
-        .page__title__delete {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          opacity: 0;
-          transition: .1s linear;
-          .page__title__delete--delete {
-            transition: .1s linear;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: none;
-            border: none;
-            color: #7e8c8d;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            &:hover {
-              color: #e84c3d;
-              background: #fff;
-            }
-          }
-          .page__title__delete--message {
-
-          }
-          .page__title__delete--confirm {
-
-          }
-          .page__title__delete--cancel {
-
-          }
-        }
+        // &:hover {
+        //   .page__title__delete {
+        //     button {
+        //       color: #2d3e50;
+        //     }
+        //   }
+        // }
+        // .page__title__delete {
+        //   display: flex;
+        //   align-items: center;
+        //   justify-content: flex-end;
+        //   opacity: 0;
+        //   transition: .1s linear;
+        //   .page__title__delete--delete {
+        //     transition: .1s linear;
+        //     width: 40px;
+        //     height: 40px;
+        //     border-radius: 50%;
+        //     background: none;
+        //     border: none;
+        //     color: #7e8c8d;
+        //     font-size: 20px;
+        //     cursor: pointer;
+        //     padding: 0;
+        //     &:hover {
+        //       color: #e84c3d;
+        //       background: #fff;
+        //     }
+        //   }
+        //   .page__title__delete--message {
+        //
+        //   }
+        //   .page__title__delete--confirm {
+        //
+        //   }
+        //   .page__title__delete--cancel {
+        //
+        //   }
+        // }
       }
       .page__content {
         background: #fff;
