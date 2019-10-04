@@ -30,7 +30,8 @@ body, html, h1, p {
 
 $caption_text_size: 9px;
 $select_primary_colour: #1ac6e8;
-$button_background--primary: #3A3A3A;
+// $button_background--primary: #3A3A3A;
+$button_background--primary: #1d1d1d;
 $button_colour--primary: #fff;
 $button_background--hover: #333333;
 $button_background--active: #7e7e7e;
@@ -57,6 +58,32 @@ button {
     right: 10vw;
     font-size: 1.2rem;
     z-index: 10;
+  }
+}
+
+@mixin widget_interface_title {
+  border-bottom: 1px solid #ecf0f1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  h3 {
+    text-align: center;
+    font-size: 16px;
+  }
+}
+
+@mixin action_button_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 20px;
+  border-top: 1px solid #ecf0f1;
+  button {
+
   }
 }
 
@@ -522,7 +549,9 @@ $page_width: 75vw;
         margin: 0;
         padding: 10px 15px;
         &.active {
-          border-left: 4px solid #2d3e50;
+          // border-left: 4px solid #2d3e50;
+          color: #fff;
+          background: #3A3A3A;
         }
       }
       .item_menu__toggle, .item_menu__info {
@@ -552,31 +581,56 @@ $page_width: 75vw;
           background: $text_main;
           &:hover { background: $text_hover;}
           &:active {background: $text_active; }
+          &.active {
+            color: #fff;
+            background: #3A3A3A;
+            background: #1d1d1d;
+          }
         }
         &.image button {
           background: $image_main;
           &:hover { background: $image_hover;}
           &:active {background: $image_active; }
+          &.active {
+            color: #fff;
+            background: #1d1d1d;
+          }
         }
         &.product button {
           background: $product_main;
           &:hover { background: $product_hover;}
           &:active {background: $product_active; }
+          &.active {
+            color: #fff;
+            background: #1d1d1d;
+          }
         }
         &.material button {
           background: $material_main;
           &:hover { background: $material_hover;}
           &:active {background: $material_active; }
+          &.active {
+            color: #fff;
+            background: #1d1d1d;
+          }
         }
         &.colour button {
           background: $colour_main;
           &:hover { background: $colour_hover; }
           &:active { background: $colour_active; }
+          &.active {
+            color: #fff;
+            background: #1d1d1d;
+          }
         }
         &.file button {
           background: $file_main;
           &:hover {  background: $file_hover; }
           &:active { background: $file_active; }
+          &.active {
+            color: #fff;
+            background: #1d1d1d;
+          }
         }
       }
       .item_menu__control__secondary {
@@ -663,6 +717,12 @@ $page_width: 75vw;
             button[name=new_product__insert] {}
             button[name=new_material__insert] {}
           }
+          .insert__title {
+            @include widget_interface_title;
+          }
+          .insert__action_butons {
+            @include action_button_container;
+          }
         }
 
         display: none;
@@ -678,12 +738,15 @@ $page_width: 75vw;
         display: none;
 
         .edit_close {
-          display: flex;
+          @include widget_interface_title;
+          flex-direction: row;
           align-items: center;
           .edit_close__title {
             flex: 1;
             margin: 0;
             padding: 10px 20px;
+            font-size: 16px;
+
           }
         }
         .edit {
@@ -848,6 +911,12 @@ $page_width: 75vw;
                 }
               }
             }
+          }
+          .edit__title {
+            @include widget_interface_title;
+          }
+          .edit__action_butons {
+            @include action_button_container;
           }
         }
 

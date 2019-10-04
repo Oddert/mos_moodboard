@@ -100,17 +100,20 @@
                     <i class="fas fa-arrow-right"></i>
                   </button>
                 </li>
-                <li class="item_menu__info" title="About Moodboard">
+                <!-- <li class="item_menu__info" title="About Moodboard">
                   <button type="button" name="application_information">
                     <i class="fas fa-info-circle"></i>
                   </button>
-                </li>
+                </li> -->
               </span>
             </ul>
 
           <div class="item_menu__interface">
             <div class="item_menu__interface__variant text" data-mos-type="text">
               <div class="insert new_text__insert">
+                <div class="insert__title">
+                  <h3>INSERT TEXT BOX</h3>
+                </div>
                 <ul class="new_text__size">
                   <li>
                     <button type="button" name="small" class="new_text__size--small">A</button>
@@ -125,11 +128,16 @@
                 <div class="new_text__value">
                   <textarea name="name" rows="4" placeholder="Text box content"></textarea>
                 </div>
-                <button type="button" name="new_text__insert">Insert Text Box +</button>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_text__insert">Insert Text Box +</button>
+                </div>
               </div>
             </div>
             <div class="item_menu__interface__variant image" data-mos-type="image">
               <div class="insert new_image__insert">
+                <div class="insert__title">
+                  <h3>INSERT IMAGE</h3>
+                </div>
                 <div class="image_interface--wrapper">
                   <label for="image_upload">Upload Image</label>
                   <input type="file" name="image_upload" class="image_upload" id="image_upload" />
@@ -138,12 +146,17 @@
                     <img src="https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png" alt="Placeholder Image">
                   </div>
                 </div>
-                <button type="button" name="new_image__insert">Insert Image +</button>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_image__insert">Insert Image +</button>
+                </div>
               </div>
             </div>
             <div class="item_menu__interface__variant product active" data-mos-type="product">
 
               <div class="insert new_product__insert">
+                <div class="insert__title">
+                  <h3>INSERT PRODUCT</h3>
+                </div>
                 <div class="product_search__input">
                   <div class="product_search__input--wrapper">
                     <input class="product_search__input--bar" type="text" name="product_search" placeholder="Search MOS Products..." />
@@ -157,13 +170,18 @@
 
                   </ul>
                 </div>
-                <button type="button" name="new_product__insert">Insert Product +</button>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_product__insert">Insert Product +</button>
+                </div>
               </div>
 
             </div>
             <div class="item_menu__interface__variant material" data-mos-type="material">
 
               <div class="insert new_material__insert">
+                <div class="insert__title">
+                  <h3>INSERT MATERIAL</h3>
+                </div>
                 <div class="product_search__input">
                   <div class="product_search__input--wrapper">
                     <input class="product_search__input--bar" type="text" name="product_search" placeholder="Search the Material Library..." />
@@ -177,12 +195,17 @@
 
                   </ul>
                 </div>
-                <button type="button" name="new_material__insert">Insert Material +</button>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_material__insert">Insert Material +</button>
+                </div>
               </div>
 
             </div>
             <div class="item_menu__interface__variant colour" data-mos-type="colour">
               <div class="insert new_colour__insert">
+                <div class="insert__title">
+                  <h3>INSERT COLOUR SWATCH</h3>
+                </div>
                 <div class="colour_picker__iro">
 
                 </div>
@@ -191,13 +214,19 @@
                     <input value="#1bbc9b" class="colour_picker__preview__input" />
                   </div>
                 </div>
-                <button type="button" name="new_colour__insert">Insert Colour Swatch +</button>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_colour__insert">Insert Colour Swatch +</button>
+                </div>
               </div>
             </div>
             <div class="item_menu__interface__variant file" data-mos-type="file">
               <div class="insert new_file__insert">
-                <p>New File Instert Interface</p>
-                <button type="button" name="new_file__insert">Insert File +</button>
+                <div class="insert__title">
+                  <h3>INSERT FILE</h3>
+                </div>
+                <div class="insert__action_butons">
+                  <button type="button" name="new_file__insert">Upload File <i class="fas fa-upload"></i></button>
+                </div>
               </div>
             </div>
 
@@ -206,7 +235,7 @@
             <div class="item_edit__interface__variant text" data-mos-type="text">
               <div class="edit edit_text">
                 <div class="edit_close edit_text__title">
-                  <h4 class="edit_close__title">Edit text</h4>
+                  <h3 class="edit_close__title">EDIT TEXT</h4>
                   <button type="button" name="edit_text__close" class="edit_close__close">X</button>
                 </div>
                 <ul class="edit_text__size">
@@ -223,8 +252,10 @@
                 <div class="edit_text__value">
                   <textarea name="name" rows="4" placeholder="Text box content"></textarea>
                 </div>
-                <button type="button" name="edit_text__save">Finished</button>
-                <button type="button" name="edit_text__cancel">Cancel</button>
+                <div class="edit__action_butons">
+                  <button type="button" name="edit_text__save">Finished</button>
+                  <button type="button" name="edit_text__cancel">Cancel</button>
+                </div>
               </div>
             </div>
 
@@ -232,7 +263,7 @@
             <div class="item_edit__interface__variant image" data-mos-type="image">
               <div class="edit edit_image">
                 <div class="edit_close edit_image__title">
-                  <h4 class="edit_close__title">Edit image</h4>
+                  <h3 class="edit_close__title">EDIT IMAGE</h4>
                   <button type="button" name="edit_image__close" class="edit_close__close">X</button>
                 </div>
                 <div class="image_interface--wrapper">
@@ -241,14 +272,16 @@
                     <img src="https://res.cloudinary.com/oddert/image/upload/v1558101908/MOS/tiles/placeholder_image-01.png" alt="Placeholder Image">
                   </div>
                 </div>
-                <button type="button" name="edit_image__save">Finished</button>
-                <button type="button" name="edit_image__cancel">Cancel</button>
+                <div class="edit__action_butons">
+                  <button type="button" name="edit_image__save">Finished</button>
+                  <button type="button" name="edit_image__cancel">Cancel</button>
+                </div>
               </div>
             </div>
 
             <div class="item_edit__interface__variant colour" data-mos-type="colour">
               <div class="edit_close edit_colour__title">
-                <h4 class="edit_close__title">Edit colour</h4>
+                <h3 class="edit_close__title">EDIT COLOUR</h4>
                 <button type="button" name="edit_colour__close" class="edit_close__close">X</button>
               </div>
               <div class="edit edit_colour">
@@ -260,14 +293,16 @@
                     <input value="#1bbc9b" class="colour_edit__preview__input" />
                   </div>
                 </div>
-                <button type="button" name="edit_colour__save">Finish</button>
-                <button type="button" name="edit_colour__cancel">Cancel</button>
+                <div class="edit__action_butons">
+                  <button type="button" name="edit_colour__save">Finish</button>
+                  <button type="button" name="edit_colour__cancel">Cancel</button>
+                </div>
               </div>
             </div>
 
             <div class="item_edit__interface__variant product" data-mos-type="product">
               <div class="edit_close edit_product__title">
-                <h4 class="edit_close__title">Edit product</h4>
+                <h3 class="edit_close__title">EDIT PRODUCT</h4>
                 <button type="button" name="edit_colour__close" class="edit_close__close">X</button>
               </div>
               <div class="edit edit_product">
@@ -293,14 +328,16 @@
                     </button>
                   </div>
                 </div>
-                <button type="button" name="edit_product__save">Finish</button>
-                <button type="button" name="edit_product__cancel">Cancel</button>
+                <div class="edit__action_butons">
+                  <button type="button" name="edit_product__save">Finish</button>
+                  <button type="button" name="edit_product__cancel">Cancel</button>
+                </div>
               </div>
             </div>
 
             <div class="item_edit__interface__variant material" data-mos-type="material">
               <div class="edit_close edit_material__title">
-                <h4 class="edit_close__title">Edit material</h4>
+                <h3 class="edit_close__title">EDIT MATERIAL</h4>
                 <button type="button" name="edit_colour__close" class="edit_close__close">X</button>
               </div>
               <div class="edit edit_material">
@@ -326,8 +363,10 @@
                     </button>
                   </div>
                 </div>
-                <button type="button" name="edit_material__save">Finish</button>
-                <button type="button" name="edit_material__cancel">Cancel</button>
+                <div class="edit__action_butons">
+                  <button type="button" name="edit_material__save">Finish</button>
+                  <button type="button" name="edit_material__cancel">Cancel</button>
+                </div>
               </div>
             </div>
 

@@ -16,7 +16,7 @@ body, html, h1, p {
 }
 
 button {
-  background: #3A3A3A;
+  background: #1d1d1d;
   padding: 10px 15px;
   color: #fff;
   border: none;
@@ -322,7 +322,8 @@ button[name=dev] {
   color: #3A3A3A;
 }
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button.active, .item_menu--container .item_menu .item_menu__control .item_menu__info button.active {
-  border-left: 4px solid #2d3e50;
+  color: #fff;
+  background: #3A3A3A;
 }
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button:hover, .item_menu--container .item_menu .item_menu__control .item_menu__info button:hover {
   background: #333333;
@@ -350,7 +351,8 @@ button[name=dev] {
   padding: 10px 15px;
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item button.active {
-  border-left: 4px solid #2d3e50;
+  color: #fff;
+  background: #3A3A3A;
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.text button {
   font-weight: 700;
@@ -362,6 +364,11 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.text button:active {
   background: #bec3c7;
 }
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.text button.active {
+  color: #fff;
+  background: #3A3A3A;
+  background: #1d1d1d;
+}
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.image button {
   background: #fff;
 }
@@ -370,6 +377,10 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.image button:active {
   background: #bec3c7;
+}
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.image button.active {
+  color: #fff;
+  background: #1d1d1d;
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.product button {
   background: #fff;
@@ -380,6 +391,10 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.product button:active {
   background: #bec3c7;
 }
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.product button.active {
+  color: #fff;
+  background: #1d1d1d;
+}
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.material button {
   background: #fff;
 }
@@ -388,6 +403,10 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.material button:active {
   background: #bec3c7;
+}
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.material button.active {
+  color: #fff;
+  background: #1d1d1d;
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.colour button {
   background: #fff;
@@ -398,6 +417,10 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.colour button:active {
   background: #bec3c7;
 }
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.colour button.active {
+  color: #fff;
+  background: #1d1d1d;
+}
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.file button {
   background: #fff;
 }
@@ -406,6 +429,10 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__control .new_item_menu__item.file button:active {
   background: #bec3c7;
+}
+.item_menu--container .item_menu .item_menu__control .new_item_menu__item.file button.active {
+  color: #fff;
+  background: #1d1d1d;
 }
 .item_menu--container .item_menu .item_menu__interface {
   position: relative;
@@ -440,7 +467,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button {
   color: #000;
   background: #fff;
-  border: 3px solid #3A3A3A;
+  border: 3px solid #1d1d1d;
   font-weight: 800;
   padding: 10px 15px;
 }
@@ -457,7 +484,7 @@ button[name=dev] {
   background-color: #ecf0f1;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert ul.new_text__size li button.active {
-  background-color: #3A3A3A;
+  background-color: #1d1d1d;
   color: #fff;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value {
@@ -480,6 +507,27 @@ button[name=dev] {
   flex: 1;
   overflow-y: auto;
 }
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__title {
+  border-bottom: 1px solid #ecf0f1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__title h3 {
+  text-align: center;
+  font-size: 16px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__action_butons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 20px;
+  border-top: 1px solid #ecf0f1;
+}
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant.active {
   display: flex;
 }
@@ -491,13 +539,24 @@ button[name=dev] {
   display: none;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close {
+  border-bottom: 1px solid #ecf0f1;
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: row;
   align-items: center;
+}
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close h3 {
+  text-align: center;
+  font-size: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close .edit_close__title {
   flex: 1;
   margin: 0;
   padding: 10px 20px;
+  font-size: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit {
   width: 100%;
@@ -519,7 +578,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button {
   color: #000;
   background: #fff;
-  border: 3px solid #3A3A3A;
+  border: 3px solid #1d1d1d;
   font-weight: 800;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.edit_text__size--small {
@@ -535,7 +594,7 @@ button[name=dev] {
   background-color: #ecf0f1;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text ul.edit_text__size li button.active {
-  background-color: #3A3A3A;
+  background-color: #1d1d1d;
   color: #fff;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value {
@@ -654,6 +713,27 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .carousel__image_select li.active button {
   border-color: #1ac6e8;
 }
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__title {
+  border-bottom: 1px solid #ecf0f1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__title h3 {
+  text-align: center;
+  font-size: 16px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__action_butons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 20px;
+  border-top: 1px solid #ecf0f1;
+}
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant.active {
   display: flex;
 }
@@ -700,7 +780,7 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
   transition: 0.1s linear;
-  color: #3A3A3A;
+  color: #1d1d1d;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--clear:hover {
   background: #ecf0f1;
@@ -853,7 +933,7 @@ button[name=dev] {
   background: #fff;
   border: none;
   cursor: pointer;
-  color: #3A3A3A;
+  color: #1d1d1d;
   padding: 2px 5px;
 }
 .grid-stack-item .grid-stack-item-content .content.text {
@@ -1094,7 +1174,7 @@ button[name=dev] {
   border-radius: 40px;
   border: none;
   background: #fff;
-  color: #3A3A3A;
+  color: #1d1d1d;
   padding: 0;
   cursor: pointer;
   font-size: 20px;
@@ -1330,7 +1410,7 @@ button[name=dev] {
   border-radius: 40px;
   border: none;
   background: #fff;
-  color: #3A3A3A;
+  color: #1d1d1d;
   padding: 0;
   cursor: pointer;
   font-size: 20px;
