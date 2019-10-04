@@ -741,47 +741,25 @@ function copySlide (cut = false) {
 function pasteSlide () {
   const serialised = serialise('pasteSlide')
   let newData = [...serialised]
-  // WARNING: Constrain slide copy to one only for now
-  // In future this func will look for shift key and .push() to slideAttrubutes
-  // Issues with intuitively trying to copy multiple slides
-
-  // WARNING: Switching two items usnig bellow itirative methods invalid due to duplicate pages on index lookup (becuase they were just coppied)
-  // replacing with next older method
-
-  // lastClick.cutPasteData.slideAttrubutes.forEach(each => {
-  //   const targetIdx = Number(each.idx)
-  //   newData.splice(Number(focusedPage.idx), 0, serialised[targetIdx])
-  // })
-  // console.log(newData)
-  // if (lastClick.cutPasteData.lastAction === 'CUT') {
-  //   lastClick.cutPasteData.slideAttrubutes.forEach(each => {
-  //     const targetIdx = Number(each.idx)
-  //     const mappedIdx = [...newData].map(e => JSON.stringify(e)).indexOf(JSON.stringify(serialised[targetIdx]))
-  //     console.log({ targetIdx, mappedIdx })
-  //     newData = newData.slice(0, mappedIdx).concat(newData.slice(mappedIdx + 1))
-  //   })
-  // }
-  // console.log(serialised, newData)
   const targetIdx = Number(lastClick.cutPasteData.slideAttrubutes[0].idx) + 1
   if (!targetIdx) return
   const readData = serialised[targetIdx]
   const focusedIdx = focusedPage.idx
-  console.log(focusedPage.idx, serialised[targetIdx])
-  newData.splice(focusedIdx, 0, serialised[targetIdx])
-  console.log(newData)
+  // console.log(focusedIdx, serialised[targetIdx])
+  newData.splice(focusedIdx + 1, 0, serialised[targetIdx - 1])
+  // console.log(newData)
   if (lastClick.cutPasteData.lastAction === 'CUT') {
-    console.log('...cutting old')
     if (focusedIdx >= targetIdx) {
-      console.log('focus is greater than target, splicing at: ', targetIdx)
+      // console.log('focus is greater than target, splicing at: ', targetIdx - 1)
       // idx should be the same as copied data is before end of list and focus
-      newData.splice(targetIdx, 1)
+      newData.splice(targetIdx - 1, 1)
     } else {
-      console.log('focus is less than target, splicing at: ', targetIdx + 1)
+      // console.log('focus is less than target, splicing at: ', targetIdx)
       // idx is + 1
-      newData.splice(targetIdx + 1, 1)
+      newData.splice(targetIdx, 1)
     }
   }
-  console.log(newData)
+  // console.log(newData)
   data.projects = newData
   render (data)
 }
@@ -915,16 +893,16 @@ function undo () {
   }
 }
 
-let memory
-function testOne () {
-  console.log('testOne')
-}
+// let memory
+// function testOne () {
+//   console.log('testOne')
+// }
+// const refoundTarget = passedEvent.target.closest('.grid-stack-item').querySelector('.content_image__img__resize')
 
 function enableDragHandleMouseDown (e) {
   e.preventDefault()
   if (e.target.classList.contains('resize') || e.target.classList.contains('resizer')) return
-
-  console.log('enableDragHandleMouseDown() e.target:', e.target)
+  // console.log('enableDragHandleMouseDown() e.target:', e.target)
   const start = {
     width: 0,
     height: 0,
@@ -936,7 +914,6 @@ function enableDragHandleMouseDown (e) {
   const target = e.target.closest('.grid-stack-item').querySelector('.content_image__img__resize')
   const parent = target.closest('.content.image')
   const { top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect()
-  console.log('~~~')
   const rect = target.getBoundingClientRect()
   const computed = getComputedStyle(target, null)
   start.width = parseFloat(computed.getPropertyValue('width').replace('px', ''))
@@ -945,9 +922,8 @@ function enableDragHandleMouseDown (e) {
   start.y = rect.top
   start.mouseX = e.pageX
   start.mouseY = e.pageY
+
   function enableDragHandleDrag (e) {
-    // BUG:
-    console.log('#')
     target.style.left = `${((start.x + (e.pageX - start.mouseX) - parentLeft) / parentWidth) * 100}%`
     target.style.top = `${((start.y + (e.pageY - start.mouseY) - parentTop) / parentHeight) * 100}%`
   }
@@ -961,26 +937,18 @@ function enableDragHandleMouseDown (e) {
 }
 
 function enableDrag (target, enable) {
-  // const refoundTarget = passedEvent.target.closest('.grid-stack-item').querySelector('.content_image__img__resize')
   const gridStackItemContent = target.closest('.grid-stack-item-content')
-  // const parent = target.closest('.content.image')
-  // const { top: parentTop, left: parentLeft } = parent.getBoundingClientRect()
 
-
-
-  // testing this with testOne() shows the above functions, while named, are still anonymouse
-  console.log(memory === enableDragHandleMouseDown)
+  // console.log(memory === enableDragHandleMouseDown)
   if (enable) {
     target.addEventListener('mousedown', enableDragHandleMouseDown)
     gridStackItemContent.style.border = 'none'
     gridStackItemContent.style.zIndex = '999'
     memory = enableDragHandleMouseDown
-    console.log('enabled')
   } else {
     target.removeEventListener('mousedown', enableDragHandleMouseDown)
     gridStackItemContent.style.border = null
     gridStackItemContent.style.zIndex = null
-    console.log('disabled')
   }
 }
 
@@ -1072,8 +1040,8 @@ function enableResize (target, enable) {
     function endResize (e) {
       window.removeEventListener('mousemove', resize)
     }
-    // pun not intended:
     if (enable) {
+      // pun not intended:
       handle.addEventListener('mousedown', handleMouseDown)
       gridStackItemContent.style.border = 'none'
       gridStackItemContent.style.zIndex = '999'
