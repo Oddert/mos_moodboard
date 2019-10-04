@@ -294,6 +294,21 @@ function updateSlideBar (event, idx, updateContext) {
         lastClick.slide = [each]
         lastClick.context = 'SLIDE'
       }
+      const parent = each.closest('.slides--wrapper')
+      const rect = each.getBoundingClientRect()
+      // IDEA: This inbuilt function is a bit janky but it's good that its native
+      // considder carrying on with original method:
+      if (rect.top < (0 - rect.height)) {
+        // console.log(parent.scrollTop)
+        // parent.scrollTop -= rect.top
+        each.scrollIntoView()
+        console.log(rect.top)
+      }
+      if (rect.top > window.innerHeight) {
+        // console.log(parent.scrollTop)
+        each.scrollIntoView()
+        console.log(rect.top)
+      }
       each.classList.add('selected')
     } else each.classList.remove('selected')
   })

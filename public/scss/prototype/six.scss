@@ -713,6 +713,7 @@ $page_width: 75vw;
             .product_search__results {
               flex: 1;
               overflow-y: auto;
+              @include noscrollbar;
             }
             button[name=new_product__insert] {}
             button[name=new_material__insert] {}
@@ -1617,19 +1618,28 @@ $page_width: 75vw;
     }
   }
   label {
-    border: 1px solid #ecf0f1;
     margin: 5px;
-    background: black;
-    color: white;
-    padding: 10px;
     cursor: pointer;
     font-size: 12px;
     text-align: center;
     flex: 1;
     white-space: nowrap;
+
+    background: $button_background--primary;
+    padding: 10px 15px;
+    color: $button_colour--primary;
+    border: none;
+    cursor: pointer;
+    transition: .1s linear;
+    text-transform: uppercase;
     &:hover {
-      text-decoration: underline;
+      background-color: $button_background--hover;
+      // text-decoration: underline;
     }
+    &:active {
+      background-color: $button_background--active;
+    }
+
   }
   input {
     &[type=file] {

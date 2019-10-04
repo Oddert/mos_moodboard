@@ -506,6 +506,11 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert .product_search__results, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert .product_search__results {
   flex: 1;
   overflow-y: auto;
+  overflow-y: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert .product_search__results::-webkit-scrollbar, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert .product_search__results::-webkit-scrollbar {
+  width: 0;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__title {
   border-bottom: 1px solid #ecf0f1;
@@ -1371,19 +1376,25 @@ button[name=dev] {
   object-fit: contain;
 }
 .image_interface--wrapper label {
-  border: 1px solid #ecf0f1;
   margin: 5px;
-  background: black;
-  color: white;
-  padding: 10px;
   cursor: pointer;
   font-size: 12px;
   text-align: center;
   flex: 1;
   white-space: nowrap;
+  background: #1d1d1d;
+  padding: 10px 15px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.1s linear;
+  text-transform: uppercase;
 }
 .image_interface--wrapper label:hover {
-  text-decoration: underline;
+  background-color: #333333;
+}
+.image_interface--wrapper label:active {
+  background-color: #7e7e7e;
 }
 .image_interface--wrapper input[type=file] {
   width: 0.1px;
