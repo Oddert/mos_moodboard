@@ -527,7 +527,7 @@ function createGridContent (pages, data, overrideWidth) {
         }
         // detect last page and last item on last page
         if (pageIdx === data.projects.length - 1 && itemIdx === data.projects[data.projects.length-1].entities.length-1) {
-          // initPageFocus()
+          if (window.scrollY < 25) initPageFocus()
           renderIcons()
           // pages.addEventListener('keydown', handleGlobalKeyPress)
           // pages.setAttribute('tabindex', 0)
@@ -543,7 +543,7 @@ function createGridContent (pages, data, overrideWidth) {
 function initPageFocus () {
   // Might not be necessary, code seems successfull in runnin on page load so far
   const firstGrid = document.querySelectorAll('.page')[0]
-  const gridData = $(firstGrid).find('grid-stack').data('gridstack')
+  const gridData = $(firstGrid).find('.grid-stack').data('gridstack')
   focusedPage.grid = gridData
   focusedPage.gridElem = firstGrid
   focusedPage.idx = 0

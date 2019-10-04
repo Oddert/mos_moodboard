@@ -742,7 +742,7 @@ button[name=dev] {
 }
 
 .product_search__input {
-  padding: 0 10px 10px 10px;
+  padding: 5px 10px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -1202,6 +1202,7 @@ button[name=dev] {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 10px 0;
 }
 
 .colour_picker__preview, .colour_edit__preview {
@@ -1212,7 +1213,7 @@ button[name=dev] {
 .colour_picker__preview .colour_picker__preview--wrapper, .colour_picker__preview .colour_edit__preview--wrapper, .colour_edit__preview .colour_picker__preview--wrapper, .colour_edit__preview .colour_edit__preview--wrapper {
   height: 40px;
   width: 70%;
-  margin-top: 12px;
+  margin: 12px 0;
   border-radius: 20px;
   background-color: #fff;
   display: flex;
