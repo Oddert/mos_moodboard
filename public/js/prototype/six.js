@@ -290,6 +290,7 @@ function handleAutosave (delay) {
 
       localStorage.setItem(localStoreAutosave, JSON.stringify(saveData))
       autosave.lastAction = currentTime
+      renderIcons ()
       console.log('autosave complete')
     }// else console.log('debounced.')
   }
@@ -635,7 +636,7 @@ function pageScrollHandler (event) {
   if (Number(focusedPage.idx) === closestToCenter.idx) return
 
   focusedPage = closestToCenter
-  renderIcons()
+  // renderIcons()
   updateSlideBar (event, focusedPage.idx, false)
 }
 
