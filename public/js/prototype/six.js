@@ -515,6 +515,7 @@ function addOnePageContent (page, idx, width, height) {
 }
 
 function createGridContent (pages, data, overrideWidth) {
+  renderComplete = false
   const all = pages.querySelectorAll('.page .page__content')
 
   const containerWidth = overrideWidth ? overrideWidth : document.querySelector('.pages').offsetWidth
