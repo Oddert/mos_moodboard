@@ -1553,8 +1553,10 @@ function initialiseItemMenuControl () {
   }
   controlButtons.forEach(each => {
     each.querySelector('button').onclick = function () {
+      if (this.classList.contains('active')) return toggleItemMenu (null, false)
+      const type = this.closest('.new_item_menu__item').dataset.mosType
       toggleItemMenu (null, true)
-      swapActive(controlButtons, this.closest('.new_item_menu__item').dataset.mosType)
+      swapActive(controlButtons, type)
     }
   })
   const menuState = JSON.parse(localStorage.getItem(localStoreMenuState))
