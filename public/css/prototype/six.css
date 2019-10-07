@@ -835,6 +835,7 @@ button[name=dev] {
 }
 .product_search__results ul .result_product .result_product__text {
   font-size: 9px;
+  font-weight: bolder;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -842,6 +843,10 @@ button[name=dev] {
 }
 .product_search__results ul .result_product .result_product__text > * {
   text-align: center;
+}
+.product_search__results ul .result_product .result_product__text .result_product__text--price {
+  font-weight: normal;
+  color: #444;
 }
 .product_search__results ul .result_product.user_focus {
   border-color: #1ac6e8;

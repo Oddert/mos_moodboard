@@ -1694,13 +1694,12 @@ function initialiseItemMenuInterface () {
 
   function initNewProduct (newProduct) {
     const createResultItem = ({ title, design, price, img, product_id }) => `
-      <div class="result_product" data-mos-product_id="${product_id}">
+      <div class="result_product" data-mos-product_id="${product_id}" title="${title}\nBy ${design}\nPrice: ${price}">
         <div class="result_product__img">
           <img src="${img ? img.src : ''}" alt="${img ? img.alt : ''}" />
         </div>
         <div class="result_product__text">
-          <p class="result_product__text--title">${title}</p>
-          <p class="result_product__text--design">${design}</p>
+          <p class="result_product__text--title">${title.length > 25 ? title.substring(0, 25) + '...' : title}</p>
           <p class="result_product__text--price">${price}</p>
         </div>
       </div>
