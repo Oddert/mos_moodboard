@@ -262,10 +262,10 @@ function save () {
     .then(res => console.log({ res }))
 }
 
-function handleAutosave (delay) {
+function handleAutosave (delay, source) {
   if (!renderComplete) return //console.log('blocking autosave; render in progress')
   function performAutoSave () {
-    // console.log('autosave')
+    console.log(`[${source ? source : 'unknowen'}]: handleAutosave`)
     const currentTime = new Date().getTime() - 2000
     if (autosave.lastAction < currentTime) {
       // console.log('...passed debounce')
@@ -274,7 +274,7 @@ function handleAutosave (delay) {
 
       // console.log({ saveData })
       if (!(saveData && saveData.steps)) saveData = { steps: [] }
-      console.log(autosave.stepSelected)
+      // console.log(autosave.stepSelected)
       if (autosave.stepSelected) {
         const cut = saveData.steps.length - autosave.stepSelected
         console.log(saveData.steps, `slicing at: 0, ${cut}`)
@@ -479,10 +479,10 @@ function render (data, overrideWidth) {
   // except its not the last time using jQuery becuase life is pain
 
   function updateSlideDisplay () {
-    const slides = document.querySelectorAll('.slides__grid .slide')
+    const slides = document.querySelectorAll('.slides__grid .slide .slide__image')
     const sample = slides[0]
     if (!sample) return
-    const rect = sample.querySelector('.slide__image').getBoundingClientRect()
+    const rect = sample.getBoundingClientRect()
     const width = rect.width
     const height = width * (9/16)
     slides.forEach(each => {
@@ -582,7 +582,7 @@ function createGridContent (pages, data, overrideWidth) {
           // detect last page
           elem.on('change', () => {
             // console.log('change')
-            handleAutosave()
+            handleAutosave(null, 'elem change')
           })
           if (pageIdx === data.projects.length - 1) {
             if (window.scrollY < 25) initPageFocus()
