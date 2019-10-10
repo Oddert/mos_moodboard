@@ -992,6 +992,7 @@ button[name=dev] {
   justify-content: center;
   text-align: center;
   vertical-align: middle;
+  display: none;
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text {
   font-size: var(--medium_font);
@@ -1004,6 +1005,12 @@ button[name=dev] {
 }
 .grid-stack-item .grid-stack-item-content .content.text .content_text__text.large {
   font-size: var(--large_font);
+}
+.grid-stack-item .grid-stack-item-content .content.text.editing .content_text__input {
+  display: block;
+}
+.grid-stack-item .grid-stack-item-content .content.text.editing .content_text__text {
+  display: none;
 }
 .grid-stack-item .grid-stack-item-content .content.image {
   display: flex;

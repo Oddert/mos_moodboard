@@ -1219,12 +1219,21 @@ $page_width: 75vw;
           justify-content: center;
           text-align: center;
           vertical-align: middle;
+          display: none;
         }
         .content_text__text {
           font-size: var(--medium_font);
           &.small { font-size: var(--small_font); }
           &.medium { font-size: var(--medium_font); }
           &.large { font-size: var(--large_font); }
+        }
+        &.editing {
+          .content_text__input {
+            display: block;
+          }
+          .content_text__text {
+            display: none;
+          }
         }
       }
       &.image {

@@ -1178,10 +1178,13 @@ function toggleImageCrop (event, overrideTarget) {
 
 function openTextEditor (event) {
   const displayText = this.closest('.grid-stack-item').querySelector('.content_text__text')
+  // force exit if textbox is already "open":
+  if (!displayText) return
   const text = displayText.textContent
   const size = displayText.className.match(/small|medium|large/gi)
   const sizeButtons = document.querySelectorAll('.edit_text__size button')
   const sizes = ['small', 'medium', 'large']
+  toggleTextEdit (null, this, false)
   if (lastClick.widget.length > 1) {
     lastClick.widget.forEach(each => each.classList.remove('user_focus'))
     lastClick.widget = [this]
@@ -1191,6 +1194,7 @@ function openTextEditor (event) {
   editor.target = this
   editor.type = 'text'
   editor.data.text = text
+  // BUG: cannot read 0 of undefined (unknowen trigger)
   editor.data.size = size[0]
   globalHandleEditMenuChange ('text')
   document.querySelector('.edit_text__value textarea').value = text
@@ -1218,6 +1222,9 @@ function openTextEditor (event) {
   }
   document.querySelector('.edit_text button[name=edit_text__cancel]').onclick = () => {
     globalHandleEditMenuChange ('text', true)
+    displayText.classList.remove(...sizes)
+    displayText.classList.add(size)
+    toggleTextEdit (null, this, true)
   }
 }
 
@@ -2060,6 +2067,7 @@ const createText = ({ text, size }) => `
       <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <p class="content_text__text ${size ? size : 'medium'}">${text}</p>
+    <textarea class="content_text__input"></textarea>
   </div>
 `
 
@@ -2358,39 +2366,34 @@ function saveOne (gridStackItem, payload) {
   }
 }
 
-function toggleTextEdit () {
-  const parent = this.closest('.grid-stack-item')
-  console.log(parent.dataset)
+
+// WARNING: OLD EDIT METHOD, TO BE UNIFIED INTO CURRENT
+
+// toggle[Typology]Edit was from old interface,
+// current version is open[Typeology]Editor
+
+function toggleTextEdit (e, targetOverride, close) {
+  const parent = targetOverride ? targetOverride.closest('.grid-stack-item') : this.closest('.grid-stack-item')
   const content = parent.querySelector('.content')
 
-  if (parent.dataset.mosEdit === 'active') {
-    // console.log('item active')
-
+  if (parent.dataset.mosEdit === 'active' || close) {
     if (parent.querySelector('.content_text__input')) {
       const textInput = content.querySelector('.content_text__input')
       const { value } = textInput
       saveOne(parent, { text: value })
-      const textShow = document.createElement('p')
-      textShow.className = 'content_text__text'
+      const textShow = content.querySelector('p')
       textShow.textContent = value
-      content.removeChild(textInput)
-      content.appendChild(textShow)
     }
-
+    content.classList.remove('editing')
     parent.dataset.mosEdit = 'inactive'
   } else {
-    // console.log('item inactive')
-
     if (parent.querySelector('.content_text__text')) {
       const textShow = content.querySelector('.content_text__text')
       const { textContent } = textShow
-      const textInput = document.createElement('textarea')
-      textInput.className = 'content_text__input'
+      const textInput = content.querySelector('textarea.content_text__input')
       textInput.value = textContent
-      content.removeChild(textShow)
-      content.appendChild(textInput)
     }
-
+    content.classList.add('editing')
     parent.dataset.mosEdit = 'active'
   }
 }
