@@ -1180,6 +1180,8 @@ function openTextEditor (event) {
   const displayText = this.closest('.grid-stack-item').querySelector('.content_text__text')
   const text = displayText.textContent
   const size = displayText.className.match(/small|medium|large/gi)
+  const sizeButtons = document.querySelectorAll('.edit_text__size button')
+  const sizes = ['small', 'medium', 'large']
   if (lastClick.widget.length > 1) {
     lastClick.widget.forEach(each => each.classList.remove('user_focus'))
     lastClick.widget = [this]
@@ -1192,12 +1194,25 @@ function openTextEditor (event) {
   editor.data.size = size[0]
   globalHandleEditMenuChange ('text')
   document.querySelector('.edit_text__value textarea').value = text
-  document.querySelectorAll('.edit_text__size button').forEach(each => {
+  sizeButtons.forEach(each => {
     if (each.name === size[0]) each.classList.add('active')
     else each.classList.remove('active')
+    each.onclick = changeSizeImediate
   })
+  function changeSizeImediate (e) {
+    const { name } = e.target
+    // console.log(editor.data.size, name)
+    if (editor.data.size && name === editor.data.size) return
+    else {
+      sizeButtons.forEach(each => each.classList.remove('active'))
+      this.classList.add('active')
+      editor.data.size = name
+      displayText.classList.remove(...sizes)
+      displayText.classList.add(name)
+    }
+  }
   document.querySelector('.edit_text button[name=edit_text__save]').onclick = () => {
-    displayText.classList.remove('small', 'medium', 'large')
+    displayText.classList.remove(...sizes)
     displayText.classList.add(editor.data.size)
     displayText.textContent = editor.data.text
   }
@@ -1887,7 +1902,7 @@ function initialiseItemMenuInterface () {
     const sizes = ["small", "medium", "large"]
     function changeSize (e) {
       const { name } = e.target
-      console.log(editor.data.size, name)
+      // console.log(editor.data.size, name)
       if (editor.data.size && name === editor.data.size) return
       else {
         sizeButtons.forEach(each => each.classList.remove('active'))
@@ -1899,6 +1914,7 @@ function initialiseItemMenuInterface () {
     textBox.onchange = e => editor.data.text = e.target.value
     save.onclick = () => {
       console.warn('save function not supplied')
+
     }
     cancel.onclick = () => {
       console.warn('cancel action not supplied')
@@ -2112,7 +2128,11 @@ const createColour = ({ hex }) => `
     <div class="colour__module" style="background-color: ${hex};"></div>
   </div>
 `
-const createFile = ({ format, name, img: { src } }) => {
+const createFile = ({ format, name, img: { src } }) => `
+  <div class="content file format_undefined" data-mos-contenttype="undef">
+  </div>
+`
+const createFileREMOVED = ({ format, name, img: { src } }) => {
   switch (format) {
     case 'pdf':
       return `

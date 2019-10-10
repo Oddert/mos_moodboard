@@ -91,18 +91,27 @@ button[name=dev] {
   grid-template-rows: auto 1fr auto;
 }
 .slides--container .slides .top_menu {
-  min-height: 30px;
   border-bottom: 1px solid #bec3c7;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .slides--container .slides .bottom_menu {
-  min-height: 30px;
   border-top: 1px solid #bec3c7;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.slides--container .slides .top_menu, .slides--container .slides .bottom_menu {
+  height: 35px;
+}
+.slides--container .slides .top_menu button, .slides--container .slides .bottom_menu button {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .slides--wrapper {
