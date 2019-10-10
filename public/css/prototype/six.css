@@ -511,7 +511,8 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value textarea {
   text-align: center;
-  width: 90%;
+  width: 100%;
+  margin: 5px 15px;
   border: 1px solid #bec3c7;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert {
@@ -638,11 +639,14 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value {
   display: flex;
+  justify-content: center;
   padding: 20px 0;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value textarea {
   text-align: center;
   width: 100%;
+  margin: 5px 15px;
+  border: 1px solid #bec3c7;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_product .edit_product__image_carousel {
   width: 100%;
@@ -767,7 +771,7 @@ button[name=dev] {
 }
 
 .product_search__input {
-  padding: 5px 10px;
+  padding: 5px 15px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -776,7 +780,7 @@ button[name=dev] {
 }
 .product_search__input .product_search__input--wrapper {
   border: 1px solid #bec3c7;
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -1429,7 +1433,7 @@ button[name=dev] {
   z-index: -1;
 }
 .image_interface--wrapper input[type=url] {
-  margin: 5px;
+  margin: 5px 15px;
   flex: 4;
   align-self: stretch;
 }

@@ -1350,11 +1350,12 @@ function openMaterialEditor (event) {
 
   const material_id = content.dataset.mosMaterial_id
   fetchFullProduct('material', material_id, data => {
-    if (!data.images) {
-      data.images = []
-      const numFakeImages = Math.floor(Math.random()*7) + 1
-      for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
-    }
+    // DEV ONLY:
+    // if (!data.images) {
+    //   data.images = []
+    //   const numFakeImages = Math.floor(Math.random()*7) + 1
+    //   for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
+    // }
     primaryImage.src = data.images[0].src
     console.log(data, primaryImage)
     extraImages.innerHTML = ''
