@@ -13,10 +13,19 @@ body, html, h1, p {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  overflow-y: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+body::-webkit-scrollbar, html::-webkit-scrollbar, h1::-webkit-scrollbar, p::-webkit-scrollbar {
+  width: 0;
+}
+
+textarea {
+  border-radius: 0;
+  border: 1px solid #bec3c7;
 }
 
 input {
-  border-radius: 3px;
   border: 1px solid #bec3c7;
   padding: 10px;
 }
@@ -307,6 +316,7 @@ button[name=dev] {
   margin: 0;
   list-style-type: none;
   background: #fff;
+  border-left: 1px solid #ecf0f1;
 }
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button, .item_menu--container .item_menu .item_menu__control .item_menu__info button {
   font-size: 20px;
@@ -496,10 +506,12 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value {
   display: flex;
+  justify-content: center;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value textarea {
   text-align: center;
-  width: 100%;
+  width: 90%;
+  border: 1px solid #bec3c7;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_product__insert, .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_material__insert {
   flex: 1;
@@ -748,7 +760,6 @@ button[name=dev] {
 }
 .product_search__input .product_search__input--wrapper {
   border: 1px solid #bec3c7;
-  border-radius: 3px;
   width: 90%;
   display: flex;
   align-items: center;
@@ -757,7 +768,6 @@ button[name=dev] {
   flex: 1;
   padding: 10px;
   border: none;
-  border-radius: 3px;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--bar:hover + .product_search__input--clear {
   display: flex;
@@ -1245,7 +1255,6 @@ button[name=dev] {
   top: 100px;
   left: 100px;
   background: #fff;
-  border-radius: 15px;
   padding: 10px 0;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -1262,7 +1271,6 @@ button[name=dev] {
 }
 .material_search .material_search__input .material_search__input--wrapper {
   border: 1px solid #bec3c7;
-  border-radius: 10px;
   width: 90%;
   display: flex;
   align-items: center;
@@ -1271,7 +1279,6 @@ button[name=dev] {
   flex: 1;
   padding: 10px;
   border: none;
-  border-radius: 10px;
 }
 .material_search .material_search__input .material_search__input--wrapper .material_search__input--bar:hover + .material_search__input--clear {
   display: flex;
