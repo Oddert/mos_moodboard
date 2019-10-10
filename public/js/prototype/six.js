@@ -1177,11 +1177,12 @@ function toggleImageCrop (event, overrideTarget) {
 }
 
 function openTextEditor (event) {
-  const displayText = this.closest('.grid-stack-item').querySelector('.content_text__text')
+  const content = this.closest('.grid-stack-item').querySelector('.content.text')
+  const displayText = content.querySelector('.content_text__text')
   // force exit if textbox is already "open":
   if (!displayText) return
   const text = displayText.textContent
-  const size = displayText.className.match(/small|medium|large/gi)
+  const size = content.className.match(/small|medium|large/gi)
   const sizeButtons = document.querySelectorAll('.edit_text__size button')
   const sizes = ['small', 'medium', 'large']
   toggleTextEdit (null, this, false)
@@ -1211,19 +1212,19 @@ function openTextEditor (event) {
       sizeButtons.forEach(each => each.classList.remove('active'))
       this.classList.add('active')
       editor.data.size = name
-      displayText.classList.remove(...sizes)
-      displayText.classList.add(name)
+      content.classList.remove(...sizes)
+      content.classList.add(name)
     }
   }
   document.querySelector('.edit_text button[name=edit_text__save]').onclick = () => {
-    displayText.classList.remove(...sizes)
-    displayText.classList.add(editor.data.size)
+    content.classList.remove(...sizes)
+    content.classList.add(editor.data.size)
     displayText.textContent = editor.data.text
   }
   document.querySelector('.edit_text button[name=edit_text__cancel]').onclick = () => {
     globalHandleEditMenuChange ('text', true)
-    displayText.classList.remove(...sizes)
-    displayText.classList.add(size)
+    content.classList.remove(...sizes)
+    content.classList.add(size)
     toggleTextEdit (null, this, true)
   }
 }
@@ -1598,6 +1599,7 @@ function handleEditMenuChange (type, close = false) {
   const types = ["text", "image", "product", "material", "colour", "file"]
 
   if (close) {
+    if (editor.type === "text") toggleTextEdit (null, editor.target, true)
     editInterfaces.forEach(each => each.classList.remove('active'))
     const menuState = JSON.parse(localStorage.getItem(localStoreMenuState))
     if (menuState && menuState.lastActive && types.includes(menuState.lastActive)) {
@@ -2061,12 +2063,12 @@ clearLocalStore()
 // ========== Content Creators ==========
 
 const createText = ({ text, size }) => `
-  <div class="content text" data-mos-contenttype="text" data-mos-text_size="${size ? size : 'medium'}">
+  <div class="content text ${size ? size : 'medium'}" data-mos-contenttype="text" data-mos-text_size="${size ? size : 'medium'}">
     <div class="content__controls">
       <button class="content__controls--text_edit"><i class="fas fa-pen"></i></button>
       <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
-    <p class="content_text__text ${size ? size : 'medium'}">${text}</p>
+    <p class="content_text__text">${text}</p>
     <textarea class="content_text__input"></textarea>
   </div>
 `

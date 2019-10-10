@@ -143,7 +143,7 @@ const fora_payload = {
       ]
     },
     {
-      title: 'Jokers want to say that this is design',
+      title: 'squares',
       // title: '',
       entities: [
         {x: 2, y: 3, width: 3, height: 13, _type: "image", src: "https://www.extreme-design.co.uk/wp-content/uploads/2019/07/kitchen-design-trend-2019-colour-blocking-and-geometric-interior.jpg", alt: "A banner image from the storefront" },

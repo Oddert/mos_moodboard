@@ -1220,12 +1220,25 @@ $page_width: 75vw;
           text-align: center;
           vertical-align: middle;
           display: none;
+          font-size: var(--medium_font);
         }
         .content_text__text {
-          font-size: var(--medium_font);
-          &.small { font-size: var(--small_font); }
-          &.medium { font-size: var(--medium_font); }
-          &.large { font-size: var(--large_font); }
+          // font-size: var(--medium_font);
+        }
+        &.small {
+          .content_text__input, .content_text__text {
+            font-size: var(--small_font);
+          }
+        }
+        &.medium {
+          .content_text__input, .content_text__text {
+            font-size: var(--medium_font);
+          }
+        }
+        &.large {
+          .content_text__input, .content_text__text {
+            font-size: var(--large_font);
+          }
         }
         &.editing {
           .content_text__input {
