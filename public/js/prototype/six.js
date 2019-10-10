@@ -2039,8 +2039,8 @@ clearLocalStore()
 const createText = ({ text, size }) => `
   <div class="content text" data-mos-contenttype="text" data-mos-text_size="${size ? size : 'medium'}">
     <div class="content__controls">
-      <button class="content__controls--text_edit">✎</button>
-      <button class="content__controls--delete">✖</button>
+      <button class="content__controls--text_edit"><i class="fas fa-pen"></i></button>
+      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <p class="content_text__text ${size ? size : 'medium'}">${text}</p>
   </div>
@@ -2051,7 +2051,7 @@ const createImage = ({ src, alt, crop }) => `
     <div class="content__controls">
     <button class="content__controls--undo"><i class="fas fa-undo-alt"></i></button>
     <button class="content__controls--image_edit"><i class="fas fa-crop-alt"></i></button>
-      <button class="content__controls--delete">✖</button>
+      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <div class="content_image__img__crop_boundary">
       <div class="content_image__img__crop_display"></div>
@@ -2073,8 +2073,8 @@ const createImage = ({ src, alt, crop }) => `
 const createProduct = ({ img: { src, alt }, title, design, price, product_id }) => `
   <div class="content product" data-mos-contenttype="product" data-mos-product_id="${product_id}">
     <div class="content__controls">
-      <button class="content__controls--product_edit">✎</button>
-      <button class="content__controls--delete">✖</button>
+      <button class="content__controls--product_edit"><i class="fas fa-pen"></i></button>
+      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <div class="content_product__img">
       <img src="${src}" alt="${alt}" />
@@ -2090,8 +2090,8 @@ const createProduct = ({ img: { src, alt }, title, design, price, product_id }) 
 const createMaterial = ({ img: { src, alt }, title, design, material_id }) => `
   <div class="content material" data-mos-contenttype="material" data-mos-material_id="${material_id}">
     <div class="content__controls">
-      <button class="content__controls--material_edit">✎</button>
-      <button class="content__controls--delete">✖</button>
+      <button class="content__controls--material_edit"><i class="fas fa-pen"></i></button>
+      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <div class="content_material__img">
       <img src="${src}" alt="${alt}" />
@@ -2106,7 +2106,7 @@ const createMaterial = ({ img: { src, alt }, title, design, material_id }) => `
 const createColour = ({ hex }) => `
   <div class="content colour" data-mos-contenttype="colour">
     <div class="content__controls">
-      <button class="content__controls--delete">✖</button>
+      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
     </div>
     <div class="colour__module" style="background-color: ${hex};"></div>
   </div>
@@ -2117,8 +2117,8 @@ const createFile = ({ format, name, img: { src } }) => {
       return `
         <div class="content file format_pdf" data-mos-contenttype="file" style="background-image: url('${src}');">
           <div class="content__controls">
-            <button class="content__controls--file_edit">✎</button>
-            <button class="content__controls--delete">✖</button>
+            <button class="content__controls--file_edit"><i class="fas fa-pen"></i></button>
+            <button class="content__controls--delete"><i class="fas fa-times"></i></button>
           </div>
           <div
             class="file__data" data-mos-format="${format}"

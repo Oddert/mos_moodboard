@@ -507,6 +507,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value {
   display: flex;
   justify-content: center;
+  padding: 20px 0;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert.new_text__insert .new_text__value textarea {
   text-align: center;
@@ -542,6 +543,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__title h3 {
   text-align: center;
   font-size: 16px;
+  margin: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__action_butons {
   width: 100%;
@@ -574,15 +576,25 @@ button[name=dev] {
   justify-content: center;
   flex-direction: row;
   align-items: center;
+  position: relative;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close h3 {
   text-align: center;
   font-size: 16px;
+  margin: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close .edit_close__title {
   flex: 1;
   margin: 0;
-  padding: 10px 20px;
+  font-size: 16px;
+  margin: 16px;
+}
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close button {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
   font-size: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit {
@@ -626,6 +638,7 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value {
   display: flex;
+  padding: 20px 0;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_text .edit_text__value textarea {
   text-align: center;
@@ -633,12 +646,14 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_product .edit_product__image_carousel {
   width: 100%;
+  margin: 20px 0;
   display: grid;
   grid-template-columns: 50px 1fr 50px;
   grid-template-rows: 150px auto;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit.edit_material .edit_material__image_carousel {
   width: 100%;
+  margin: 20px 0;
   display: grid;
   grid-template-columns: 50px 1fr 50px;
   grid-template-rows: 150px auto;
@@ -730,6 +745,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__title h3 {
   text-align: center;
   font-size: 16px;
+  margin: 16px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__action_butons {
   width: 100%;
@@ -1376,6 +1392,7 @@ button[name=dev] {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px 0;
 }
 .image_interface--wrapper .image_interface__preview img {
   max-width: 70%;
