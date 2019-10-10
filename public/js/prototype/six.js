@@ -2250,6 +2250,59 @@ function toggleTitleEdit () {
 //   }
 // }
 
+function savePDF () {
+  const example = document.querySelectorAll('.page')[2]
+  const preview = document.createElement('iframe')
+  preview.type = 'application/pdf'
+  preview.style.position = 'fixed'
+  preview.style.top = '5px'
+  preview.style.left = '5px'
+  preview.style.width = '50vw'
+  preview.style.height = '50vh'
+  const pdf = new jsPDF({
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a3'
+    // w: 420mm, h: 297mm
+  })
+  let aaaahhhhh = null
+  imgFromUrl ('https://cdn.mos.cms.futurecdn.net/U4BRsKHqqUrs3wcXVY49ub-768-80.jpg', function (data) {
+    aaaahhhhh = data
+    console.log(data)
+  })
+  pdf.text(35, 25, 'sample text')
+  pdf.addImage(aaaahhhhh, 'JPEG', 210, 30, 50, 100)
+  // pdf.save('hello_world.pdf')
+  preview.src = pdf.output('datauristring')
+  document.body.appendChild(preview)
+}
+function imgFromUrl (url, cb) {
+  const img = new Image()
+  // img.setAttribute('crossOrigin', 'anonymous')
+  img.onload = function () {
+    const canvas = document.createElement('canvas')
+    canvas.width = this.naturalWidth
+    canvas.height = this.naturalHeight
+
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#fff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    canvas.getContext('2d').drawImage(this, 0, 0)
+
+    cb(canvas.toDataURL('image/jpeg'))
+  }
+  img.src = url
+  // return 'data:image/jpeg;base64,' + btoa(img)
+}
+//
+// function savePDF () {
+//   const example = document.querySelector('.page')[2]
+//   const pdf = new jsPDF()
+//   pdf.text(35, 25, 'sample text')
+//   pdf.save('hello_world.pdf')
+// }
+
 function removePage (e) {
   const idx = Number(e.target.closest('.page').querySelector('.page__content').dataset.mosPageIdx)
   removePageByIdx (idx)

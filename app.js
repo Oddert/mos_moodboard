@@ -23,11 +23,13 @@ const express     = require('express')
     , app         = express()
     , bodyParser  = require('body-parser')
     , path        = require('path')
+    , cors        = require('cors')
 
 const sd = require('./utils/sample_data.js')
 
 const PORT = process.env.PORT || 3000
 
+app.use(cors())
 app.set('view engine', 'ejs')
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')))
