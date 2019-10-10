@@ -900,7 +900,7 @@ function pasteWidget () {
       lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = elem
+      lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
     testInitNewWidgetListeners (createdWidget, each)
@@ -2424,7 +2424,7 @@ function createTextWidget (value, size) {
       lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = elem
+      lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
     createdTextWidget.dblclick(openTextEditor)
@@ -2457,7 +2457,7 @@ function createImageWidget (src, alt) {
       lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = elem
+      lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
     createdImageWidget.dblclick(openImageEditor)
@@ -2489,7 +2489,7 @@ function createColourWidget (picker) {
       lastClick.context = 'PAGE'
       lastClick.widget.push(this)
       lastClick.grid = grid
-      lastClick.gridElem = elem
+      lastClick.gridElem = gridElem
       this.classList.add('user_focus')
     })
     createdColourWidget.dblclick(openColourEditor)
@@ -2521,7 +2521,7 @@ function createProductWidget (product) {
         lastClick.context = 'PAGE'
         lastClick.widget.push(this)
         lastClick.grid = grid
-        lastClick.gridElem = elem
+        lastClick.gridElem = gridElem
         this.classList.add('user_focus')
       })
       createdProductWidget.find('.content__controls--delete').click(function () {
@@ -2552,7 +2552,7 @@ function createMaterialWidget (product) {
         lastClick.context = 'PAGE'
         lastClick.widget.push(this)
         lastClick.grid = grid
-        lastClick.gridElem = elem
+        lastClick.gridElem = gridElem
         this.classList.add('user_focus')
       })
       createdMaterialWidget.find('.content__controls--delete').click(function () {

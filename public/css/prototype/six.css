@@ -329,9 +329,6 @@ button[name=dev] {
   background: #1bbc9b;
   color: #000;
   border: none;
-  border-top: 4px solid rgba(255, 255, 255, 0);
-  border-left: 4px solid rgba(255, 255, 255, 0);
-  border-bottom: 4px solid rgba(255, 255, 255, 0);
   padding: 0;
   margin: 0;
   padding: 10px 15px;
@@ -360,9 +357,6 @@ button[name=dev] {
   background: #1bbc9b;
   color: #000;
   border: none;
-  border-top: 4px solid rgba(255, 255, 255, 0);
-  border-left: 4px solid rgba(255, 255, 255, 0);
-  border-bottom: 4px solid rgba(255, 255, 255, 0);
   padding: 0;
   margin: 0;
   padding: 10px 15px;
@@ -540,6 +534,7 @@ button[name=dev] {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  height: 50px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__title h3 {
   text-align: center;
@@ -557,6 +552,7 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant .insert .insert__action_butons button {
   margin: 0 10px;
+  font-size: 12px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_menu__interface__variant.active {
   display: flex;
@@ -575,6 +571,7 @@ button[name=dev] {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  height: 50px;
   flex-direction: row;
   align-items: center;
   position: relative;
@@ -745,6 +742,7 @@ button[name=dev] {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  height: 50px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__title h3 {
   text-align: center;
@@ -762,6 +760,7 @@ button[name=dev] {
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit .edit__action_butons button {
   margin: 0 10px;
+  font-size: 12px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant.active {
   display: flex;
@@ -1404,7 +1403,8 @@ button[name=dev] {
   object-fit: contain;
 }
 .image_interface--wrapper label {
-  margin: 5px;
+  box-sizing: border-box;
+  margin: 10px 5px 5px 5px;
   cursor: pointer;
   font-size: 12px;
   text-align: center;

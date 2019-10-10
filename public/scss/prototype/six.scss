@@ -83,6 +83,8 @@ button {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  height: 50px;
+  // margin-bottom: 5px;
   h3 {
     text-align: center;
     font-size: 16px;
@@ -100,6 +102,7 @@ button {
   border-top: $ui_border_primary;
   button {
     margin: 0 10px;
+    font-size: 12px;
   }
 }
 
@@ -560,9 +563,9 @@ $page_width: 75vw;
         color: #000;
         // border-radius: 50%;
         border: none;
-        border-top: 4px solid rgba(255,255,255,0);
-        border-left: 4px solid rgba(255,255,255,0);
-        border-bottom: 4px solid rgba(255,255,255,0);
+        // border-top: 4px solid rgba(255,255,255,0);
+        // border-left: 4px solid rgba(255,255,255,0);
+        // border-bottom: 4px solid rgba(255,255,255,0);
         padding: 0;
         margin: 0;
         padding: 10px 15px;
@@ -685,6 +688,7 @@ $page_width: 75vw;
                   color: #000;
                   background: #fff;
                   border: 3px solid $button_background--primary;
+                  // border: none;
                   font-weight: 800;
                   padding: 10px 15px;
                   &.new_text__size {
@@ -765,6 +769,7 @@ $page_width: 75vw;
           flex-direction: row;
           align-items: center;
           position: relative;
+
           .edit_close__title {
             flex: 1;
             margin: 0;
@@ -1676,7 +1681,8 @@ $page_width: 75vw;
     }
   }
   label {
-    margin: 5px;
+    box-sizing: border-box;
+    margin: 10px 5px 5px 5px;
     cursor: pointer;
     font-size: 12px;
     text-align: center;
