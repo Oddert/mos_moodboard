@@ -267,6 +267,7 @@ button[name=dev] {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .pages--container .pages .page {
   width: 100%;
@@ -280,7 +281,7 @@ button[name=dev] {
 }
 .pages--container .pages .page .page__wrapper .page__title {
   display: flex;
-  height: 70px;
+  height: 50px;
   display: flex;
   align-items: flex-end;
 }
@@ -320,6 +321,8 @@ button[name=dev] {
 }
 .pages--container:fullscreen .pages .page {
   margin: 0;
+  height: 100vh;
+  align-items: center;
 }
 
 .item_menu--container {

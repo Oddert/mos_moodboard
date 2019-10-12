@@ -1537,8 +1537,26 @@ function toggleFullscreen (e, close) {
         return
       }
       setTimeout(() => {
+        let width, height
+        console.log({ winWidth: window.innerWidth, winHeight: window.innerHeight })
+        if (window.innerHeight > window.innerWidth) {
+          console.log('### Tall Viewport')
+          width = window.innerWidth
+          height = (9/16) * window.innerWidth
+
+          console.log({ width, height })
+        } else {
+          console.log('### Wide Viewport')
+          width = window.innerWidth
+          height = (9/16) * window.innerWidth
+          if (height > window.innerHeight) {
+            // height = window.innerHeight
+            width = (16/9) * window.innerHeight
+          }
+          console.log({ width, height })
+        }
         // userRender(window.innerWidth)
-        render (data, window.innerWidth, () => {
+        render (data, width, () => {
           const top = document.querySelectorAll('.page')[focusedPage.idx || 0].getBoundingClientRect().height * focusedPage.idx || 0
           // pages.scrollTop = top
           target.querySelector('.pages').style.top = `-${top}px`
