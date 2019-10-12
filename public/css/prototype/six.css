@@ -269,7 +269,6 @@ button[name=dev] {
   flex-direction: column;
 }
 .pages--container .pages .page {
-  margin: 5px 0;
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -281,6 +280,9 @@ button[name=dev] {
 }
 .pages--container .pages .page .page__wrapper .page__title {
   display: flex;
+  height: 70px;
+  display: flex;
+  align-items: flex-end;
 }
 .pages--container .pages .page .page__wrapper .page__title h3, .pages--container .pages .page .page__wrapper .page__title input {
   font-size: 20px;
@@ -309,6 +311,15 @@ button[name=dev] {
 }
 .pages--container .pages .page:hover .page__wrapper .page__title .page__title__delete {
   opacity: 1;
+}
+.pages--container:fullscreen {
+  overflow: hidden;
+}
+.pages--container:fullscreen .pages {
+  position: absolute;
+}
+.pages--container:fullscreen .pages .page {
+  margin: 0;
 }
 
 .item_menu--container {
@@ -1017,6 +1028,12 @@ button[name=dev] {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.grid-stack-item .grid-stack-item-content .content .content__controls button:hover {
+  background: #ecf0f1;
+}
+.grid-stack-item .grid-stack-item-content .content .content__controls button:active {
+  background: #bec3c7;
 }
 .grid-stack-item .grid-stack-item-content .content.text {
   display: flex;

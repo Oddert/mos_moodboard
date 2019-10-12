@@ -434,7 +434,7 @@ function performLibSeach (extention, value, cb) {
     })
 }
 
-function render (data, overrideWidth) {
+function render (data, overrideWidth, finished) {
 
   renderComplete = false
 
@@ -526,6 +526,7 @@ function render (data, overrideWidth) {
   if (overrideWidth) userRender (overrideWidth)
   else userRender()
   setTimeout(handleAutosave, 300)
+  if (finished) finished ()
 }
 
 function addOnePageContent (page, idx, width, height) {
@@ -994,6 +995,10 @@ function handleGlobalKeyPress (event) {
       if (lastClick.context === 'PAGE') deleteWidget ()
       if (lastClick.context === 'SLIDE') deleteSlide ()
     }
+    if (fullscreen.open) {
+      if (event.key === 'ArrowLeft') fsPageLeft ()
+      if (event.key === 'ArrowRight') fsPageRight ()
+    }
   // }
 }
 
@@ -1009,6 +1014,28 @@ function undo () {
     else autosave.stepSelected ++
     render (data)
   }
+}
+
+function fsPageLeft () {
+  console.log(`focusedPage.idx <= 0; `, `${focusedPage.idx <= 0 ? 'focusedPage.idx' : 'focusedPage.idx - 1'}; `, `${focusedPage.idx <= 0 ? focusedPage.idx : focusedPage.idx - 1}`)
+  fsPageRight ({ val: focusedPage.idx <= 0 ? focusedPage.idx : focusedPage.idx - 1})
+}
+function fsPageRight (over) {
+  const pages = document.querySelector('.pages--container')
+  const pageWrap = document.querySelector('.pages')
+  const allPages = document.querySelectorAll('.page')
+  const samplePage = allPages[0]
+  console.log(focusedPage.idx)
+  focusedPage.idx = over
+    ? over.val
+    : focusedPage.idx >= allPages.length - 1 ? focusedPage.idx : focusedPage.idx + 1
+  const { idx } = focusedPage
+  console.log(idx)
+  const pagesTop = document.querySelector('.main').getBoundingClientRect().top
+  const top = samplePage.getBoundingClientRect().height * idx
+  console.log(focusedPage.idx, top)
+  // pages.scrollTop = top
+  pageWrap.style.top = `-${top}px`
 }
 
 // let memory
@@ -1485,14 +1512,13 @@ function openMaterialEditor (event) {
 function toggleFullscreen (e, close) {
   console.log('toggleFullscreen')
   if (fullscreen.open || close) {
-    console.log('...closeing')
+    console.log('...closing')
 
     fullscreen.open = false
   } else {
     console.log('...opening')
     const test = focusedPage.gridElem
-    const pages = document.querySelector('.pages')
-    console.log(test)
+    const pages = document.querySelector('.pages--container')
     function open (target) {
       if (target.requestFullscreen) {
         console.log('1')
@@ -1512,7 +1538,13 @@ function toggleFullscreen (e, close) {
       }
       setTimeout(() => {
         // userRender(window.innerWidth)
-        render (data, window.innerWidth)
+        render (data, window.innerWidth, () => {
+          const top = document.querySelectorAll('.page')[focusedPage.idx || 0].getBoundingClientRect().height * focusedPage.idx || 0
+          // pages.scrollTop = top
+          target.querySelector('.pages').style.top = `-${top}px`
+          // const targetPage = document.querySelectorAll('.page__content')[focusedPage.idx || 0]
+          // target.scrollTop = targetPage.getBoundingClientRect().top
+        })
       }, 1000)
       fullscreen.open = true
     }
@@ -2267,30 +2299,18 @@ function openNewItemMenu (event, elem, grid) {
 }
 
 function toggleTitleEdit () {
-  const title = this.closest('.page__title')
-  console.log(title, title.dataset.mosEdit === "active")
-  function outsideClick (e) {
-    // console.log(e.target, !e.target.classList.contains('page__title__edit'))
-    if (!e.target.classList.contains('page__title__edit')) {
-      const titleEdit = title.querySelector('input')
-      const titleDisplay = document.createElement('h3')
-      titleDisplay.textContent = titleEdit.value
-      title.removeChild(titleEdit)
-      title.prepend(titleDisplay)
-      title.dataset.mosEdit = "inactive"
-      window.removeEventListener('click', outsideClick)
-    }
-  }
-
-  if (title.dataset.mosEdit === "active") {
-    const titleEdit= title.querySelector('input')
+  function closeTitleEdit (title) {
+    const titleEdit = title.querySelector('input')
     const titleDisplay = document.createElement('h3')
     titleDisplay.textContent = titleEdit.value
     title.removeChild(titleEdit)
-    title.appendChild(titleDisplay)
+    title.prepend(titleDisplay)
     title.dataset.mosEdit = "inactive"
+    $(titleDisplay).dblclick(toggleTitleEdit)
     window.removeEventListener('click', outsideClick)
-  } else {
+  }
+
+  function openTitleEdit (title) {
     const titleDisplay = title.querySelector('h3')
     const titleEdit = document.createElement('input')
     titleEdit.value = titleDisplay.textContent
@@ -2304,6 +2324,15 @@ function toggleTitleEdit () {
       window.addEventListener('click', outsideClick)
     }, 1000)
   }
+
+  const title = this.closest('.page__title')
+  // console.log(title, title.dataset.mosEdit === "active")
+  function outsideClick (e) {
+    if (!e.target.classList.contains('page__title__edit')) closeTitleEdit (title)
+  }
+
+  if (title.dataset.mosEdit === "active") closeTitleEdit (title)
+  else openTitleEdit (title)
 }
 
 // function toggleTitleDelete () {
