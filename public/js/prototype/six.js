@@ -1699,14 +1699,25 @@ function initialiseItemMenuInterface () {
     const urlInput = newImage.querySelector('input[type=url]')
     const preview = newImage.querySelector('.image_interface__preview img')
     const add = newImage.querySelector('.new_image__insert button')
+    function testImage (value, success, fail, source) {
+      console.log({ value, success, fail, source })
+      const img = new Image ()
+      img.onload = () => success (value)
+      img.onerror = () => fail (value)
+      img.src = value
+    }
     function handleInput (e) {
-      // TODO: Need some sort of broken link detector, copy from Oddert/odd-blog blog engine later
-      preview.src = e.target.value
+      const { value } = e.target
+      testImage (value, val => preview.src = val, () => preview.src = defaultImg.src, 'inp')
+    }
+    function handleNewImage () {
+      const { value } = urlInput
+      testImage (value, val => createImageWidget(val, ''), ()=>{}, 'create')
     }
     urlInput.onmousedown = handleInput
     urlInput.onpaste = handleInput
     urlInput.oninput = handleInput
-    add.onclick = e => createImageWidget(urlInput.value, '')
+    add.onclick = handleNewImage
   }
 
   function initNewColour (newColour) {

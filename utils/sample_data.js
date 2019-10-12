@@ -1,5 +1,24 @@
 const materials = require('./materials')
 
+const interact = [
+  { route: 'one', title: 'One' },
+  { route: 'two', title: 'Two' },
+  { route: 'three', title: 'Three' },
+  { route: 'four', title: 'Four' },
+  { route: 'drag_resize', title: 'Basic Restricted Drag Example' },
+  { route: 'grid', title: 'Grid Drag Example' },
+  { route: 'drag_drop', title: 'Drag and Drop Example' },
+  { route: 'grid_proto_one', title: 'Grid Prototype Moodboard One' },
+  { route: 'gridstack_one', title: 'Gridstack Prototype Moodboard Two', items: [
+    { x:0, y:0, w:2, h:2 },
+    { x:3, y:1, w:1, h:2 },
+    { x:4, y:1, w:1, h:1 },
+    { x:2, y:3, w:3, h:1 },
+    { x:2, y:5, w:3, h:1 }
+  ] },
+  { route: 'gridstack_copy', title: 'Gridstack Multi Board Drag Drop' }
+]
+
 const sampleProducts = [
   {
     title: 'Hand Painted Screen',
@@ -216,6 +235,8 @@ const fora_payload = {
 }
 
 module.exports = {
+  interact,
+
   sampleProducts,
   proto_one_items,
 
