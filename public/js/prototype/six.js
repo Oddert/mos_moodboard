@@ -795,7 +795,9 @@ function deleteSlide () {
 }
 
 function deleteWidget () {
-
+  const { grid, widget } = lastClick
+  const removeWidget = widget[0]
+  grid.removeWidget(removeWidget)
 }
 
 function copySlide (cut = false) {
