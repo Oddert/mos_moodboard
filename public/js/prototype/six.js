@@ -494,10 +494,10 @@ function render (data, overrideWidth) {
   oddert = updateSlideDisplay
   updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
-  // NOTE: Are we still using userRender ??
   userRender = overrideWidth => createGridContent (pages, data, overrideWidth)
   if (overrideWidth) userRender (overrideWidth)
   else userRender()
+  setTimeout(handleAutosave, 300)
 }
 
 function addOnePageContent (page, idx, width, height) {
@@ -786,6 +786,18 @@ function testInitNewWidgetListeners (createdWidget, node) {
   }
 }
 
+function deleteSlide () {
+  const idx = lastClick.slide[0].dataset.mosSlide_idx
+  const serialised = serialise('deleteSlide')
+  serialised.splice(idx, 1)
+  data.projects = serialised
+  render (data)
+}
+
+function deleteWidget () {
+
+}
+
 function copySlide (cut = false) {
   console.log('COPY SLIDE', { cut })
   // TODO: Overhaul namespaces for "attibutes", "previousPosition"
@@ -921,7 +933,7 @@ function handleGlobalKeyPress (event) {
   // Going to have to go on faith that the following (highlighted) seection
   // works before testing can be crried out on mac devices
   // ==================================
-  if ((navigator.platform === "MacIntel" && event.metaKey) || (!(navigator.platform === "MacIntel" && event.metaKey) && event.ctrlKey)) {
+  // if ((navigator.platform === "MacIntel" && event.metaKey) || (!(navigator.platform === "MacIntel" && event.metaKey) && event.ctrlKey)) {
   // ==================================
 
     if (event.key === 'c' && event.ctrlKey) {
@@ -946,7 +958,13 @@ function handleGlobalKeyPress (event) {
     if (event.key === 'z' && event.ctrlKey) {
       undo ()
     }
-  }
+    console.log(event.key, event.key === 'Delete')
+    if (event.key === 'Delete') {
+      console.log(lastClick.context)
+      if (lastClick.context === 'PAGE') deleteWidget ()
+      if (lastClick.context === 'SLIDE') deleteSlide ()
+    }
+  // }
 }
 
 function undo () {
@@ -1680,7 +1698,7 @@ function initialiseItemMenuInterface () {
     const preview = newImage.querySelector('.image_interface__preview img')
     const add = newImage.querySelector('.new_image__insert button')
     function handleInput (e) {
-      // WARNING: Need some sort of broken link detector, copy from Oddert/odd-blog blog engine later
+      // TODO: Need some sort of broken link detector, copy from Oddert/odd-blog blog engine later
       preview.src = e.target.value
     }
     urlInput.onmousedown = handleInput
@@ -1940,6 +1958,7 @@ function initialiseItemMenuInterface () {
       preview.src = e.target.value
     }
     input.onchange = handleChange
+    // TODO: Same as other todo, add broken image detection
     input.onpaste = handleChange
     input.onmousedown = handleChange
     save.onclick = () => {
