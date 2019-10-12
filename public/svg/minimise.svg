@@ -1,7 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11.34 11.34">
-  <title>123rrrAsset 13</title>
-  <g id="Layer_2" data-name="Layer 2">
-    <g id="Layer_1-2" data-name="Layer 1">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11.34 11.34" class="mos_ui_icon minimise">
+  <g id="minimise-layer-1">
+    <g id="minimise-layer-2">
       <g>
         <polygon points="11.34 3.08 8.26 3.08 8.26 0 6.87 0 6.87 3.08 6.87 4.47 8.26 4.47 11.34 4.47 11.34 3.08"/>
         <polygon points="3.08 0 3.08 3.08 0 3.08 0 4.47 3.08 4.47 4.47 4.47 4.47 3.08 4.47 0 3.08 0"/>

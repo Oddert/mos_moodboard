@@ -1,7 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.25 9.25">
-  <title>123rrrAsset 8</title>
-  <g id="Layer_2" data-name="Layer 2">
-    <g id="Layer_1-2" data-name="Layer 1">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.25 9.25" class="mos_ui_icon close">
+  <g id="close-layer-1">
+    <g id="close-layer-2">
       <polygon points="5.51 4.62 5.51 4.62 5.51 4.62 9.25 0.89 8.36 0 4.62 3.74 4.62 3.74 4.62 3.74 0.89 0 0 0.89 3.74 4.62 3.74 4.62 3.74 4.62 0 8.36 0.89 9.25 4.62 5.51 4.62 5.51 4.62 5.51 8.36 9.25 9.25 8.36 5.51 4.62"/>
     </g>
   </g>

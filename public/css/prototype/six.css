@@ -53,6 +53,20 @@ button[name=dev] {
   z-index: 10;
 }
 
+.mos_ui_icon {
+  width: 30px;
+  height: 30px;
+}
+.mos_ui_icon.plus, .mos_ui_icon.maximise {
+  width: auto;
+  height: 50%;
+  fill: #fff;
+}
+.mos_ui_icon.close, .mos_ui_icon.pencil, .mos_ui_icon.crop {
+  width: auto;
+  height: 15px;
+}
+
 .grid-stack-item-content {
   color: #2c3e50;
   text-align: center;
@@ -71,6 +85,9 @@ button[name=dev] {
 }
 .main.menu_closed .item_menu--container .item_menu .item_menu__interface {
   display: none;
+}
+.main.menu_closed .item_menu__toggle svg {
+  transform: rotate(180deg);
 }
 
 .slides--container {
@@ -327,6 +344,9 @@ button[name=dev] {
   background: #fff;
   border-left: 1px solid #ecf0f1;
 }
+.item_menu--container .item_menu .item_menu__control .item_menu__toggle svg, .item_menu--container .item_menu .item_menu__control .item_menu__info svg {
+  transition: transform 0.1s linear;
+}
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button, .item_menu--container .item_menu .item_menu__control .item_menu__info button {
   font-size: 20px;
   cursor: pointer;
@@ -343,6 +363,7 @@ button[name=dev] {
   padding: 10px 15px;
   background: #fff;
   color: #3A3A3A;
+  fill: #3A3A3A;
 }
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button.active, .item_menu--container .item_menu .item_menu__control .item_menu__info button.active {
   color: #fff;
@@ -351,6 +372,7 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button:hover, .item_menu--container .item_menu .item_menu__control .item_menu__info button:hover {
   background: #333333;
   color: #fff;
+  fill: #fff;
 }
 .item_menu--container .item_menu .item_menu__control .item_menu__toggle button:active, .item_menu--container .item_menu .item_menu__control .item_menu__info button:active {
   background: #7e7e7e;
@@ -584,6 +606,7 @@ button[name=dev] {
   flex-direction: row;
   align-items: center;
   position: relative;
+  box-sizing: content-box;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close h3 {
   text-align: center;
@@ -593,8 +616,13 @@ button[name=dev] {
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close .edit_close__title {
   flex: 1;
   margin: 0;
+  padding: 0;
   font-size: 16px;
-  margin: 16px;
+  height: 50px;
+  line-height: 50px;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close button {
   height: 50px;
@@ -603,6 +631,16 @@ button[name=dev] {
   right: 0;
   top: 0;
   font-size: 16px;
+  fill: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+.item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit_close button svg {
+  width: 15px;
+  height: 15px;
 }
 .item_menu--container .item_menu .item_menu__interface .item_edit__interface__variant .edit {
   width: 100%;
@@ -784,7 +822,7 @@ button[name=dev] {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #bec3c7;
+  border-bottom: 1px solid #ecf0f1;
 }
 .product_search__input .product_search__input--wrapper {
   border: 1px solid #bec3c7;
@@ -798,10 +836,10 @@ button[name=dev] {
   border: none;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--bar:hover + .product_search__input--clear {
-  display: flex;
+  opacity: 1;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--bar:focus + .product_search__input--clear {
-  display: flex;
+  opacity: 1;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--clear {
   background: none;
@@ -811,15 +849,15 @@ button[name=dev] {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  display: none;
   align-items: center;
   justify-content: center;
   transition: 0.1s linear;
   color: #1d1d1d;
+  opacity: 0;
 }
 .product_search__input .product_search__input--wrapper .product_search__input--clear:hover {
   background: #ecf0f1;
-  display: flex;
+  opacity: 1;
 }
 
 .product_search__results {
@@ -968,13 +1006,17 @@ button[name=dev] {
   right: 0;
   opacity: 0;
   z-index: 10;
+  display: flex;
 }
 .grid-stack-item .grid-stack-item-content .content .content__controls button {
   background: #fff;
   border: none;
   cursor: pointer;
   color: #1d1d1d;
-  padding: 2px 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .grid-stack-item .grid-stack-item-content .content.text {
   display: flex;

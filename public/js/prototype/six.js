@@ -16,6 +16,34 @@ const defaultImg = {
   alt: 'Placeholder Image'
 }
 
+const icon_close = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.25 9.25" class="mos_ui_icon close">
+  <g id="close-layer-1">
+    <g id="close-layer-2">
+      <polygon points="5.51 4.62 5.51 4.62 5.51 4.62 9.25 0.89 8.36 0 4.62 3.74 4.62 3.74 4.62 3.74 0.89 0 0 0.89 3.74 4.62 3.74 4.62 3.74 4.62 0 8.36 0.89 9.25 4.62 5.51 4.62 5.51 4.62 5.51 8.36 9.25 9.25 8.36 5.51 4.62"/>
+    </g>
+  </g>
+</svg>`
+const icon_crop = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11.34 11.34" class="mos_ui_icon crop">
+  <g id="crop-layer-1">
+    <g id="crop-layer-2">
+      <g>
+        <polygon points="10.11 8.85 10.11 1.23 3.74 1.23 3.74 2.49 8.85 2.49 8.85 11.34 10.11 11.34 10.11 10.11 11.34 10.11 11.34 8.85 10.11 8.85"/>
+        <polygon points="2.49 8.85 2.49 0 1.23 0 1.23 1.23 0 1.23 0 2.49 1.23 2.49 1.23 10.11 7.58 10.11 7.58 8.85 2.49 8.85"/>
+      </g>
+    </g>
+  </g>
+</svg>`
+const icon_pencil = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10.34 10.34" class="mos_ui_icon pencil">
+  <g id="pencil-layer-2">
+    <g id="pencil-layer-2">
+      <g>
+        <polygon points="9.2 7.69 8.69 7.18 3.32 1.82 1.82 3.32 7.18 8.69 7.69 9.2 10.34 10.34 9.2 7.69"/>
+        <rect x="0.25" y="0.52" width="2.13" height="1.59" transform="translate(-0.54 1.31) rotate(-45.01)"/>
+      </g>
+    </g>
+  </g>
+</svg>`
+
 // ========== / Resources ==========
 
 
@@ -418,7 +446,7 @@ function render (data, overrideWidth) {
   slides.innerHTML = ""
 
   // <div class="page__title__delete">
-  // <button class="page__title__delete--delete"><i class="fas fa-times"></i></button>
+  // <button class="page__title__delete--delete">${icon_close}</button>
   // </div>
   function addPage (each, idx) {
     const page = `
@@ -1509,13 +1537,14 @@ function toggleItemMenu (e, open) {
   if (main.classList.contains('menu_closed') || open) {
     if (settingRerenderOnSideMenu) render (data)
     toggle.title = `Close side menu`
-    toggle.querySelector('i').className = 'fas fa-arrow-right'
+
+    // toggle.querySelector('i').className = 'fas fa-arrow-right'
     main.classList.remove('menu_closed')
   } else {
 
     if (settingRerenderOnSideMenu) render (data)
     toggle.title = `Open side menu`
-    toggle.querySelector('i').className = 'fas fa-arrow-left'
+    // toggle.querySelector('i').className = 'fas fa-arrow-left'
     main.classList.add('menu_closed')
   }
 }
@@ -2097,8 +2126,8 @@ clearLocalStore()
 const createText = ({ text, size }) => `
   <div class="content text ${size ? size : 'medium'}" data-mos-contenttype="text" data-mos-text_size="${size ? size : 'medium'}">
     <div class="content__controls">
-      <button class="content__controls--text_edit"><i class="fas fa-pen"></i></button>
-      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+      <button class="content__controls--text_edit">${icon_pencil}</button>
+      <button class="content__controls--delete">${icon_close}</button>
     </div>
     <p class="content_text__text">${text}</p>
     <textarea class="content_text__input"></textarea>
@@ -2109,8 +2138,8 @@ const createImage = ({ src, alt, crop }) => `
   <div class="content image" data-mos-contenttype="image" data-mos-image_idx="0">
     <div class="content__controls">
     <button class="content__controls--undo"><i class="fas fa-undo-alt"></i></button>
-    <button class="content__controls--image_edit"><i class="fas fa-crop-alt"></i></button>
-      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+    <button class="content__controls--image_edit">${icon_crop}</button>
+      <button class="content__controls--delete">${icon_close}</button>
     </div>
     <div class="content_image__img__crop_boundary">
       <div class="content_image__img__crop_display"></div>
@@ -2132,8 +2161,8 @@ const createImage = ({ src, alt, crop }) => `
 const createProduct = ({ img: { src, alt }, title, design, price, product_id }) => `
   <div class="content product" data-mos-contenttype="product" data-mos-product_id="${product_id}">
     <div class="content__controls">
-      <button class="content__controls--product_edit"><i class="fas fa-pen"></i></button>
-      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+      <button class="content__controls--product_edit">${icon_pencil}</button>
+      <button class="content__controls--delete">${icon_close}</button>
     </div>
     <div class="content_product__img">
       <img src="${src}" alt="${alt}" />
@@ -2149,8 +2178,8 @@ const createProduct = ({ img: { src, alt }, title, design, price, product_id }) 
 const createMaterial = ({ img: { src, alt }, title, design, material_id }) => `
   <div class="content material" data-mos-contenttype="material" data-mos-material_id="${material_id}">
     <div class="content__controls">
-      <button class="content__controls--material_edit"><i class="fas fa-pen"></i></button>
-      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+      <button class="content__controls--material_edit">${icon_pencil}</button>
+      <button class="content__controls--delete">${icon_close}</button>
     </div>
     <div class="content_material__img">
       <img src="${src}" alt="${alt}" />
@@ -2165,7 +2194,7 @@ const createMaterial = ({ img: { src, alt }, title, design, material_id }) => `
 const createColour = ({ hex }) => `
   <div class="content colour" data-mos-contenttype="colour">
     <div class="content__controls">
-      <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+      <button class="content__controls--delete">${icon_close}</button>
     </div>
     <div class="colour__module" style="background-color: ${hex};"></div>
   </div>
@@ -2180,8 +2209,8 @@ const createFileREMOVED = ({ format, name, img: { src } }) => {
       return `
         <div class="content file format_pdf" data-mos-contenttype="file" style="background-image: url('${src}');">
           <div class="content__controls">
-            <button class="content__controls--file_edit"><i class="fas fa-pen"></i></button>
-            <button class="content__controls--delete"><i class="fas fa-times"></i></button>
+            <button class="content__controls--file_edit">${icon_pencil}</button>
+            <button class="content__controls--delete">${icon_close}</button>
           </div>
           <div
             class="file__data" data-mos-format="${format}"
@@ -2304,7 +2333,7 @@ function toggleTitleEdit () {
 //     deleteContainer.appendChild(cancel)
 //   } else {
 //     const deleteButton = document.createElement('button')
-//     deleteButton.innerHTML = `<i class="fas fa-times"></i>`
+//     deleteButton.innerHTML = `${icon_close}`
 //     deleteButton.className = 'page__title__delete--delete'
 //     deleteButton.name = 'delete_page_delete'
 //     deleteButton.onclick = toggleTitleDelete
