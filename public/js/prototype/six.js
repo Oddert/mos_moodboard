@@ -290,6 +290,12 @@ function save () {
     .then(res => console.log({ res }))
 }
 
+function getAutosave (includeState = false) {
+  const data = JSON.parse(localStorage.getItem(localStoreAutosave))
+  if (includeState) console.log(autosave)
+  return data
+}
+
 function handleAutosave (delay, source) {
   if (!renderComplete) return //console.log('blocking autosave; render in progress')
   function performAutoSave () {
@@ -301,7 +307,7 @@ function handleAutosave (delay, source) {
       let saveData = JSON.parse(localStorage.getItem(localStoreAutosave))
 
       // console.log({ saveData })
-      if (!(saveData && saveData.steps)) saveData = { steps: [] }
+      if (!(saveData && saveData.steps)) saveData = { steps: { serial: [] } }
       // console.log(autosave.stepSelected)
       if (autosave.stepSelected) {
         const cut = saveData.steps.length - autosave.stepSelected
@@ -312,7 +318,7 @@ function handleAutosave (delay, source) {
       } else if (saveData.steps.length >= 10) {
         saveData.steps.shift()
       }
-      saveData.steps.push(serialised)
+      saveData.steps.push({ serial: serialised, timestamp: currentTime })
       saveData.lastUpdate = currentTime
       // console.log({ saveData })
 
@@ -324,6 +330,23 @@ function handleAutosave (delay, source) {
   }
   if (delay) setTimeout (performAutoSave, 500)
   else performAutoSave ()
+}
+
+function undo () {
+  const previousState = JSON.parse(localStorage.getItem(localStoreAutosave))
+  if (previousState && previousState.steps && previousState.steps.length) {
+    const { steps } = previousState
+    const { stepSelected } = autosave
+    const targetIdx = steps.length - 2 - stepSelected
+    if (targetIdx < 0) {
+      return
+    }
+    data.projects = steps[targetIdx].serial
+    if (isNaN(stepSelected)) autosave.stepSelected = 0
+    else autosave.stepSelected ++
+    renderComplete = false
+    render (data)
+  }
 }
 
 // ========== / Serialise Functions ==========
@@ -412,7 +435,7 @@ function createSlideInterfaceGrid (clearPrevious) {
     render(data)
     reassignIndeces ()
     console.log('Slide moved positions (from, to): ', ui.item.startPos, ui.item.endPos)
-    handleAutosave()
+    handleAutosave(null, 'createSlideInterfaceGrid > stop')
   }
   queryElem.sortable({ start, stop })
   queryElem.disableSelection()
@@ -522,11 +545,12 @@ function render (data, overrideWidth, finished) {
   oddert = updateSlideDisplay
   updateSlideDisplay()
   const slidesGrid = createSlideInterfaceGrid (false)
-  userRender = overrideWidth => createGridContent (pages, data, overrideWidth)
+  userRender = (overrideWidth, finished) => createGridContent (pages, data, overrideWidth, finished)
   if (overrideWidth) userRender (overrideWidth)
   else userRender()
-  setTimeout(handleAutosave, 300)
-  if (finished) finished ()
+  // BUG: undo triggers re-render which autosaves
+  // handleAutosave(true, 'render')
+  // if (finished) finished ()
 }
 
 function addOnePageContent (page, idx, width, height) {
@@ -544,7 +568,7 @@ function addOnePageContent (page, idx, width, height) {
   page.dataset.mosPageIdx = idx
 }
 
-function createGridContent (pages, data, overrideWidth) {
+function createGridContent (pages, data, overrideWidth, finished) {
   renderComplete = false
   const all = pages.querySelectorAll('.page .page__content')
 
@@ -619,6 +643,8 @@ function createGridContent (pages, data, overrideWidth) {
             // pages.addEventListener('keydown', handleGlobalKeyPress)
             // pages.setAttribute('tabindex', 0)
             pages.addEventListener('click', deselectOnGrid)
+            handleAutosave (false, 'createGridContent')
+            if (finished) finished ()
             renderComplete = true
           }
           // elem.on('gsresizestop', () => {
@@ -989,7 +1015,7 @@ function handleGlobalKeyPress (event) {
     if (event.key === 'z' && event.ctrlKey) {
       undo ()
     }
-    console.log(event.key, event.key === 'Delete')
+    // console.log(event.key, event.key === 'Delete')
     if (event.key === 'Delete') {
       console.log(lastClick.context)
       if (lastClick.context === 'PAGE') deleteWidget ()
@@ -1000,20 +1026,6 @@ function handleGlobalKeyPress (event) {
       if (event.key === 'ArrowRight') fsPageRight ()
     }
   // }
-}
-
-function undo () {
-  const previousState = JSON.parse(localStorage.getItem(localStoreAutosave))
-  if (previousState && previousState.steps && previousState.steps.length) {
-    if (previousState.steps.length - 2 - autosave.stepSelected < 0) {
-      return
-    }
-    data.projects = previousState.steps[previousState.steps.length - 2 - autosave.stepSelected]
-    console.log(autosave.stepSelected, isNaN(autosave.stepSelected))
-    if (isNaN(autosave.stepSelected)) autosave.stepSelected = 0
-    else autosave.stepSelected ++
-    render (data)
-  }
 }
 
 function fsPageLeft () {
@@ -1324,7 +1336,7 @@ function openImageEditor (event) {
   globalHandleEditMenuChange('image')
   accept.onclick = () => {
     img.src = editor.data.imageSrc
-    handleAutosave(true)
+    handleAutosave(true, 'openImageEditor')
   }
   cancel.onclick = () => {
     globalHandleEditMenuChange ('image', true)
@@ -1344,7 +1356,7 @@ function openColourEditor (event) {
   globalHandleEditMenuChange ('colour')
   accept.onclick = () => {
     colourModule.style.backgroundColor = editColourPicker.color.hexString
-    handleAutosave(true)
+    handleAutosave(true, 'openColourEditor')
   }
   cancel.onclick = () => {
     globalHandleEditMenuChange ('colour', true)
@@ -1374,11 +1386,11 @@ function openProductEditor (event) {
   const product_id = content.dataset.mosProduct_id
   fetchFullProduct('product', product_id, data => {
     // DEV ONLY:
-    // if (!data.images) {
-    //   data.images = []
+    if (!data.images) {
+      data.images = [data.img]
     //   const numFakeImages = Math.floor(Math.random()*7) + 1
     //   for (let i=0; i<numFakeImages; i++) data.images.push(data.img)
-    // }
+    }
     primaryImage.src = data.images[0].src
     extraImages.innerHTML = ''
     data.images.forEach((each, idx) => {
@@ -1424,7 +1436,7 @@ function openProductEditor (event) {
       content.dataset.mosImage_idx = idx
       contentImage.src = data.images[idx].src
       contentImage.alt = data.images[idx].alt
-      handleAutosave(true)
+      handleAutosave(true, 'openProductEditor > accept')
     }
     cancel.onclick = () => {
       globalHandleEditMenuChange ('product', true)
@@ -1500,7 +1512,7 @@ function openMaterialEditor (event) {
       content.dataset.mosImage_idx = idx
       contentImage.src = data.images[idx].src
       contentImage.alt = data.images[idx].alt
-      handleAutosave(true)
+      handleAutosave(true, 'openMaterialEditor > accept')
     }
     cancel.onclick = () => {
       globalHandleEditMenuChange ('material', true)
@@ -1620,15 +1632,30 @@ function initialAjax () {
     headers: { 'Content-Type': 'application/json' }
   }
 
+  function performAutoSave (data) {
+    const timestamp = new Date().getTime()
+    const saveData = {
+      lastUpdate: timestamp,
+      steps: [{
+        timestamp,
+        serial: data.projects
+      }]
+    }
+    localStorage.setItem(localStoreAutosave, JSON.stringify(saveData))
+  }
+
+  const json = res => res.json ()
+
   function cb (res) {
     console.log(res)
     const { projects } = res.payload
     data.projects = projects
-    render(data)
+    performAutoSave (data)
+    render (data)
   }
 
   fetch(url, opts)
-  .then(res => res.json())
+  .then(json)
   .then(cb)
 }
 
@@ -2565,7 +2592,7 @@ function createTextWidget (value, size) {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
     createdTextWidget.find('.content__controls--text_edit').click(toggleTextEdit)
-    handleAutosave()
+    handleAutosave(null, 'createTextWidget')
   }
 }
 
@@ -2597,7 +2624,7 @@ function createImageWidget (src, alt) {
     createdImageWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
-    handleAutosave()
+    handleAutosave(null, 'createImageWidget')
   }
 }
 
@@ -2629,7 +2656,7 @@ function createColourWidget (picker) {
     createdColourWidget.find('.content__controls--delete').click(function () {
       grid.removeWidget(this.closest('.grid-stack-item'))
     })
-    handleAutosave()
+    handleAutosave(null, 'createColourWidget')
   }
 }
 
@@ -2660,7 +2687,7 @@ function createProductWidget (product) {
       createdProductWidget.find('.content__controls--delete').click(function () {
         grid.removeWidget(this.closest('.grid-stack-item'))
       })
-      handleAutosave()
+      handleAutosave(null, 'createProductWidget')
   }
 }
 
@@ -2691,7 +2718,7 @@ function createMaterialWidget (product) {
       createdMaterialWidget.find('.content__controls--delete').click(function () {
         grid.removeWidget(this.closest('.grid-stack-item'))
       })
-      handleAutosave()
+      handleAutosave(null, createMaterialWidget)
   }
 }
 

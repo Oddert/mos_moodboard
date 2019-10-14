@@ -11,6 +11,9 @@
   // --medium_font: 12px;
   // --large_font: 16px;
 
+    --small_font: .7rem;
+    --medium_font: 1rem;
+    --large_font: 1.3rem;
     --small_font: 10px;
     --medium_font: 16px;
     --large_font: 20px;
@@ -1847,18 +1850,24 @@ $page_width: 75vw;
 // 992 - 1200
 @media only screen and (max-width: 1200px) {
   :root {
-    --small_font: 9px;
-    --medium_font: 12px;
-    --large_font: 15px;
+    // --small_font: 9px;
+    // --medium_font: 12px;
+    // --large_font: 15px;
+    --small_font: .55rem;
+    --medium_font: .8rem;
+    --large_font: .95rem;
   }
 }
 // 768 - 992
 @media only screen and (max-width: 992px) {
   :root {
-    --small_font: 8px;
-    --medium_font: 10px;
-    --large_font: 12px;
-    .text_overflow {
+    // --small_font: 8px;
+    // --medium_font: 10px;
+    // --large_font: 12px;
+    --small_font: .3rem;
+    --medium_font: .6rem;
+    --large_font: .7rem;
+    .grid-stack > .grid-stack-item > .grid-stack-item-content.text_overflow {
       overflow: visible;
       overflow-x: visible;
       overflow-y: visible;
@@ -1868,9 +1877,12 @@ $page_width: 75vw;
 // 0px - 768px
 @media only screen and (max-width: 768px) {
   :root {
-    --small_font: 6px;
-    --medium_font: 8px;
-    --large_font: 10px;
+    // --small_font: 6px;
+    // --medium_font: 8px;
+    // --large_font: 10px;
+    --small_font: .3rem;
+    --medium_font: .6rem;
+    --large_font: .7rem;
   }
 }
 
