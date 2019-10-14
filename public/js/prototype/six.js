@@ -349,6 +349,24 @@ function undo () {
   }
 }
 
+function redo () {
+  // reverse undo plz
+  const previousState = JSON.parse(localStorage.getItem(localStoreAutosave))
+  if (previousState && previousState.steps && previousState.steps.length) {
+    const { steps } = previousState
+    const { stepSelected } = autosave
+    const targetIdx = steps.length - stepSelected
+    if (targetIdx > steps.length - 1) {
+      return
+    }
+    data.projects = steps[targetIdx].serial
+    if (isNaN(stepSelected)) autosave.stepSelected = 0
+    else autosave.stepSelected ++
+    renderComplete = false
+    render (data)
+  }
+}
+
 // ========== / Serialise Functions ==========
 
 
@@ -1015,6 +1033,9 @@ function handleGlobalKeyPress (event) {
     if (event.key === 'z' && event.ctrlKey) {
       undo ()
     }
+    if (event.key === 'y' && event.ctrlKey) {
+      redo ()
+    }
     // console.log(event.key, event.key === 'Delete')
     if (event.key === 'Delete') {
       console.log(lastClick.context)
@@ -1642,6 +1663,7 @@ function initialAjax () {
       }]
     }
     localStorage.setItem(localStoreAutosave, JSON.stringify(saveData))
+    autosave.lastAction = timestamp
   }
 
   const json = res => res.json ()
