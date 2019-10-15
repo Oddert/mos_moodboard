@@ -62,7 +62,7 @@ const server = app.listen(
 // -Implament Page Add ✓
 // -Implament Page Delete (1/2) ✓
 // -Implament auto-save and actual save x
-// -Implament undo, redo x
+// -Implament undo, redo ✓
 //  -Item edit via selector: ✓
 //    -Image ✓
 //    -Product ✓
@@ -82,17 +82,14 @@ const server = app.listen(
 //    -Paste / Destroy new slide ✓
 //    -Re-render ✓
 //    -Check that slide jump updates focused page ✓
-//    -Implament extra drop menu functions for slides ???
+//    -Implament extra drop menu functions for slides ✓
 //  -New Sidebar Layout and collapse ✓
-//  -Local auto save
-//    -Move widget
-//    -Resize widget
-//    -Edit widget
-//    -Delete widget
-//    -Cut Copy Paste x 2
-//    -Reorder slide
-//    -Delete Slide
+//  -Local auto save ✓
+//    -Move, Resize, Edit Widget, Delete widget ✓
+//    -Cut Copy Paste x 2 ✓
+//    -Reorder slide ✓
+//    -Delete Slide ✓
 //  -Actual ajax save (mock db for this)
-//  -EXPORT TO PDF
+//  -EXPORT TO PDF x
 
 //  -Minor Bug: Resizing still ausing issues when multiple resize handles are employed at once
