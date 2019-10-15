@@ -418,6 +418,7 @@ function updateSlideBar (event, idx, updateContext) {
 
 function handleSlideClick (event) {
   const allPages = document.querySelectorAll('.page')
+  if (!allPages.length) return
   const slide = event.target.classList.contains('.slide') ? event.target : event.target.closest('.slide')
   const idx = Number(slide.dataset.mosSlide_idx)
   const rect = allPages[idx].getBoundingClientRect()
@@ -705,7 +706,7 @@ function pageScrollHandler (event) {
       each => each.offset === Math.max(nextDown.offset, nextUp.offset)
     )[0]
   }
-  const closestToCenter = getClosestToCenter()
+  const closestToCenter = getClosestToCenter() || 0
   if (Number(focusedPage.idx) === closestToCenter.idx) return
 
   focusedPage = closestToCenter
@@ -1694,8 +1695,7 @@ function initialisePageAdd () {
       entities: []
     })
     data.projects = serialised
-    render(data)
-    pageScrollHandler()
+    render(data, null, pageScrollHandler)
   }
   newPageButton.onclick = createNewPage
 }
@@ -2167,8 +2167,10 @@ function initDragDrop () {
   function drop (e) {
     e.preventDefault()
     e.stopPropagation()
-    const url = e.dataTransfer.getData('text/plain')
-    newImage (url, '')
+    let url = e.dataTransfer.getData('text/plain')
+    if (/google./gi.test(url)) url = decodeURIComponent(url.replace('https://www.google.com/imgres?imgurl=', '').replace(/&imgrefurl(.*)/gi, ''))//.replace('https%3A%2F%2F', '')
+    console.log(url)
+    createImageWidget (url, '')
   }
   pages.addEventListener('dragenter', nodrop, false)
   pages.addEventListener('dragexit', nodrop, false)
@@ -2498,6 +2500,7 @@ function removePage (e) {
 
 function removePageByIdx (idx) {
   const serialised = serialise('removePageByIdx')
+  // if (serialised.length <= 1) return
   const serialisedRemoved = [...serialised.slice(0, idx), ...serialised.slice(idx + 1)]
   data.projects = serialisedRemoved
   render(data)
