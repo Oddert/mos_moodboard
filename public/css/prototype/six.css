@@ -115,14 +115,13 @@ button[name=dev] {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 70px;
 }
 .slides--container .slides .bottom_menu {
   border-top: 1px solid #bec3c7;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-.slides--container .slides .top_menu, .slides--container .slides .bottom_menu {
   height: 35px;
 }
 .slides--container .slides .top_menu button, .slides--container .slides .bottom_menu button {
@@ -132,6 +131,11 @@ button[name=dev] {
   align-items: center;
   justify-content: center;
   padding: 0;
+}
+.slides--container .slides .top_menu button.save_all, .slides--container .slides .bottom_menu button.save_all {
+  background: #fff;
+  font-size: 10px;
+  color: #969B9F;
 }
 
 .slides--wrapper {

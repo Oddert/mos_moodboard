@@ -127,6 +127,7 @@ const default_payload = {
 }
 
 const fora_payload = {
+  lastUpdate: 1570098110000,
   projects: [
     {
       title: '',

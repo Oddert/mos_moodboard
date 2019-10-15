@@ -1654,6 +1654,18 @@ function initialAjax () {
     headers: { 'Content-Type': 'application/json' }
   }
 
+  function updateSaveIndicator (res) {
+    const date = new Date()
+    const lastUpdate = res.lastUpdate ? new Date(res.lastUpdate) : null
+    console.log(lastUpdate)
+    const str = date => `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+    const displayDate = () => str(lastUpdate) === str(date) ? lastUpdate.toLocalTimeString('en-GB') : lastUpdate.toLocaleDateString('en-GB')
+    const message = lastUpdate
+      ? `Last saved ${displayDate ()}`
+      : `Autosave running`
+    document.querySelector('.save_all').textContent = message
+  }
+
   function performAutoSave (data) {
     const timestamp = new Date().getTime()
     const saveData = {
@@ -1671,8 +1683,9 @@ function initialAjax () {
 
   function cb (res) {
     console.log(res)
-    const { projects } = res.payload
+    const { projects, lastUpdate } = res.payload
     data.projects = projects
+    updateSaveIndicator ({lastUpdate})
     performAutoSave (data)
     render (data)
   }
@@ -2169,7 +2182,7 @@ function initDragDrop () {
     e.stopPropagation()
     let url = e.dataTransfer.getData('text/plain')
     if (/google./gi.test(url)) url = decodeURIComponent(url.replace('https://www.google.com/imgres?imgurl=', '').replace(/&imgrefurl(.*)/gi, ''))//.replace('https%3A%2F%2F', '')
-    console.log(url)
+    // console.log(url)
     createImageWidget (url, '')
   }
   pages.addEventListener('dragenter', nodrop, false)
