@@ -94,6 +94,8 @@ const proto_one_items = [
 ]
 
 const default_payload = {
+  title: 'Moodboard Title',
+  lastUpdate: 1570098110000,
   projects: [
     {
       title: 'My Cool Page',
@@ -127,6 +129,7 @@ const default_payload = {
 }
 
 const fora_payload = {
+  title: 'Moodboard Title',
   lastUpdate: 1570098110000,
   projects: [
     {

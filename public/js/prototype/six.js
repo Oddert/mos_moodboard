@@ -1683,7 +1683,9 @@ function initialAjax () {
 
   function cb (res) {
     console.log(res)
-    const { projects, lastUpdate } = res.payload
+    const { projects, lastUpdate, title } = res.payload
+    data.title = title
+    document.querySelector('.moodboard_title').textContent = title
     data.projects = projects
     updateSaveIndicator ({lastUpdate})
     performAutoSave (data)
