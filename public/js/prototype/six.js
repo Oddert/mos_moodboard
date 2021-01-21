@@ -1687,7 +1687,7 @@ function initialAjax () {
     data.title = title
     document.querySelector('.moodboard_title').textContent = title
     data.projects = projects
-    updateSaveIndicator ({lastUpdate})
+    updateSaveIndicator ({ lastUpdate })
     performAutoSave (data)
     render (data)
   }
